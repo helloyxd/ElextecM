@@ -1,44 +1,39 @@
 package com.elextec.mdm.mapper;
 
-
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.stereotype.Component;
 
-import com.elextec.mdm.entity.UserEntity;
-import com.elextec.mdm.entity.UserSexEnum;
+import com.elextec.mdm.entity.User;
 
 public interface UserMapper {
-	@Select("SELECT * FROM users")
+	@Select("SELECT * FROM user")
 	@Results({
-        @Result(property = "userSex",  column = "user_sex"/*, javaType = UserSexEnum.class*/),
-        @Result(property = "nickName", column = "nick_name")
+        @Result(property = "userName",  column = "user_name"),
+        @Result(property = "userPassword", column = "user_password")
     })
-    List<UserEntity> getAll();
+    List<User> getAll();
 
-    @Select("SELECT * FROM users WHERE id = #{id}")
+    @Select("SELECT * FROM user WHERE id = #{id}")
     @Results({
-        @Result(property = "userSex",  column = "user_sex"/*, javaType = UserSexEnum.class*/),
-        @Result(property = "nickName", column = "nick_name")
+        @Result(property = "userName",  column = "user_name"/*, javaType = UserSexEnum.class*/),
+        @Result(property = "userPassword", column = "user_password")
     })
-    UserEntity getOne(Long id);
+    User getOne(Long id);
 
-    @Insert("INSERT INTO users(userName,passWord,user_sex) VALUES(#{userName}, #{passWord}, #{userSex})")
-    void insert(UserEntity user);
+    @Insert("INSERT INTO user(user_name,user_password) VALUES(#{userName}, #{userPassword})")
+    void insert(User user);
 
-    @Update("UPDATE users SET userName=#{userName},nick_name=#{nickName} WHERE id =#{id}")
-    void update(UserEntity user);
+    @Update("UPDATE user SET userName=#{userName},user_password=#{userPassword} WHERE id =#{id}")
+    void update(User user);
 
-    @Delete("DELETE FROM users WHERE id =#{id}")
+    @Delete("DELETE FROM user WHERE id =#{id}")
     void delete(Long id);
     
     @Update("${sql}")

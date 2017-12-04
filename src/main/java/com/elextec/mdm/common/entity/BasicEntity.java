@@ -3,27 +3,26 @@ package com.elextec.mdm.common.entity;
 import java.sql.Date;
 
 public class BasicEntity {
-	private Date createDate;
-	private Date modifyDate;
-	private Integer disable; //0启动，1启用
-	public Date getCreateDate() {
-		return createDate;
-	}
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-	public Date getModifyDate() {
-		return modifyDate;
-	}
-	public void setModifyDate(Date modifyDate) {
-		this.modifyDate = modifyDate;
-	}
-	public Integer getDisable() {
-		return disable;
-	}
-	public void setDisable(Integer disable) {
-		this.disable = disable;
-	}
+	private Integer id;
+	private Date createTime;
+	private String creater;
 	
-	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public String getCreater() {
+		return creater;
+	}
+	public void setCreater(String creater) {
+		this.creater = creater;
+	}
 }

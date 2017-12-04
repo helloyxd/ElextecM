@@ -37,4 +37,5 @@ public class SampleWarApplication extends SpringBootServletInitializer {
 		SpringApplication.run(SampleWarApplication.class, args);
 	}
 
+	
 }
