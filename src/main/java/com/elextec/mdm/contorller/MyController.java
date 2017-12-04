@@ -28,7 +28,7 @@ public class MyController {
 	public HashMap hello() {
 		HashMap<String, String> map = new HashMap<String,String>();
 		map.put("key", "name");
-		map.put("key", "123");
+		map.put("key", "1234");
 		return map;
 	}
 
