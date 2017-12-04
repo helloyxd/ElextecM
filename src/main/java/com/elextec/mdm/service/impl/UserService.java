@@ -1,5 +1,7 @@
 package com.elextec.mdm.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,12 @@ public class UserService implements IUserService {
 	public boolean registerUser(User user){
 		userMapper.insert(user);
 		return true;
+	}
+
+	@Override
+	public List<User> getAll() {
+		List<User> list =  userMapper.getAll();
+		return list;
 	}
 
 }

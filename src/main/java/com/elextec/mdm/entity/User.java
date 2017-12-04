@@ -28,10 +28,10 @@ public class User extends BasicEntity{
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	public int getDepartmentId() {
+	public Integer getDepartmentId() {
 		return departmentId;
 	}
-	public void setDepartmentId(int departmentId) {
+	public void setDepartmentId(Integer departmentId) {
 		this.departmentId = departmentId;
 	}
 	public Integer getStatus() {
