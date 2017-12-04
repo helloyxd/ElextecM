@@ -15,7 +15,7 @@ import com.elextec.mdm.SampleWarApplication;
 import com.elextec.mdm.entity.UserEntity;
 import com.elextec.mdm.entity.UserSexEnum;
 import com.elextec.mdm.mapper.TableDLLMapper;
-import com.elextec.mdm.mapper.UserMapper;
+import com.elextec.mdm.mapper.UserEntityMapper;
 import com.elextec.mdm.service.IUserService;
 
 @RunWith(SpringRunner.class)
