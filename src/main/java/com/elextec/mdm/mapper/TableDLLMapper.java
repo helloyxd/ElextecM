@@ -9,8 +9,6 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.elextec.mdm.entity.UserEntity;
-
 public interface TableDLLMapper {
 	
 	@Update("${createSql}")

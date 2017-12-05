@@ -6,6 +6,7 @@ public class BasicEntity {
 	private Integer id;
 	private Date createTime;
 	private String creater;
+	private Integer status;
 	
 	public Date getCreateTime() {
 		return createTime;
@@ -24,5 +25,11 @@ public class BasicEntity {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 }

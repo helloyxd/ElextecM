@@ -7,7 +7,6 @@ public class TableDefinition extends BasicEntity{
 	private String tableName;
 	private String tableLable;
 	private String modelId;
-	private String status;
 	
 	public String getTableName() {
 		return tableName;
@@ -26,12 +25,6 @@ public class TableDefinition extends BasicEntity{
 	}
 	public void setModelId(String modelId) {
 		this.modelId = modelId;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
 	}
 	
 }

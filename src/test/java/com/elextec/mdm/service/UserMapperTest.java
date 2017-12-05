@@ -1,64 +1,86 @@
 package com.elextec.mdm.service;
 
 import java.util.List;
-import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.elextec.mdm.SampleWarApplication;
-import com.elextec.mdm.entity.UserEntity;
-import com.elextec.mdm.entity.UserSexEnum;
-import com.elextec.mdm.mapper.TableDLLMapper;
-import com.elextec.mdm.mapper.UserEntityMapper;
-import com.elextec.mdm.service.IUserService;
+import com.elextec.mdm.common.entity.StatusEnum;
+import com.elextec.mdm.entity.Department;
+import com.elextec.mdm.entity.Role;
+import com.elextec.mdm.entity.User;
+import com.elextec.mdm.mapper.DepartmentMapper;
+import com.elextec.mdm.mapper.RoleMapper;
+import com.elextec.mdm.mapper.UserMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserMapperTest {
 	
-	/*@Autowired
-	private IUserService userService;
+	@Autowired
+	private UserMapper userMapper;
 	
-	@Test
-	public  void testUser() {
-		System.out.println(userService.getUserName());
-	}*/
+	@Autowired
+	private RoleMapper roleMapper;
 	
+	@Autowired
+	private DepartmentMapper departmentMapper;
 	
-    @Autowired
-    private TableDLLMapper UserMapper;
-
-    /*@Test
-    public void testInsert() throws Exception {
-        UserMapper.insert(new UserEntity("aa", "a123456", UserSexEnum.MAN));
-        UserMapper.insert(new UserEntity("bb", "b123456", UserSexEnum.WOMAN));
-        UserMapper.insert(new UserEntity("cc", "b123456", UserSexEnum.WOMAN));
-
-        Assert.assertEquals(3, UserMapper.getAll().size());
-    }
-
     @Test
-    public void testQuery() throws Exception {
-        List<UserEntity> users = UserMapper.getAll();
-        System.out.println(users.toString());
+    public void getUserByName() throws Exception {
+    	List<User> list = userMapper.findUserByName("zkj");
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(list));
     }
-*/
+    
     @Test
-    public void testUpdate() throws Exception {
-        //UserEntity user = UserMapper.getOne(3l);
-        //System.out.println(user.toString());
-        //user.setNickName("neo1");
-        //UserMapper.update(user);
-        //Assert.assertTrue(("neo".equals(UserMapper.getOne(3l).getNickName())));
-    	//String sql = "create table TableName1(id int(11) NOT NULL AUTO_INCREMENT,empno varchar(32),empname varchar(32),PRIMARY KEY (id))";
-        List<Map> mapList = UserMapper.getTableColumnDefine("memuser");
-        System.out.println(mapList.get(0).get("columnName"));
+    public void getAllUsers() throws Exception {
+    	List<User> list = userMapper.getAll();
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(list));
+    }
+    
+    @Test
+    public void addRole() throws Exception {
+    	Role role = new Role();
+    	role.setRoleName("admin2");
+    	role.setRoleDesc("admin2");
+    	roleMapper.insert(role);
     	
+    }
+    
+    @Test
+    public void getAllRole() throws Exception {
+    	List<Role> list = roleMapper.getAll();
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(list));
+    }
+    
+    @Test
+    public void addDepartment() throws Exception {
+    	Department department = new Department();
+    	department.setDepartCode("10002");
+    	department.setDepartName("op");
+    	department.setStatus(StatusEnum.StatusEnable);
+    	departmentMapper.insert(department);
+    }
+    
+    @Test
+    public void findAllDepartments() throws JsonProcessingException{
+    	List<Department> departments = departmentMapper.getAll();
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(departments));
+    }
+    
+    @Test
+    public void findDepartmentById() throws JsonProcessingException{
+    	Department department = departmentMapper.findDepartmentById(1);
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(department));
     }
 }

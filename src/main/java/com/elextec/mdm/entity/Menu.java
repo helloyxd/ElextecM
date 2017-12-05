@@ -9,7 +9,6 @@ public class Menu extends BasicEntity{
 	private Integer parentId;
 	private Integer level;
 	private Integer sortOrder;
-	private Integer status;
 	private String remark;
 	
 	public String getMenuName() {
@@ -41,12 +40,6 @@ public class Menu extends BasicEntity{
 	}
 	public void setSortOrder(Integer sortOrder) {
 		this.sortOrder = sortOrder;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
 	}
 	public String getRemark() {
 		return remark;

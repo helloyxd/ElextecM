@@ -7,8 +7,7 @@ public class User extends BasicEntity{
 	private String userName;
 	private String userPassword;
 	private String fullName;
-	private Integer departmentId;
-	private Integer status;//用户状态,0正常，1锁定，2禁用，3删除
+	private Department department;
 	
 	public String getUserName() {
 		return userName;
@@ -28,17 +27,11 @@ public class User extends BasicEntity{
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	public Integer getDepartmentId() {
-		return departmentId;
+	public Department getDepartment() {
+		return department;
 	}
-	public void setDepartmentId(Integer departmentId) {
-		this.departmentId = departmentId;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 	
 }
