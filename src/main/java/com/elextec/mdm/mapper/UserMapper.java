@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Options;
@@ -42,11 +43,13 @@ public interface UserMapper {
     List<User> getAll();
 	
 	@Select("SELECT * FROM user WHERE id = #{userId}")
+	@ResultMap("userMap")
 	User findUserById(int userId);
 
     @Insert("INSERT INTO user(user_name,user_password,full_name,department_id,status,creater)"
     		+ " VALUES(#{userName}, #{userPassword}, #{fullName}, #{department.id}, #{status}, #{creater})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+    @ResultMap("userMap")
     void insert(User user);
 
     @Update("UPDATE user SET userName=#{userName},user_password=#{userPassword} WHERE id =#{id}")
@@ -57,5 +60,12 @@ public interface UserMapper {
     
     @Update("${sql}")
     void createTable(@Param("sql") String sql);
+    
+    /**
+     * 新增用户的角色信息
+     * @param user
+     */
+    @InsertProvider(type = MapperProvider.class,method = "addUserRoles")
+    void addUserRoles(@Param("user")User user);
     
 }

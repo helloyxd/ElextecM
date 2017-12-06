@@ -1,5 +1,6 @@
 package com.elextec.mdm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class UserMapperTest {
 	
     @Test
     public void getUserByName() throws Exception {
-    	List<User> list = userMapper.findUserByName("zkj");
+    	List<User> list = userMapper.findUserByName("admin3");
     	//System.out.println("===========" + list.size());
     	ObjectMapper mapper = new ObjectMapper();
     	//mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -54,20 +55,49 @@ public class UserMapperTest {
     }
     
     @Test
+    public void getUserById() throws Exception {
+    	User user = userMapper.findUserById(1);
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(user));
+    }
+    
+    @Test
     public void addUser() throws Exception {
     	User user = new User();
-    	user.setUserName("admin");
+    	user.setUserName("admin3");
     	user.setUserPassword("123");
     	user.setStatus(UserStatusEnum.UserStatusNormal);
-    	//user.setDepartment(department);
+    	Department department = new Department();
+    	department.setId(2);
+    	user.setDepartment(department);
+    	List<Role> roles = new ArrayList<Role>();
+    	Role role = new Role();
+    	role.setId(2);
+    	roles.add(role);
+    	user.setRoles(roles);
     	userMapper.insert(user);
+    }
+    
+    @Test
+    public void addUserRole() throws Exception {
+    	User user = new User();
+    	user.setId(7);
+    	List<Role> roles = new ArrayList<Role>();
+    	Role role = new Role();
+    	role.setId(2);
+    	roles.add(role);
+    	Role role1 = new Role();
+    	role1.setId(3);
+    	roles.add(role1);
+    	user.setRoles(roles);
+    	userMapper.addUserRoles(user);
     }
     
     @Test
     public void addRole() throws Exception {
     	Role role = new Role();
-    	role.setRoleName("admin2");
-    	role.setRoleDesc("admin2");
+    	role.setRoleName("admin3");
+    	role.setRoleDesc("admin3");
     	roleMapper.insert(role);
     	
     }
