@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.VoResult;
+import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.entity.User;
+import com.elextec.mdm.mapper.DepartmentMapper;
 import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.mapper.UserMapper;
 import com.elextec.mdm.service.IUserService;
@@ -19,6 +21,9 @@ public class UserService implements IUserService {
 	
 	@Autowired
 	private RoleMapper roleMapper;
+	
+	@Autowired
+	private DepartmentMapper departmentMapper;
 	
 	@Override
 	public String getUserName() {
@@ -41,6 +46,11 @@ public class UserService implements IUserService {
 	@Override
 	public List<User> getAll() {
 		List<User> list =  userMapper.getAll();
+		return list;
+	}
+	
+	public List<Department> getAllDepartments(){
+		List<Department> list = departmentMapper.getSuperDepartment();
 		return list;
 	}
 

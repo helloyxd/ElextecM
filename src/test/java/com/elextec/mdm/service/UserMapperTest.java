@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.elextec.mdm.common.entity.StatusEnum;
 import com.elextec.mdm.common.entity.UserStatusEnum;
+import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
@@ -19,6 +20,7 @@ import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.mapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -140,8 +142,11 @@ public class UserMapperTest {
     @Test
     public void findAllDepartments() throws JsonProcessingException{
     	List<Department> departments = departmentMapper.getAll();
+    	VoResponse vo = new VoResponse();
+    	vo.setData(departments);
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(departments));
+    	System.out.println(mapper.writeValueAsString(vo));
     }
     
     @Test
