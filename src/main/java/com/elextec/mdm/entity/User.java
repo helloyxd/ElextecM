@@ -1,13 +1,21 @@
 package com.elextec.mdm.entity;
 
+import java.io.Serializable;
+import java.util.List;
+
 import com.elextec.mdm.common.entity.BasicEntity;
 
-public class User extends BasicEntity{
+public class User extends BasicEntity implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String userName;
 	private String userPassword;
 	private String fullName;
 	private Department department;
+	private List<Role> roles;
 	
 	public String getUserName() {
 		return userName;
@@ -32,6 +40,12 @@ public class User extends BasicEntity{
 	}
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+	public List<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 	
 }

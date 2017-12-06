@@ -48,4 +48,8 @@ public interface RoleMapper {
     
     @Update("${sql}")
     void createTable(@Param("sql") String sql);
+    
+    @Select("SELECT * FROM role WHERE id IN (SELECT role_id FROM user_role WHERE USER_ID = #{userId})")
+    @ResultMap("roleMap")
+    List<Role> findRolesByUserId(Integer userId);
 }

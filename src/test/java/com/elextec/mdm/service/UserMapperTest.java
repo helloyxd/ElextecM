@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.elextec.mdm.common.entity.StatusEnum;
+import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
@@ -16,7 +17,12 @@ import com.elextec.mdm.mapper.DepartmentMapper;
 import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.mapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,7 +40,9 @@ public class UserMapperTest {
     @Test
     public void getUserByName() throws Exception {
     	List<User> list = userMapper.findUserByName("zkj");
+    	//System.out.println("===========" + list.size());
     	ObjectMapper mapper = new ObjectMapper();
+    	//mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     	System.out.println(mapper.writeValueAsString(list));
     }
     
@@ -43,6 +51,16 @@ public class UserMapperTest {
     	List<User> list = userMapper.getAll();
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(list));
+    }
+    
+    @Test
+    public void addUser() throws Exception {
+    	User user = new User();
+    	user.setUserName("admin");
+    	user.setUserPassword("123");
+    	user.setStatus(UserStatusEnum.UserStatusNormal);
+    	//user.setDepartment(department);
+    	userMapper.insert(user);
     }
     
     @Test
@@ -64,8 +82,8 @@ public class UserMapperTest {
     @Test
     public void addDepartment() throws Exception {
     	Department department = new Department();
-    	department.setDepartCode("10002");
-    	department.setDepartName("op");
+    	department.setDepartCode("10003");
+    	department.setDepartName("xxx");
     	department.setStatus(StatusEnum.StatusEnable);
     	departmentMapper.insert(department);
     }

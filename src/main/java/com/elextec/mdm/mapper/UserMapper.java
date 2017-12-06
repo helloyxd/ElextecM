@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -27,8 +28,11 @@ public interface UserMapper {
         @Result(property = "status", column = "status"),
 		@Result(property = "createTime", column = "create_time"),
         @Result(property = "creater", column = "creater"),
-        @Result(property = "department", column = "id",
+        @Result(property = "department", column = "department_id",
     		one = @One(select = "com.elextec.mdm.mapper.DepartmentMapper.findDepartmentById")
+        		),
+        @Result(property = "roles", column = "id",
+        	many = @Many(select = "com.elextec.mdm.mapper.RoleMapper.findRolesByUserId")
         		)
     })
     List<User> findUserByName(String userName);
@@ -41,7 +45,7 @@ public interface UserMapper {
 	User findUserById(int userId);
 
     @Insert("INSERT INTO user(user_name,user_password,full_name,department_id,status,creater)"
-    		+ " VALUES(#{userName}, #{userPassword}, #{full_name}, #{department_id}, #{status}, #{creater})")
+    		+ " VALUES(#{userName}, #{userPassword}, #{fullName}, #{department.id}, #{status}, #{creater})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(User user);
 
@@ -53,5 +57,5 @@ public interface UserMapper {
     
     @Update("${sql}")
     void createTable(@Param("sql") String sql);
-
+    
 }
