@@ -52,7 +52,8 @@ public interface UserMapper {
     @ResultMap("userMap")
     void insert(User user);
 
-    @Update("UPDATE user SET userName=#{userName},user_password=#{userPassword} WHERE id =#{id}")
+    @Update("UPDATE user SET full_name=#{fullName},user_password=#{userPassword},"
+    		+ "department_id=#{department.id},status=#{status} WHERE id =#{id}")
     void update(User user);
 
     @Delete("DELETE FROM user WHERE id =#{id}")
@@ -67,5 +68,12 @@ public interface UserMapper {
      */
     @InsertProvider(type = MapperProvider.class,method = "addUserRoles")
     void addUserRoles(@Param("user")User user);
+    
+    /**
+     * 根据用户ID，删除用户的角色信息
+     * @param userId
+     */
+    @Delete("DELETE FROM user_role WHERE user_id=#{userId}")
+    void delUserRoles(int userId);
     
 }

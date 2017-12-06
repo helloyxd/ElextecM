@@ -3,6 +3,7 @@ package com.elextec.mdm.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
@@ -16,9 +17,10 @@ public interface DepartmentMapper {
 	@Insert("INSERT INTO department(depart_code,depart_name,parent_id,status,creater)"
     		+ " VALUES(#{departCode}, #{departName}, #{parentId}, #{status}, #{creater})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
+	@ResultMap("departmentMap")
     void insert(Department department);
 	
-	@Select("SELECT * FROM department")
+	@Select("SELECT * FROM department ORDER BY depart_code")
 	@Results(id="departmentMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -27,12 +29,28 @@ public interface DepartmentMapper {
         @Result(property = "status", column = "status"),
 		@Result(property = "createTime", column = "create_time"),
         @Result(property = "creater", column = "creater"),
+        @Result(property = "parentId", column = "parent_id"),
+        @Result(property = "departments", column = "id",
+            	many = @Many(select = "com.elextec.mdm.mapper.DepartmentMapper.findDepartmentByParentId"))
     })
     List<Department> getAll();
 	
+	/**
+	 * 根据departmentId查找部门信息
+	 * @param departmentId
+	 * @return
+	 */
 	@Select("SELECT * FROM department WHERE id = #{departmentId}")
 	@ResultMap("departmentMap")
 	Department findDepartmentById(int departmentId);
 	
+	/**
+	 * 根据parentId查找下级部门信息
+	 * @param parentId
+	 * @return
+	 */
+	@Select("SELECT * FROM department WHERE parent_id = #{parentId}")
+	@ResultMap("departmentMap")
+	Department findDepartmentByParentId(int parentId);
 	
 }

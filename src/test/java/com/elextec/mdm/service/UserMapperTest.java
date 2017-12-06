@@ -18,12 +18,7 @@ import com.elextec.mdm.mapper.DepartmentMapper;
 import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.mapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -79,6 +74,18 @@ public class UserMapperTest {
     }
     
     @Test
+    public void updateUserinfo() throws Exception {
+    	User user = userMapper.findUserById(1);
+    	user.setUserPassword("zkj123");
+    	user.setFullName("zhangkaijun");
+    	user.setStatus(UserStatusEnum.UserStatusLock);
+    	userMapper.update(user);
+    	user = userMapper.findUserById(1);
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(user));
+    }
+    
+    @Test
     public void addUserRole() throws Exception {
     	User user = new User();
     	user.setId(7);
@@ -91,6 +98,13 @@ public class UserMapperTest {
     	roles.add(role1);
     	user.setRoles(roles);
     	userMapper.addUserRoles(user);
+    }
+    
+    @Test
+    public void delUserRole() throws Exception {
+    	User user = new User();
+    	user.setId(7);
+    	userMapper.delUserRoles(user.getId());
     }
     
     @Test
@@ -112,9 +126,14 @@ public class UserMapperTest {
     @Test
     public void addDepartment() throws Exception {
     	Department department = new Department();
-    	department.setDepartCode("10003");
-    	department.setDepartName("xxx");
+    	department.setDepartCode("30001");
+    	department.setDepartName("IC-4");
     	department.setStatus(StatusEnum.StatusEnable);
+    	department.setParentId(7);
+    	/*List<Department> nextDepartments = new ArrayList<Department>();
+    	Department nextDepartment = new Department();
+    	nextDepartment.setId(2);
+    	nextDepartments.add(nextDepartment);*/
     	departmentMapper.insert(department);
     }
     
@@ -127,7 +146,7 @@ public class UserMapperTest {
     
     @Test
     public void findDepartmentById() throws JsonProcessingException{
-    	Department department = departmentMapper.findDepartmentById(1);
+    	Department department = departmentMapper.findDepartmentById(2);
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(department));
     }
