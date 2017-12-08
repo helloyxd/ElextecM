@@ -3,6 +3,8 @@ package com.elextec.mdm.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,11 @@ import com.elextec.mdm.common.entity.StatusEnum;
 import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.Department;
+import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.mapper.DepartmentMapper;
+import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.mapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,6 +37,9 @@ public class UserMapperTest {
 	private RoleMapper roleMapper;
 	
 	@Autowired
+	private MenuMapper menuMapper;
+	
+	@Autowired
 	private DepartmentMapper departmentMapper;
 	
     @Test
@@ -46,7 +53,7 @@ public class UserMapperTest {
     
     @Test
     public void getAllUsers() throws Exception {
-    	List<User> list = userMapper.getAll();
+    	List<User> list = userMapper.findAll();
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(list));
     }
@@ -90,14 +97,11 @@ public class UserMapperTest {
     @Test
     public void addUserRole() throws Exception {
     	User user = new User();
-    	user.setId(7);
+    	user.setId(1);
     	List<Role> roles = new ArrayList<Role>();
     	Role role = new Role();
-    	role.setId(2);
+    	role.setId(1);
     	roles.add(role);
-    	Role role1 = new Role();
-    	role1.setId(3);
-    	roles.add(role1);
     	user.setRoles(roles);
     	userMapper.addUserRoles(user);
     }
@@ -112,15 +116,15 @@ public class UserMapperTest {
     @Test
     public void addRole() throws Exception {
     	Role role = new Role();
-    	role.setRoleName("admin3");
-    	role.setRoleDesc("admin3");
+    	role.setRoleName("admin1");
+    	role.setRoleDesc("admin1");
     	roleMapper.insert(role);
     	
     }
     
     @Test
     public void getAllRole() throws Exception {
-    	List<Role> list = roleMapper.getAll();
+    	List<Role> list = roleMapper.findAll();
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(list));
     }
@@ -141,7 +145,7 @@ public class UserMapperTest {
     
     @Test
     public void findAllDepartments() throws JsonProcessingException{
-    	List<Department> departments = departmentMapper.getAll();
+    	List<Department> departments = departmentMapper.findAll();
     	VoResponse vo = new VoResponse();
     	vo.setData(departments);
     	ObjectMapper mapper = new ObjectMapper();
@@ -154,5 +158,60 @@ public class UserMapperTest {
     	Department department = departmentMapper.findDepartmentById(2);
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(department));
+    }
+    
+    @Test
+    public void addMenu() throws Exception {
+    	Menu menu = new Menu();
+    	menu.setMenuName("3 level");
+    	menu.setLevel(1);
+    	menu.setMenuUrl("menu");
+    	menu.setRemark("desc");
+    	menu.setParentId(4);
+    	menu.setSortOrder(1);
+    	menu.setStatus(UserStatusEnum.UserStatusNormal);
+    	menu.setCreater("zkj");
+    	menuMapper.insert(menu);
+    }
+    
+    @Test
+    public void delMenu() throws Exception {
+    	menuMapper.delById(1);
+    }
+    
+    @Test
+    public void getAllMenus() throws Exception {
+    	List<Menu> list = menuMapper.findAll();
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(list));
+    }
+    
+    @Test
+    public void getAllMenus1Level() throws Exception {
+    	List<Menu> list = menuMapper.findSuperMenus();
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(list));
+    }
+    
+    @Test
+    public void addRoleMenus() throws Exception {
+    	Role role = new Role();
+    	role.setId(1);
+    	List<Menu> menus = new ArrayList<Menu>();
+    	Menu menu1 = new Menu();
+    	menu1.setId(2);
+    	menus.add(menu1);
+    	Menu menu2 = new Menu();
+    	menu2.setId(3);
+    	menus.add(menu2);
+    	role.setMenus(menus);
+    	roleMapper.addRoleMenus(role);
+    }
+    
+    @Test
+    public void getRoleById() throws Exception {
+    	Role role = roleMapper.findRoleById(1);
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(role));
     }
 }

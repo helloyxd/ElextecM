@@ -50,12 +50,7 @@ public class UserController{
 		return voResponse;
 	}
 	
-	@GetMapping("/getDepartments")
-	public Object getAllDepartments() {
-		VoResponse voResponse = new VoResponse();
-		voResponse.setData(userService.getAllDepartments());
-		return voResponse;
-	}
+	
 	
 
 }

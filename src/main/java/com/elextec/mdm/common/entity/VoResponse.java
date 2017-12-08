@@ -8,6 +8,7 @@ public class VoResponse {
 	
 	public VoResponse(){
 		this.setCode(ResponseCodeEnum.CodeSuccess);
+		this.setSuccess(Boolean.TRUE);
 	}
 	
 	public String getMessage() {

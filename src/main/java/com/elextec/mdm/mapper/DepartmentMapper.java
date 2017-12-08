@@ -2,6 +2,7 @@ package com.elextec.mdm.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Options;
@@ -33,7 +34,7 @@ public interface DepartmentMapper {
         @Result(property = "departments", column = "id",
             	many = @Many(select = "com.elextec.mdm.mapper.DepartmentMapper.findDepartmentByParentId"))
     })
-    List<Department> getAll();
+    List<Department> findAll();
 	
 	/**
 	 * 获取所有最高级部门信息
@@ -41,7 +42,7 @@ public interface DepartmentMapper {
 	 */
 	@Select("SELECT * FROM department WHERE parent_id is null ORDER BY depart_code")
 	@ResultMap("departmentMap")
-    List<Department> getSuperDepartment();
+    List<Department> findSuperDepartments();
 	
 	/**
 	 * 根据departmentId查找单个部门信息
@@ -79,4 +80,14 @@ public interface DepartmentMapper {
 	@ResultMap("departmentMap")
 	Department findDepartmentByParentId(int parentId);
 	
+	/**
+     * 根据部门ID，删除部门信息
+     * @param id
+     */
+    @Delete("DELETE FROM department WHERE id=#{id}")
+    void delById(int id);
+    
+    @Select("SELECT * FROM department WHERE depart_code = #{departCode} OR depart_name = #{departName}")
+    @ResultMap("departmentMapOnly")
+    List<Department> findByCodeOrName(String departCode,String departName);
 }

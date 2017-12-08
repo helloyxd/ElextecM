@@ -40,7 +40,7 @@ public interface UserMapper {
 	
 	@Select("SELECT * FROM user")
 	@ResultMap("userMap")
-    List<User> getAll();
+    List<User> findAll();
 	
 	@Select("SELECT * FROM user WHERE id = #{userId}")
 	@ResultMap("userMap")
