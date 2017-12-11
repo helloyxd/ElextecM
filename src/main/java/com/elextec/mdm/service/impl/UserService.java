@@ -1,6 +1,8 @@
 package com.elextec.mdm.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +43,8 @@ public class UserService implements IUserService {
 		return list;
 	}
 
-	@Override
-	public List<User> getPage(User user, int page, int pageSize) {
+	public Map<String, Object> getPage(User user, int page, int pageSize){
+		Map<String, Object> map = new HashMap<String, Object>();
 		int count = userMapper.findCount(user);
 		PageQuery pageQuery = new PageQuery();
 		pageQuery.setAllCount(count);
@@ -51,7 +53,9 @@ public class UserService implements IUserService {
 		pageQuery.setOrder("user_name");
 		pageQuery.calcutePage(pageQuery);
 		List<User> list = userMapper.findUserByPage(user, pageQuery);
-		return list;
+		map.put("total", count);
+		map.put("rows", list);
+		return map;
 	}
 	
 	
