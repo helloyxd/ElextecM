@@ -16,20 +16,18 @@
 
 package com.elextec.mdm.contorller;
 
-import java.util.HashMap;
-
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("mdm")
 public class MyController {
 
-	@GetMapping("/hello")
-	public HashMap hello() {
-		HashMap<String, String> map = new HashMap<String,String>();
-		map.put("key", "name");
-		map.put("key", "1234");
-		return map;
+	@GetMapping("/")
+	public Object hello() {
+		String msg = "Hello,MDM system";
+		return msg;
 	}
 
 }

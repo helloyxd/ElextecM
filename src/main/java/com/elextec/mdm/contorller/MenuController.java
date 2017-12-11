@@ -11,39 +11,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
-import com.elextec.mdm.entity.Department;
-import com.elextec.mdm.service.IDepartmentService;
+import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.Role;
+import com.elextec.mdm.service.IMenuService;
+import com.elextec.mdm.service.IRoleService;
 
 @RestController
-@RequestMapping("department")
-public class DepartmentController {
+@RequestMapping("menu")
+public class MenuController {
 
 	@Autowired
-	private IDepartmentService departmentService;
+	private IMenuService menuService;
 	
 	@GetMapping("/getAll")
 	public Object getAllDepartments() {
 		VoResponse voResponse = new VoResponse();
-		voResponse.setData(departmentService.getAllDepartments());
+		voResponse.setData(menuService.getAllMenus());
 		return voResponse;
 	}
 	
 	@DeleteMapping(value="{id}")
 	public Object del(@PathVariable("id") int id) {
-		VoResponse voResponse = departmentService.delDepartment(id);
+		VoResponse voResponse = menuService.delMenu(id);
 		return voResponse;
 	}
 	
 	@PostMapping
-	public Object add(@RequestBody Department department) {
-		VoResponse voResponse = departmentService.addDepartment(department);
+	public Object add(@RequestBody Menu menu) {
+		VoResponse voResponse = menuService.addMenu(menu);
 		return voResponse;
 	}
 	
 	@PutMapping
-	public Object update(@RequestBody Department department) {
-		VoResponse voResponse = new VoResponse();
+	public Object update(@RequestBody Menu menu) {
+		VoResponse voResponse = menuService.updateMenu(menu);
 		return voResponse;
 	}
-	
 }

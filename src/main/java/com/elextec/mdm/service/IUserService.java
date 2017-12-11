@@ -9,4 +9,6 @@ public interface IUserService {
 	public String getUserName();
 	public VoResult registerUser(User user);
 	public List<User> getAll();
+	public List<User> getPage(User user, int page, int pageSize);
+	
 }

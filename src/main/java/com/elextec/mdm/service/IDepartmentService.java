@@ -5,7 +5,7 @@ import java.util.List;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.Department;
 
-public interface IDepartmentService {
+public interface IDepartmentService{
 
 	public List<Department> getAllDepartments();
 	

@@ -3,7 +3,6 @@ package com.elextec.mdm.entity;
 import java.util.List;
 
 import com.elextec.mdm.common.entity.BasicEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Department extends BasicEntity{
 

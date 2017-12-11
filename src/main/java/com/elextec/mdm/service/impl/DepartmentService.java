@@ -71,6 +71,5 @@ public class DepartmentService implements IDepartmentService{
 		VoResponse vo = new VoResponse();
 		return null;
 	}
-	
-	
+
 }

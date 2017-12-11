@@ -21,9 +21,6 @@ public class UserController{
 	@Autowired
 	private IUserService userService;
 	
-	@Autowired
-	private IRoleService roleService;
-	
 	@PostMapping("/registered")
 	public Object registered(@RequestBody User user) {
 		VoResponse voResponse = new VoResponse();

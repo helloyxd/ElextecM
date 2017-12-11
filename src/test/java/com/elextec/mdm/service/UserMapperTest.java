@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.common.entity.StatusEnum;
 import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
@@ -67,19 +68,13 @@ public class UserMapperTest {
     
     @Test
     public void addUser() throws Exception {
-    	User user = new User();
-    	user.setUserName("admin3");
-    	user.setUserPassword("123");
-    	user.setStatus(UserStatusEnum.UserStatusNormal);
-    	Department department = new Department();
-    	department.setId(2);
-    	user.setDepartment(department);
-    	List<Role> roles = new ArrayList<Role>();
-    	Role role = new Role();
-    	role.setId(2);
-    	roles.add(role);
-    	user.setRoles(roles);
-    	userMapper.insert(user);
+    	for(int i=4;i<100;i++){
+    		User user = new User();
+        	user.setUserName("admin" + i);
+        	user.setUserPassword("123");
+        	user.setStatus(UserStatusEnum.UserStatusNormal);
+        	//userMapper.insert(user);
+    	}
     }
     
     @Test
@@ -213,5 +208,23 @@ public class UserMapperTest {
     	Role role = roleMapper.findRoleById(1);
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(role));
+    }
+    
+    @Test
+    public void getUserPage() throws Exception {
+    	ObjectMapper mapper = new ObjectMapper();
+    	User user = new User();
+    	user.setUserName("%admin%");
+    	int count = userMapper.findCount(user);
+    	System.out.println(count);
+		PageQuery pageQuery = new PageQuery();
+		pageQuery.setAllCount(count);
+		pageQuery.setCurrentPage(10);
+		pageQuery.setPageRowSize(10);
+		pageQuery.setOrder("user_name");
+		pageQuery.calcutePage(pageQuery);
+		System.out.println(mapper.writeValueAsString(pageQuery));
+		List<User> list = userMapper.findUserByPage(user, pageQuery);
+    	System.out.println(mapper.writeValueAsString(list));
     }
 }

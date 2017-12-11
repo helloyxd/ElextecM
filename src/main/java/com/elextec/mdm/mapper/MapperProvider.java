@@ -1,8 +1,10 @@
 package com.elextec.mdm.mapper;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Map;
 
+import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
@@ -39,5 +41,55 @@ public class MapperProvider {
 		return sb.toString();
 	}
 	
+	public String findUserByPage(Map<String, Object> map){
+		StringBuilder sb = new StringBuilder();
+		User user = (User) map.get("user");
+		PageQuery pageQuery = (PageQuery) map.get("page");
+		sb.append("SELECT * FROM user WHERE 1=1");
+		sb.append(getUserCondition(user));
+		if(pageQuery.getOrder() != null)
+			sb.append(" ORDER BY ").append(pageQuery.getOrder());
+		sb.append(" LIMIT ").append(pageQuery.getBeginIndex()).append(",").append(pageQuery.getPageRowSize());
+		System.out.println(sb);
+		return sb.toString();
+	}
+	
+	public String findUserCount(Map<String, User> map){
+		StringBuilder sb = new StringBuilder();
+		User user = map.get("user");
+		sb.append("SELECT COUNT(*) FROM user WHERE 1=1");
+		sb.append(getUserCondition(user));
+		System.out.println(sb);
+		return sb.toString();
+	}
+	
+	public String getUserCondition(User user){
+		StringBuilder sb = new StringBuilder();
+		if(user.getUserName() != null)
+			sb.append(" AND user_name LIKE '").append(user.getUserName()).append("'");		
+		if(user.getFullName() != null)
+			sb.append(" AND full_name LIKE '").append(user.getUserName()).append("'");
+		return sb.toString();
+	}
+	
+	
+	public String test(Map<String, Role> map){
+		StringBuilder sb = new StringBuilder();
+		
+		System.out.println(sb);
+		return sb.toString();
+	}
+	
+	public static void main(String[] args) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		User user = new User();
+		user.setUserName("%admin%");
+		PageQuery pageQuery = new PageQuery();
+		pageQuery.setOrder("user_name");
+		map.put("user", user);
+		map.put("page", pageQuery);
+		new MapperProvider().findUserByPage(map);
+		
+	}
 	
 }

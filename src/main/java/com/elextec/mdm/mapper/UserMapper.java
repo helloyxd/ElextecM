@@ -13,8 +13,10 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
+import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.User;
 
 public interface UserMapper {
@@ -76,4 +78,10 @@ public interface UserMapper {
     @Delete("DELETE FROM user_role WHERE user_id=#{userId}")
     void delUserRoles(int userId);
     
+    @SelectProvider(type = MapperProvider.class,method = "findUserByPage")
+    @ResultMap("userMap")
+    List<User> findUserByPage(@Param("user")User user, @Param("page")PageQuery pageQuery);
+    
+    @SelectProvider(type = MapperProvider.class,method = "findUserCount")
+    int findCount(@Param("user")User user);
 }

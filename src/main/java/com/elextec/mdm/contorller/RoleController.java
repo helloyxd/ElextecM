@@ -11,39 +11,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
-import com.elextec.mdm.entity.Department;
-import com.elextec.mdm.service.IDepartmentService;
+import com.elextec.mdm.entity.Role;
+import com.elextec.mdm.service.IRoleService;
 
 @RestController
-@RequestMapping("department")
-public class DepartmentController {
+@RequestMapping("role")
+public class RoleController {
 
 	@Autowired
-	private IDepartmentService departmentService;
+	private IRoleService roleService;
 	
 	@GetMapping("/getAll")
 	public Object getAllDepartments() {
 		VoResponse voResponse = new VoResponse();
-		voResponse.setData(departmentService.getAllDepartments());
+		voResponse.setData(roleService.getAllRoles());
 		return voResponse;
 	}
 	
 	@DeleteMapping(value="{id}")
 	public Object del(@PathVariable("id") int id) {
-		VoResponse voResponse = departmentService.delDepartment(id);
+		VoResponse voResponse = roleService.delRole(id);
 		return voResponse;
 	}
 	
 	@PostMapping
-	public Object add(@RequestBody Department department) {
-		VoResponse voResponse = departmentService.addDepartment(department);
+	public Object add(@RequestBody Role role) {
+		VoResponse voResponse = roleService.addRole(role);
 		return voResponse;
 	}
 	
 	@PutMapping
-	public Object update(@RequestBody Department department) {
-		VoResponse voResponse = new VoResponse();
+	public Object update(@RequestBody Role role) {
+		VoResponse voResponse = roleService.updateRole(role);
 		return voResponse;
 	}
-	
 }
