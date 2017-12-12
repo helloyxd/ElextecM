@@ -13,14 +13,14 @@ public class MapperProvider {
 
 	public String addUserRoles(Map<String, User> map){
 		User user = map.get("user");
-		StringBuilder sb = new StringBuilder();  
+		StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO user_role(user_id,role_id) VALUES");
         MessageFormat mf = new MessageFormat("(#'{'user.id}, #'{'user.roles[{0}].id})");
         for(int i = 0; i < user.getRoles().size(); i++) {
-        	sb.append(mf.format(new Object[]{i}));  
-            if (i < user.getRoles().size() - 1) {  
-                sb.append(",");  
-            }  
+        	sb.append(mf.format(new Object[]{i}));
+            if (i < user.getRoles().size() - 1) {
+                sb.append(",");
+            }
         }
         System.out.println(sb);
 		return sb.toString();
@@ -28,14 +28,14 @@ public class MapperProvider {
 	
 	public String addRoleMenus(Map<String, Role> map){
 		Role role = map.get("role");
-		StringBuilder sb = new StringBuilder();  
+		StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO role_menu(role_id,menu_id) VALUES");
         MessageFormat mf = new MessageFormat("(#'{'role.id}, #'{'role.menus[{0}].id})");
         for(int i = 0; i < role.getMenus().size(); i++) {
-        	sb.append(mf.format(new Object[]{i}));  
-            if (i < role.getMenus().size() - 1) {  
-                sb.append(",");  
-            }  
+        	sb.append(mf.format(new Object[]{i}));
+            if (i < role.getMenus().size() - 1) {
+                sb.append(",");
+            }
         }
         System.out.println(sb);
 		return sb.toString();
@@ -66,7 +66,7 @@ public class MapperProvider {
 	public String getUserCondition(User user){
 		StringBuilder sb = new StringBuilder();
 		if(user.getUserName() != null)
-			sb.append(" AND user_name LIKE '").append(user.getUserName()).append("'");		
+			sb.append(" AND user_name LIKE '").append(user.getUserName()).append("'");
 		if(user.getFullName() != null)
 			sb.append(" AND full_name LIKE '").append(user.getUserName()).append("'");
 		return sb.toString();

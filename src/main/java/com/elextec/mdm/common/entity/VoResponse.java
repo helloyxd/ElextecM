@@ -37,4 +37,9 @@ public class VoResponse {
 	public void setSuccess(Boolean success) {
 		this.success = success;
 	}
+	
+	public void setNull(VoResponse voRes){
+		voRes.setCode(ResponseCodeEnum.CodeInputDataException);
+		voRes.setSuccess(false);
+	}
 }
