@@ -1,12 +1,13 @@
 package com.elextec.mdm.entity;
 
+import java.util.List;
 import java.util.Map;
 
 public class ColumnDefinition {
 
 	private String name;
 	private Map<Integer, String> dataTypeMap;
-	private String constraint;
+	private List<Integer> constraints;
 	
 	public String getName() {
 		return name;
@@ -20,12 +21,11 @@ public class ColumnDefinition {
 	public void setDataTypeMap(Map<Integer, String> dataTypeMap) {
 		this.dataTypeMap = dataTypeMap;
 	}
-	public String getConstraint() {
-		return constraint;
+	public List<Integer> getConstraints() {
+		return constraints;
 	}
-	public void setConstraint(String constraint) {
-		this.constraint = constraint;
+	public void setConstraints(List<Integer> constraints) {
+		this.constraints = constraints;
 	}
-	
 	
 }

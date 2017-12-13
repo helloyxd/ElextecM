@@ -7,7 +7,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-samples</artifactId>
 		<version>${revision}</version>
-		<relativePath>../spring-boot-master/spring-boot-samples</relativePath>
+		<relativePath>../spring-boot-master/spring-boot-master/spring-boot-samples</relativePath>
 	</parent>
 	<artifactId>mdm</artifactId>
 	<packaging>war</packaging>
@@ -51,6 +51,17 @@
 	        <artifactId>mysql-connector-java</artifactId>
 	    </dependency>
 	    
+	    <!-- <dependency>
+	        <groupId>oracle</groupId>
+	        <artifactId>oracle-connector-java</artifactId>
+	    </dependency> -->
+	    
+		<dependency>
+	      <groupId>com.oracle</groupId>      
+	      <artifactId>ojdbc6</artifactId>
+	      <version>11.1.0.6.0</version>    
+	    </dependency>
+	    
 	    
 	    <!-- webservice -->
 	    <dependency>
@@ -79,6 +90,13 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				  <configuration>  
 		          <skipTests>true</skipTests>  
+		        </configuration>  
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				  <configuration>  
+		          <failOnMissingWebXml>false</failOnMissingWebXml>  
 		        </configuration>  
 			</plugin>
 		</plugins>

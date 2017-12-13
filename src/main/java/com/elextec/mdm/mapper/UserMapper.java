@@ -40,16 +40,25 @@ public interface UserMapper {
     })
     List<User> findUserByName(String userName);
 	
-	@Select("SELECT * FROM user")
-	@ResultMap("userMap")
+	@Select("SELECT * FROM mdm_user")
+	@Results(id="userMapOnly",
+	value={
+		@Result(id = true, property = "id", column = "id"),
+		@Result(property = "userName",  column = "user_name"),
+        @Result(property = "userPassword", column = "user_password"),
+        @Result(property = "fullName", column = "full_name"),
+        @Result(property = "status", column = "status"),
+		@Result(property = "createTime", column = "create_time"),
+        @Result(property = "creater", column = "creater")
+    })
     List<User> findAll();
 	
 	@Select("SELECT * FROM user WHERE id = #{userId}")
 	@ResultMap("userMap")
 	User findUserById(int userId);
 
-    @Insert("INSERT INTO user(user_name,user_password,full_name,department_id,status,creater)"
-    		+ " VALUES(#{userName}, #{userPassword}, #{fullName}, #{department.id}, #{status}, #{creater})")
+    @Insert("INSERT INTO mdm_user(id,user_name,user_password,full_name,department_id,status,creater)"
+    		+ " VALUES(sys_guid(), #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, #{department.id,jdbcType=INTEGER}, #{status}, #{creater})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @ResultMap("userMap")
     void insert(User user);

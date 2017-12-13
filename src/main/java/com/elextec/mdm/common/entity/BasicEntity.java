@@ -3,7 +3,7 @@ package com.elextec.mdm.common.entity;
 import java.sql.Date;
 
 public class BasicEntity {
-	private Integer id;
+	private String id;
 	private Date createTime;
 	private String creater;
 	private Integer status;
@@ -20,16 +20,17 @@ public class BasicEntity {
 	public void setCreater(String creater) {
 		this.creater = creater;
 	}
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	
 	public Integer getStatus() {
 		return status;
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 }

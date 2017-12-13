@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.ResponseCodeEnum;
 import com.elextec.mdm.common.entity.TableDDLMap;
@@ -16,6 +17,7 @@ import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.TableDLLMapper;
 import com.elextec.mdm.service.ITableDLLService;
 
+@Service
 public class TableDLLService implements ITableDLLService {
 	
 	@Autowired
@@ -34,7 +36,7 @@ public class TableDLLService implements ITableDLLService {
 		}
 		mdmModel.getMdmModel();
 		StringBuilder sb = new StringBuilder();
-		sb.append("CREATE TABLE ").append(table.getTableName()).append("(\n");
+		sb.append("CREATE TABLE ").append(table.getTableName()).append("(");//.append("(\n");
 		List<ColumnDefinition> list = table.getColumnDefinitions();
 		Iterator<ColumnDefinition> iter = list.iterator();
 		while(iter.hasNext()){
@@ -54,11 +56,16 @@ public class TableDLLService implements ITableDLLService {
 						break;
 				}
 			}
-			sb.append(" ").append(obj.getConstraint());
+			List<Integer> constraints = obj.getConstraints();
+			if(constraints != null){
+				for(Integer i : constraints){
+					sb.append(" ").append(TableDDLMap.oracleColumnConstraintMap.get(i));
+				}
+			}
 			if(iter.hasNext()){
 				sb.append(",");
 			}
-			sb.append("\n");
+			//sb.append("\n");
 		}
 		sb.append(");");
 		System.out.println(sb.toString());

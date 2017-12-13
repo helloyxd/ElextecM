@@ -3,8 +3,6 @@ package com.elextec.mdm.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.mapper.UserMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -68,12 +65,14 @@ public class UserMapperTest {
     
     @Test
     public void addUser() throws Exception {
-    	for(int i=4;i<100;i++){
+    	for(int i=0;i<100;i++){
     		User user = new User();
         	user.setUserName("admin" + i);
         	user.setUserPassword("123");
+        	user.setFullName("auto add");
         	user.setStatus(UserStatusEnum.UserStatusNormal);
-        	//userMapper.insert(user);
+        	user.setCreater("SYS");
+        	userMapper.insert(user);
     	}
     }
     
@@ -92,10 +91,10 @@ public class UserMapperTest {
     @Test
     public void addUserRole() throws Exception {
     	User user = new User();
-    	user.setId(1);
+    	//user.setId(1);
     	List<Role> roles = new ArrayList<Role>();
     	Role role = new Role();
-    	role.setId(1);
+    	//role.setId(1);
     	roles.add(role);
     	user.setRoles(roles);
     	userMapper.addUserRoles(user);
@@ -104,8 +103,8 @@ public class UserMapperTest {
     @Test
     public void delUserRole() throws Exception {
     	User user = new User();
-    	user.setId(7);
-    	userMapper.delUserRoles(user.getId());
+    	//user.setId(7);
+    	//userMapper.delUserRoles(user.getId());
     }
     
     @Test
@@ -191,13 +190,13 @@ public class UserMapperTest {
     @Test
     public void addRoleMenus() throws Exception {
     	Role role = new Role();
-    	role.setId(1);
+    	//role.setId(1);
     	List<Menu> menus = new ArrayList<Menu>();
     	Menu menu1 = new Menu();
-    	menu1.setId(2);
+    	//menu1.setId(2);
     	menus.add(menu1);
     	Menu menu2 = new Menu();
-    	menu2.setId(3);
+    	//menu2.setId(3);
     	menus.add(menu2);
     	role.setMenus(menus);
     	roleMapper.addRoleMenus(role);
