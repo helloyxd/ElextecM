@@ -42,4 +42,8 @@ public class VoResponse {
 		voRes.setCode(ResponseCodeEnum.CodeInputDataException);
 		voRes.setSuccess(false);
 	}
+	public void setFail(VoResponse voRes){
+		voRes.setCode(ResponseCodeEnum.CodeFail);
+		voRes.setSuccess(false);
+	}
 }

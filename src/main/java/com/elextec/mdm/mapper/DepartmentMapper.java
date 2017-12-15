@@ -15,13 +15,13 @@ import com.elextec.mdm.entity.Department;
 
 public interface DepartmentMapper {
 
-	@Insert("INSERT INTO department(depart_code,depart_name,parent_id,status,creater)"
-    		+ " VALUES(#{departCode}, #{departName}, #{parentId}, #{status}, #{creater})")
+	@Insert("INSERT INTO mdm_department(id,depart_code,depart_name,parent_id,status,creater,create_time)"
+    		+ " VALUES(sys_guid(), #{departCode}, #{departName}, #{parentId}, #{status}, #{creater}, sysdate)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
 	@ResultMap("departmentMap")
     void insert(Department department);
 	
-	@Select("SELECT * FROM department ORDER BY depart_code")
+	@Select("SELECT * FROM mdm_department ORDER BY depart_code")
 	@Results(id="departmentMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -40,7 +40,7 @@ public interface DepartmentMapper {
 	 * 获取所有最高级部门信息
 	 * @return
 	 */
-	@Select("SELECT * FROM department WHERE parent_id is null ORDER BY depart_code")
+	@Select("SELECT * FROM mdm_department WHERE parent_id is null ORDER BY depart_code")
 	@ResultMap("departmentMap")
     List<Department> findSuperDepartments();
 	
@@ -49,7 +49,7 @@ public interface DepartmentMapper {
 	 * @param departmentId
 	 * @return
 	 */
-	@Select("SELECT * FROM department WHERE id = #{departmentId}")
+	@Select("SELECT * FROM mdm_department WHERE id = #{departmentId}")
 	@Results(id="departmentMapOnly",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -67,7 +67,7 @@ public interface DepartmentMapper {
 	 * @param departmentId
 	 * @return
 	 */
-	@Select("SELECT * FROM department WHERE id = #{departmentId}")
+	@Select("SELECT * FROM mdm_department WHERE id = #{departmentId}")
 	@ResultMap("departmentMap")
 	Department findAllDepartmentsById(int departmentId);
 	
@@ -76,7 +76,7 @@ public interface DepartmentMapper {
 	 * @param parentId
 	 * @return
 	 */
-	@Select("SELECT * FROM department WHERE parent_id = #{parentId}")
+	@Select("SELECT * FROM mdm_department WHERE parent_id = #{parentId}")
 	@ResultMap("departmentMap")
 	Department findDepartmentByParentId(int parentId);
 	
@@ -84,10 +84,10 @@ public interface DepartmentMapper {
      * 根据部门ID，删除部门信息
      * @param id
      */
-    @Delete("DELETE FROM department WHERE id=#{id}")
+    @Delete("DELETE FROM mdm_department WHERE id=#{id}")
     void delById(int id);
     
-    @Select("SELECT * FROM department WHERE depart_code = #{departCode} OR depart_name = #{departName}")
+    @Select("SELECT * FROM mdm_department WHERE depart_code = #{departCode} OR depart_name = #{departName}")
     @ResultMap("departmentMapOnly")
     List<Department> findByCodeOrName(String departCode,String departName);
 }

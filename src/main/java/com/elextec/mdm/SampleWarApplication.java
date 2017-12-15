@@ -16,22 +16,35 @@
 
 package com.elextec.mdm;
 
+import java.io.IOException;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Sample WAR application
  */
+@RestController
 @SpringBootApplication
 @MapperScan("com.elextec.mdm.*")
 @ComponentScan({"com.elextec.mdm"})
-public class SampleWarApplication extends SpringBootServletInitializer {
+//public class SampleWarApplication extends SpringBootServletInitializer {
+public class SampleWarApplication  {
 
+	@RequestMapping("/index")
+    public String index() {
+		String msg = "Hello Spring Boot,我是kkkk2222112221";
+		return msg;
+    }
+	
 	public static void main(String[] args) {
-		//System.out.println(SampleWarApplication.class.getResource("/").toString());   
+		//System.out.println(SampleWarApplication.class.getResource("/").toString());
+		System.setProperty("spring.devtools.restart.enabled", "false");
 		SpringApplication.run(SampleWarApplication.class, args);
 	}
 

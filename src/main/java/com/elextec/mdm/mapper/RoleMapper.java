@@ -18,7 +18,7 @@ import com.elextec.mdm.entity.Role;
 
 public interface RoleMapper {
 
-	@Select("SELECT * FROM role WHERE role_name = #{roleName}")
+	@Select("SELECT * FROM mdm_role WHERE role_name = #{roleName}")
 	@Results(id="roleMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -33,31 +33,31 @@ public interface RoleMapper {
     })
     List<Role> findRoleByName(String userName);
 	
-	@Select("SELECT * FROM role")
+	@Select("SELECT * FROM mdm_role")
 	@ResultMap("roleMap")
     List<Role> findAll();
 	
-	@Select("SELECT * FROM role WHERE id = #{roleId}")
+	@Select("SELECT * FROM mdm_role WHERE id = #{roleId}")
 	@ResultMap("roleMap")
 	Role findRoleById(int roleId);
 
-    @Insert("INSERT INTO role(role_name,role_desc,status,creater)"
-    		+ " VALUES(#{roleName}, #{roleDesc}, #{status}, #{creater})")
+    @Insert("INSERT INTO mdm_role(id,role_name,role_desc,status,creater,create_time)"
+    		+ " VALUES(sys_guid(), #{roleName}, #{roleDesc}, #{status}, #{creater}, sysdate)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Role role);
 
-    @Update("UPDATE role SET role_name=#{roleName},user_desc=#{roleDesc} WHERE id =#{id}")
+    @Update("UPDATE mdm_role SET role_name=#{roleName},user_desc=#{roleDesc} WHERE id =#{id}")
     void update(Role role);
 
-    @Delete("DELETE FROM role WHERE id =#{id}")
+    @Delete("DELETE FROM mdm_role WHERE id =#{id}")
     void delete(Long id);
     
     @Update("${sql}")
     void createTable(@Param("sql") String sql);
     
-    @Select("SELECT * FROM role WHERE id IN (SELECT role_id FROM user_role WHERE USER_ID = #{userId})")
+    @Select("SELECT * FROM mdm_role WHERE id IN (SELECT role_id FROM mdm_user_role WHERE user_id = #{userId})")
     @ResultMap("roleMap")
-    List<Role> findRolesByUserId(Integer userId);
+    List<Role> findRolesByUserId(String userId);
     
     /**
      * 新增角色的菜单权限信息

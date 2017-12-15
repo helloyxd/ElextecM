@@ -21,7 +21,7 @@ import com.elextec.mdm.entity.User;
 
 public interface UserMapper {
 	
-	@Select("SELECT * FROM user WHERE user_name = #{userName}")
+	@Select("SELECT * FROM mdm_user WHERE user_name = #{userName}")
 	@Results(id="userMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -53,22 +53,23 @@ public interface UserMapper {
     })
     List<User> findAll();
 	
-	@Select("SELECT * FROM user WHERE id = #{userId}")
+	@Select("SELECT * FROM mdm_user WHERE id = #{userId}")
 	@ResultMap("userMap")
-	User findUserById(int userId);
+	User findUserById(String userId);
 
-    @Insert("INSERT INTO mdm_user(id,user_name,user_password,full_name,department_id,status,creater)"
-    		+ " VALUES(sys_guid(), #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, #{department.id,jdbcType=INTEGER}, #{status}, #{creater})")
+    @Insert("INSERT INTO mdm_user(id,user_name,user_password,full_name,department_id,status,creater,create_time)"
+    		+ " VALUES(sys_guid(), #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, "
+    		+ "#{department.id,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @ResultMap("userMap")
     void insert(User user);
 
-    @Update("UPDATE user SET full_name=#{fullName},user_password=#{userPassword},"
-    		+ "department_id=#{department.id},status=#{status} WHERE id =#{id}")
+    @Update("UPDATE mdm_user SET full_name=#{fullName},user_password=#{userPassword},"
+    		+ "department_id=#{department.id,jdbcType=VARCHAR},status=#{status} WHERE id =#{id}")
     void update(User user);
 
-    @Delete("DELETE FROM user WHERE id =#{id}")
-    void delete(Long id);
+    @Delete("DELETE FROM mdm_user WHERE id =#{id}")
+    void delete(String id);
     
     @Update("${sql}")
     void createTable(@Param("sql") String sql);
@@ -84,11 +85,11 @@ public interface UserMapper {
      * 根据用户ID，删除用户的角色信息
      * @param userId
      */
-    @Delete("DELETE FROM user_role WHERE user_id=#{userId}")
+    @Delete("DELETE FROM mdm_user_role WHERE user_id=#{userId}")
     void delUserRoles(int userId);
     
     @SelectProvider(type = MapperProvider.class,method = "findUserByPage")
-    @ResultMap("userMap")
+    @ResultMap("userMapOnly")
     List<User> findUserByPage(@Param("user")User user, @Param("page")PageQuery pageQuery);
     
     @SelectProvider(type = MapperProvider.class,method = "findUserCount")

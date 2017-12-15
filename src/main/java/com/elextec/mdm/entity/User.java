@@ -16,6 +16,7 @@ public class User extends BasicEntity implements Serializable{
 	private String fullName;
 	private Department department;
 	private List<Role> roles;
+	private String sessionId;
 	
 	public String getUserName() {
 		return userName;
@@ -46,6 +47,12 @@ public class User extends BasicEntity implements Serializable{
 	}
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 	
 }

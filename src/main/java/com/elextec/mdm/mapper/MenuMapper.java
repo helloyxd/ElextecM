@@ -63,7 +63,7 @@ public interface MenuMapper {
 	 * @param roleId
 	 * @return
 	 */
-	@Select("SELECT * FROM menu WHERE id IN (SELECT menu_id FROM role_menu WHERE ROLE_ID = #{roleId})")
+	@Select("SELECT * FROM mdm_menu WHERE id IN (SELECT menu_id FROM mdm_role_menu WHERE role_id = #{roleId})")
 	@Results(id="menuMapOnly",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -77,6 +77,6 @@ public interface MenuMapper {
 		@Result(property = "createTime", column = "create_time"),
 		@Result(property = "creater", column = "creater")
     })
-    List<Menu> findMenusByRoleId(Integer roleId);
+    List<Menu> findMenusByRoleId(String roleId);
 	
 }

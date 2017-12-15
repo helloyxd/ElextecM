@@ -1,5 +1,10 @@
 package com.elextec.mdm.contorller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elextec.mdm.common.entity.ResponseCodeEnum;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
 import com.elextec.mdm.entity.User;
@@ -21,23 +25,42 @@ public class UserController{
 	@Autowired
 	private IUserService userService;
 	
-	@PostMapping("/registered")
-	public Object registered(@RequestBody User user) {
-		VoResponse voResponse = new VoResponse();
+	@PostMapping
+	public Object add(@RequestBody User user) {
+		VoResponse voRes = new VoResponse();
 		if(("").equals(user.getUserName())){
-			voResponse.setCode(ResponseCodeEnum.CodeInputDataException);
-			voResponse.setMessage("userName is null");
+			voRes.setNull(voRes);
+			voRes.setMessage("userName is null");
 		}else if(("").equals(user.getUserPassword())){
-			voResponse.setCode(ResponseCodeEnum.CodeInputDataException);
-			voResponse.setMessage("password is null");
+			voRes.setNull(voRes);
+			voRes.setMessage("password is null");
 		}else{
-			VoResult vor = userService.registerUser(user);
+			VoResult vor = userService.add(user);
 			if(!vor.getResult()){
-				voResponse.setCode(ResponseCodeEnum.CodeFail);
+				voRes.setFail(voRes);
 			}
-			voResponse.setMessage(vor.getMsg());
+			voRes.setMessage(vor.getMsg());
 		}
-		return voResponse;
+		return voRes;
+	}
+	
+	@PostMapping("/signIn")
+	public Object signIn(@RequestBody User user, @RequestParam(required=false) Boolean isMarked,
+			HttpServletRequest request, HttpServletResponse response){
+		VoResponse voRes = userService.signIn(user.getUserName(), user.getUserPassword());
+		if(voRes.getSuccess()){
+			user = (User) voRes.getData();
+			HttpSession session = request.getSession();
+			String sessionId = session.getId();
+			user.setSessionId(sessionId);
+			session.setAttribute("mdm_user", user);
+			Cookie[] cookies = request.getCookies();
+			if(isMarked!= null && isMarked){
+				Cookie cook = new Cookie("sessionId", sessionId);
+				response.addCookie(cook);
+			}
+		}
+		return voRes;
 	}
 	
 	@GetMapping("/getAll")
@@ -52,6 +75,7 @@ public class UserController{
 			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 			@RequestParam(value = "userName") String userName) {
 		VoResponse voResponse = new VoResponse();
+		System.out.println(userName);
 		User user = new User();
 		user.setUserName(userName);
 		voResponse.setData(userService.getPage(user, page, pageSize));
