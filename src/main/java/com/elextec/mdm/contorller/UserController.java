@@ -5,9 +5,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +26,8 @@ import com.elextec.mdm.service.IUserService;
 @RestController
 @RequestMapping("user")
 public class UserController{
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);   
 
 	@Autowired
 	private IUserService userService;
@@ -63,23 +70,46 @@ public class UserController{
 		return voRes;
 	}
 	
+	@PostMapping("/signOut")
+	public Object signOut(HttpServletRequest request, HttpServletResponse response){
+		VoResponse voRes = new VoResponse();
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("mdm_user");
+		session.removeAttribute("mdm_user");
+		return voRes;
+	}
+	
 	@GetMapping("/getAll")
 	public Object getAll() {
-		VoResponse voResponse = new VoResponse();
-		voResponse.setData(userService.getAll());
-		return voResponse;
+		VoResponse voRes = new VoResponse();
+		voRes.setData(userService.getAll());
+		return voRes;
 	}
 	
 	@GetMapping("/getPage")
 	public Object getPage(@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 			@RequestParam(value = "userName") String userName) {
-		VoResponse voResponse = new VoResponse();
-		System.out.println(userName);
+		VoResponse voRes = new VoResponse();
+		logger.debug("/getPage");
+		logger.error("test");
+		logger.warn("11111");
 		User user = new User();
 		user.setUserName(userName);
-		voResponse.setData(userService.getPage(user, page, pageSize));
-		return voResponse;
+		voRes.setData(userService.getPage(user, page, pageSize));
+		return voRes;
+	}
+	
+	@DeleteMapping(value="/{id}")
+	public Object del(@PathVariable("id") String UserId) {
+		VoResponse voRes = userService.del(UserId);
+		return voRes;
+	}
+	
+	@PutMapping
+	public Object update(@RequestBody User user) {
+		VoResponse voRes = userService.update(user);
+		return voRes;
 	}
 	
 

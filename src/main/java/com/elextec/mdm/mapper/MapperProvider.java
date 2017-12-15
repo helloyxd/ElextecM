@@ -47,7 +47,7 @@ public class MapperProvider {
 		//sb.append("SELECT * FROM mdm_user WHERE 1=1");
 		sb.append("SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM mdm_user t WHERE 1=1");
 		sb.append(getUserCondition(user));
-		sb.append(" AND ROWNUM <= ").append(pageQuery.getPageRowSize()).append(") tt WHERE tt.rn >= ");
+		sb.append(" AND ROWNUM <= ").append(pageQuery.getPageRowSize()*pageQuery.getCurrentPage()).append(") tt WHERE tt.rn > ");
 		sb.append(pageQuery.getBeginIndex());
 		/*if(pageQuery.getOrder() != null)
 			sb.append(" ORDER BY ").append(pageQuery.getOrder());

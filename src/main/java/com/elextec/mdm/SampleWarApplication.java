@@ -38,13 +38,13 @@ public class SampleWarApplication  {
 
 	@RequestMapping("/index")
     public String index() {
-		String msg = "Hello Spring Boot,我是kkkk2222112221";
+		String msg = "Hello Spring Boot,我是MDM";
 		return msg;
     }
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		//System.out.println(SampleWarApplication.class.getResource("/").toString());
-		System.setProperty("spring.devtools.restart.enabled", "false");
+		//System.setProperty("spring.devtools.restart.enabled", "false");
 		SpringApplication.run(SampleWarApplication.class, args);
 	}
 

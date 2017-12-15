@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.PageQuery;
+import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
 import com.elextec.mdm.entity.User;
@@ -95,5 +96,43 @@ public class UserService implements IUserService {
 		map.put("rows", list);
 		return map;
 	}
+	
+	public VoResponse del(String id){
+		VoResponse voRes = new VoResponse();
+		User user = userMapper.findUserById(id);
+		if(user == null){
+			voRes.setFail(voRes);
+			voRes.setMessage("User is not exist");
+		}else{
+			user.setStatus(UserStatusEnum.UserStatusDel);
+			userMapper.update(user);
+		}
+		return voRes;
+	}
+	
+	public VoResponse update(User user){
+		VoResponse voRes = new VoResponse();
+		User existUser = userMapper.findUserById(user.getId());
+		if(existUser == null){
+			voRes.setFail(voRes);
+			voRes.setMessage("User is not exist");
+			return voRes;
+		}
+		if(!existUser.getUserName().equals(user.getUserName())){
+			if(validata(user.getUserName())){
+				voRes.setFail(voRes);
+				voRes.setMessage("userName alreadly exist");
+				return voRes;
+			}
+		}
+		userMapper.update(user);
+		return voRes;
+	}
+	
 
+	public VoResponse method(String id){
+		VoResponse voRes = new VoResponse();
+		
+		return voRes;
+	}
 }
