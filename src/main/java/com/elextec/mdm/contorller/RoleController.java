@@ -22,14 +22,14 @@ public class RoleController {
 	private IRoleService roleService;
 	
 	@GetMapping("/getAll")
-	public Object getAllDepartments() {
+	public Object getAllRoles() {
 		VoResponse voResponse = new VoResponse();
 		voResponse.setData(roleService.getAllRoles());
 		return voResponse;
 	}
 	
 	@DeleteMapping(value="{id}")
-	public Object del(@PathVariable("id") int id) {
+	public Object del(@PathVariable("id") String id) {
 		VoResponse voResponse = roleService.delRole(id);
 		return voResponse;
 	}

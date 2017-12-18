@@ -86,7 +86,7 @@ public interface UserMapper {
      * @param userId
      */
     @Delete("DELETE FROM mdm_user_role WHERE user_id=#{userId}")
-    void delUserRoles(int userId);
+    void delUserRoles(String userId);
     
     @SelectProvider(type = MapperProvider.class,method = "findUserByPage")
     @ResultMap("userMapOnly")

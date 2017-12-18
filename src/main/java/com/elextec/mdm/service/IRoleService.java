@@ -9,11 +9,11 @@ public interface IRoleService {
 
 	List<Role> getAllRoles();
 
-	VoResponse delRole(int id);
+	VoResponse delRole(String id);
 
 	VoResponse addRole(Role role);
 
 	VoResponse updateRole(Role role);
 	
-	
+	VoResponse updateRoleMenu(Role role);
 }

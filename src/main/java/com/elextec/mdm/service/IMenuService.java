@@ -7,7 +7,7 @@ public interface IMenuService {
 
 	Object getAllMenus();
 
-	VoResponse delMenu(int id);
+	VoResponse delMenu(String id);
 
 	VoResponse addMenu(Menu menu);
 

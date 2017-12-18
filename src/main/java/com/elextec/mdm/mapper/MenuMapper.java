@@ -12,18 +12,17 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.elextec.mdm.entity.Menu;
-import com.elextec.mdm.entity.Role;
 
 public interface MenuMapper {
 
-	@Select("SELECT * FROM menu ORDER BY sort_order")
+	@Select("SELECT * FROM mdm_menu ORDER BY sort_order")
 	@Results(id="menuMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),
 		@Result(property = "menuName",  column = "menu_name"),
         @Result(property = "menuUrl", column = "menu_url"),
         @Result(property = "parentId", column = "parent_id"),
-		@Result(property = "level", column = "level"),
+		@Result(property = "level", column = "menu_level"),
         @Result(property = "sortOrder", column = "sort_order"),
         @Result(property = "remark", column = "remark"),
         @Result(property = "status", column = "status"),
@@ -34,27 +33,27 @@ public interface MenuMapper {
     })
 	List<Menu> findAll();
 	
-	@Insert("INSERT INTO menu(menu_name,menu_url,parent_id,level,sort_order,status,remark,creater) "
-			+ "VALUES(#{menuName},#{menuUrl},#{parentId},#{level},#{sortOrder},#{status},#{remark},#{creater})")
+	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
+			+ "VALUES(sys_guid(),#{menuName},#{menuUrl},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark},#{creater},sysdate)")
 	@ResultMap("menuMap")
 	void insert(Menu menu);
 	
-	@Delete("DELETE FROM menu WHERE id=#{menuId}")
-	void delById(int menuId);
+	@Delete("DELETE FROM mdm_menu WHERE id=#{menuId}")
+	void delById(String menuId);
 	
-	@Update("UPDATE menu SET menu_name=#{menuName},menu_url=#{menuUrl},level=#{level},"
+	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},menu_level=#{level},"
 			+ "sort_order=#{sortOrder},remark=#{remark} WHERE id=#{id}")
 	void update(Menu menu);
 	
-	@Select("SELECT * FROM Menu WHERE parent_id = #{parentId}")
+	@Select("SELECT * FROM mdm_menu WHERE parent_id = #{parentId}")
 	@ResultMap("menuMap")
-	Menu findMenuByParentId(int parentId);
+	Menu findMenuByParentId(String parentId);
 	
 	/**
 	 * 获取所有最高级菜单信息
 	 * @return
 	 */
-	@Select("SELECT * FROM menu WHERE parent_id is null ORDER BY sort_order")
+	@Select("SELECT * FROM mdm_menu WHERE parent_id is null ORDER BY sort_order")
 	@ResultMap("menuMap")
     List<Menu> findSuperMenus();
 	
@@ -70,7 +69,7 @@ public interface MenuMapper {
 		@Result(property = "menuName",  column = "menu_name"),
         @Result(property = "menuUrl", column = "menu_url"),
         @Result(property = "parentId", column = "parent_id"),
-		@Result(property = "level", column = "level"),
+		@Result(property = "level", column = "menu_level"),
         @Result(property = "sortOrder", column = "sort_order"),
         @Result(property = "remark", column = "remark"),
         @Result(property = "status", column = "status"),

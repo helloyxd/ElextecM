@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +24,6 @@ import com.elextec.mdm.service.IUserService;
 @RestController
 @RequestMapping("user")
 public class UserController{
-	
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);   
 
 	@Autowired
 	private IUserService userService;
@@ -91,9 +87,9 @@ public class UserController{
 			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
 			@RequestParam(value = "userName") String userName) {
 		VoResponse voRes = new VoResponse();
-		logger.debug("/getPage");
-		logger.error("test");
-		logger.warn("11111");
+		//logger.debug("/getPage");
+		//logger.error("test");
+		//logger.warn("11111");
 		User user = new User();
 		user.setUserName(userName);
 		voRes.setData(userService.getPage(user, page, pageSize));
@@ -101,8 +97,8 @@ public class UserController{
 	}
 	
 	@DeleteMapping(value="/{id}")
-	public Object del(@PathVariable("id") String UserId) {
-		VoResponse voRes = userService.del(UserId);
+	public Object del(@PathVariable("id") String userId) {
+		VoResponse voRes = userService.del(userId);
 		return voRes;
 	}
 	
@@ -112,5 +108,11 @@ public class UserController{
 		return voRes;
 	}
 	
-
+	@GetMapping(value="/{id}")
+	public Object getUser(@PathVariable("id") String userId){
+		VoResponse voRes = new VoResponse();
+		User user = userService.getById(userId);
+		voRes.setData(user);
+		return voRes;
+	}
 }

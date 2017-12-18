@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.elextec.mdm.common.entity.PageQuery;
-import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 
@@ -28,14 +27,13 @@ public class MapperProvider {
 	public String addRoleMenus(Map<String, Role> map){
 		Role role = map.get("role");
 		StringBuilder sb = new StringBuilder();
-        sb.append("INSERT INTO mdm_role_menu(role_id,menu_id) VALUES");
-        MessageFormat mf = new MessageFormat("(#'{'role.id}, #'{'role.menus[{0}].id})");
+		sb.append("INSERT ALL ");
+        MessageFormat mf = new MessageFormat("INTO mdm_role_menu(id,role_id,menu_id,role_type) "
+        		+ "VALUES(sys_guid(), #'{'role.id}, #'{'role.menus[{0}].id}, 0) ");
         for(int i = 0; i < role.getMenus().size(); i++) {
         	sb.append(mf.format(new Object[]{i}));
-            if (i < role.getMenus().size() - 1) {
-                sb.append(",");
-            }
         }
+        sb.append("SELECT 1 FROM DUAL");
         System.out.println(sb);
 		return sb.toString();
 	}

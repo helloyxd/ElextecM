@@ -31,7 +31,7 @@ public interface RoleMapper {
     	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenusByRoleId")
     		)
     })
-    List<Role> findRoleByName(String userName);
+    List<Role> findRoleByName(String roleName);
 	
 	@Select("SELECT * FROM mdm_role")
 	@ResultMap("roleMap")
@@ -46,11 +46,11 @@ public interface RoleMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Role role);
 
-    @Update("UPDATE mdm_role SET role_name=#{roleName},user_desc=#{roleDesc} WHERE id =#{id}")
+    @Update("UPDATE mdm_role SET role_name=#{roleName},role_desc=#{roleDesc} WHERE id =#{id}")
     void update(Role role);
 
     @Delete("DELETE FROM mdm_role WHERE id =#{id}")
-    void delete(Long id);
+    void delete(String id);
     
     @Update("${sql}")
     void createTable(@Param("sql") String sql);
@@ -66,5 +66,10 @@ public interface RoleMapper {
     @InsertProvider(type = MapperProvider.class,method = "addRoleMenus")
 	void addRoleMenus(@Param("role")Role role);
     
-    
+    /**
+     * 根据角色ID，删除角色的菜单信息
+     * @param roleId
+     */
+    @Delete("DELETE FROM mdm_role_menu WHERE role_id=#{roleId}")
+    void delRoleMenus(String roleId);
 }

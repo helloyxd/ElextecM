@@ -185,7 +185,7 @@ public class UserMapperTest {
     	menu.setLevel(1);
     	menu.setMenuUrl("menu");
     	menu.setRemark("desc");
-    	menu.setParentId(4);
+    	menu.setParentId("");
     	menu.setSortOrder(1);
     	menu.setStatus(UserStatusEnum.UserStatusNormal);
     	menu.setCreater("zkj");
@@ -194,7 +194,7 @@ public class UserMapperTest {
     
     @Test
     public void delMenu() throws Exception {
-    	menuMapper.delById(1);
+    	menuMapper.delById("1");
     }
     
     @Test

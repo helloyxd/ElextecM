@@ -11,6 +11,7 @@ import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
+import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.mapper.UserMapper;
 import com.elextec.mdm.service.IUserService;
@@ -97,6 +98,7 @@ public class UserService implements IUserService {
 		return map;
 	}
 	
+	@Override
 	public VoResponse del(String id){
 		VoResponse voRes = new VoResponse();
 		User user = userMapper.findUserById(id);
@@ -110,6 +112,7 @@ public class UserService implements IUserService {
 		return voRes;
 	}
 	
+	@Override
 	public VoResponse update(User user){
 		VoResponse voRes = new VoResponse();
 		User existUser = userMapper.findUserById(user.getId());
@@ -129,10 +132,32 @@ public class UserService implements IUserService {
 		return voRes;
 	}
 	
+	@Override
+	public VoResponse updateUserRole(User user){
+		VoResponse voRes = new VoResponse();
+		userMapper.delUserRoles(user.getId());
+		userMapper.addUserRoles(user);
+		return voRes;
+	}
+	
+	@Override
+	public User getById(String userId){
+		User user = userMapper.findUserById(userId);
+		return user;
+	}
+	
+	public List<Menu> getUserMenuById(String userId){
+		
+		
+		return null;
+	}
+	
 
 	public VoResponse method(String id){
 		VoResponse voRes = new VoResponse();
 		
 		return voRes;
 	}
+
+
 }

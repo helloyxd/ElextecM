@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.Menu;
-import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.service.IMenuService;
-import com.elextec.mdm.service.IRoleService;
 
 @RestController
 @RequestMapping("menu")
@@ -24,20 +22,21 @@ public class MenuController {
 	private IMenuService menuService;
 	
 	@GetMapping("/getAll")
-	public Object getAllDepartments() {
+	public Object getAllMenus() {
 		VoResponse voResponse = new VoResponse();
 		voResponse.setData(menuService.getAllMenus());
 		return voResponse;
 	}
 	
 	@DeleteMapping(value="{id}")
-	public Object del(@PathVariable("id") int id) {
+	public Object del(@PathVariable("id") String id) {
 		VoResponse voResponse = menuService.delMenu(id);
 		return voResponse;
 	}
 	
 	@PostMapping
 	public Object add(@RequestBody Menu menu) {
+		menu.setCreater("sys");
 		VoResponse voResponse = menuService.addMenu(menu);
 		return voResponse;
 	}

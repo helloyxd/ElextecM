@@ -8,7 +8,7 @@ public class Menu extends BasicEntity{
 
 	private String menuName;
 	private String menuUrl;
-	private Integer parentId;
+	private String parentId;
 	private Integer level;
 	private Integer sortOrder;
 	private String remark;
@@ -26,12 +26,6 @@ public class Menu extends BasicEntity{
 	}
 	public void setMenuUrl(String menuUrl) {
 		this.menuUrl = menuUrl;
-	}
-	public Integer getParentId() {
-		return parentId;
-	}
-	public void setParentId(Integer parentId) {
-		this.parentId = parentId;
 	}
 	public Integer getLevel() {
 		return level;
@@ -56,5 +50,11 @@ public class Menu extends BasicEntity{
 	}
 	public void setMenus(List<Menu> menus) {
 		this.menus = menus;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 }

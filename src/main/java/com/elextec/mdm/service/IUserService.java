@@ -16,8 +16,12 @@ public interface IUserService {
 	
 	public Map<String, Object> getPage(User user, int page, int pageSize);
 	
-	public VoResponse del(String id);
+	public VoResponse del(String userId);
 	
 	public VoResponse update(User user);
+	
+	public VoResponse updateUserRole(User user);
+	
+	public User getById(String userId);
 	
 }
