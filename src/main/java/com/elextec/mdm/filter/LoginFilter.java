@@ -15,8 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.elextec.mdm.contorller.UserController;
-
 /**
  * @author zhangkj
  *
@@ -39,7 +37,7 @@ public class LoginFilter implements Filter{
 		String uri = req.getRequestURI();
 		String method = req.getMethod();
 		logger.debug(method + "-" + uri);
-		String[] notFilterDirs = {"/user/signIn"};
+		String[] notFilterDirs = {"/user/signIn","/mdm/ws/"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
 			if (uri.indexOf(notFilterDirValue) != -1) {

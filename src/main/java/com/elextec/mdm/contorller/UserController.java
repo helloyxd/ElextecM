@@ -1,5 +1,9 @@
 package com.elextec.mdm.contorller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
+import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.service.IUserService;
 
@@ -62,6 +68,36 @@ public class UserController{
 				Cookie cook = new Cookie("sessionId", sessionId);
 				response.addCookie(cook);
 			}
+			List<Role> roles = user.getRoles();
+			List<Menu> menus = new ArrayList<>();
+			Iterator<Role> it = roles.iterator();
+			while(it.hasNext()){
+				Role role = it.next();
+				if(menus.size() == 0){
+					menus.addAll(role.getMenus());
+					continue;
+				}
+				List<Menu> listMenu = role.getMenus();
+				Iterator<Menu> itMenu;
+				boolean flag;
+				for(Menu e : listMenu){
+					flag = false;
+					itMenu = menus.iterator();
+					while(itMenu.hasNext()){
+						Menu menu = itMenu.next();
+						if(e.getId().equals(menu.getId())){
+							flag = true;
+							continue;
+						}
+					}
+					if(!flag){
+						menus.add(e);
+					}
+				}
+			}
+			user.setMenus(menus);
+			session.setAttribute("mdm_right", menus);
+			voRes.setData(user);
 		}
 		return voRes;
 	}
@@ -114,5 +150,8 @@ public class UserController{
 		User user = userService.getById(userId);
 		voRes.setData(user);
 		return voRes;
+	}
+	
+	public static void main(String[] args) {
 	}
 }

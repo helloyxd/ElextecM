@@ -28,6 +28,13 @@ public class RoleController {
 		return voResponse;
 	}
 	
+	@GetMapping(value="/{id}")
+	public Object getRole(@PathVariable("id") String roleId) {
+		VoResponse voResponse = new VoResponse();
+		voResponse.setData(roleService.getRoleById(roleId));
+		return voResponse;
+	}
+	
 	@DeleteMapping(value="{id}")
 	public Object del(@PathVariable("id") String id) {
 		VoResponse voResponse = roleService.delRole(id);
@@ -43,6 +50,12 @@ public class RoleController {
 	@PutMapping
 	public Object update(@RequestBody Role role) {
 		VoResponse voResponse = roleService.updateRole(role);
+		return voResponse;
+	}
+	
+	@PostMapping("addRoleMenus")
+	public Object addRoleMenus(@RequestBody Role role) {
+		VoResponse voResponse = roleService.updateRoleMenu(role);
 		return voResponse;
 	}
 }

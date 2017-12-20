@@ -34,12 +34,20 @@ public interface RoleMapper {
     List<Role> findRoleByName(String roleName);
 	
 	@Select("SELECT * FROM mdm_role")
-	@ResultMap("roleMap")
+	@Results(id="roleMapOnly",
+	value={
+		@Result(id = true, property = "id", column = "id"),
+		@Result(property = "roleName",  column = "role_name"),
+        @Result(property = "roleDesc", column = "role_desc"),
+        @Result(property = "status", column = "status"),
+		@Result(property = "createTime", column = "create_time"),
+        @Result(property = "creater", column = "creater")
+    })
     List<Role> findAll();
 	
 	@Select("SELECT * FROM mdm_role WHERE id = #{roleId}")
 	@ResultMap("roleMap")
-	Role findRoleById(int roleId);
+	Role findRoleById(String roleId);
 
     @Insert("INSERT INTO mdm_role(id,role_name,role_desc,status,creater,create_time)"
     		+ " VALUES(sys_guid(), #{roleName}, #{roleDesc}, #{status}, #{creater}, sysdate)")

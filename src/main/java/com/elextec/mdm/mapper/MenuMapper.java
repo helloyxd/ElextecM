@@ -15,7 +15,7 @@ import com.elextec.mdm.entity.Menu;
 
 public interface MenuMapper {
 
-	@Select("SELECT * FROM mdm_menu ORDER BY sort_order")
+	@Select("SELECT * FROM mdm_menu WHERE menu_level=1 ORDER BY sort_order")
 	@Results(id="menuMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),

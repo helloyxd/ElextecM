@@ -8,6 +8,8 @@ import com.elextec.mdm.entity.Role;
 public interface IRoleService {
 
 	List<Role> getAllRoles();
+	
+	Role getRoleById(String id);
 
 	VoResponse delRole(String id);
 

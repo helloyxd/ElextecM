@@ -1,11 +1,15 @@
 package com.elextec.mdm.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.mockito.internal.util.collections.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.service.IRoleService;
@@ -20,6 +24,12 @@ public class RoleService implements IRoleService {
 	public List<Role> getAllRoles() {
 		List<Role> list = roleMapper.findAll();
 		return list;
+	}
+	
+	@Override
+	public Role getRoleById(String id) {
+		Role role = roleMapper.findRoleById(id);
+		return role;
 	}
 
 	@Override
@@ -55,10 +65,24 @@ public class RoleService implements IRoleService {
 	public VoResponse updateRoleMenu(Role role) {
 		VoResponse voRes = new VoResponse();
 		roleMapper.delRoleMenus(role.getId());
+		List<Menu> list = convertMenus(role.getMenus());
+		role.setMenus(list);
 		roleMapper.addRoleMenus(role);
 		return voRes;
 	}
 	
-	
-	
+	public List<Menu> convertMenus(List<Menu> menus){
+		List<Menu> list = new ArrayList<Menu>();
+		Iterator<Menu> it = menus.iterator();
+		while (it.hasNext()) {
+			Menu menu = it.next();
+			list.add(menu);
+			if(menu.getMenus() != null && menu.getMenus().size() > 0){
+				List<Menu> list1 = convertMenus(menu.getMenus());
+				list.addAll(list1);
+			}
+		}
+		return list;
+	}
+
 }
