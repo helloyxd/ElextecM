@@ -228,7 +228,7 @@ public class UserMapperTest {
     
     @Test
     public void getRoleById() throws Exception {
-    	Role role = roleMapper.findRoleById(1);
+    	Role role = roleMapper.findRoleById("");
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(role));
     }

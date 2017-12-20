@@ -1,6 +1,7 @@
 package com.elextec.mdm.filter;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,6 +15,9 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.User;
 
 /**
  * @author zhangkj
@@ -34,24 +38,36 @@ public class LoginFilter implements Filter{
 
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		String uri = req.getRequestURI();
+		String url = req.getRequestURI();
 		String method = req.getMethod();
-		logger.debug(method + "-" + uri);
-		String[] notFilterDirs = {"/user/signIn","/mdm/ws/"};
+		logger.debug(method + "-" + url);
+		String[] notFilterDirs = {"/user/signIn","/mdm/ws"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
-			if (uri.indexOf(notFilterDirValue) != -1) {
+			if (url.indexOf(notFilterDirValue) != -1) {
 				chain.doFilter(request, response);
 				return;
 			}
 		}
 		HttpSession session = req.getSession();
-		if (session.getAttribute("mdm_user")==null){
+		User user = (User) session.getAttribute("mdm_user");
+		if (user == null){
 			res.setStatus(401);
 			return;
-		}else{
-			chain.doFilter(request, response);
 		}
+		List<Menu> menus = user.getMenus();
+		boolean flag = false;
+		for(Menu menu : menus){
+			if(menu.getMethod().equals(method) && menu.getMenuUrl().equals(url)){
+				flag = true;
+			}
+		}
+		if(!flag){
+			res.setStatus(402);
+			return;
+		}
+		
+		
 	}
 
 	@Override

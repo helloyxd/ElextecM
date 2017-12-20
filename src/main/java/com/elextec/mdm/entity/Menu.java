@@ -8,6 +8,7 @@ public class Menu extends BasicEntity{
 
 	private String menuName;
 	private String menuUrl;
+	private String method;
 	private String parentId;
 	private Integer level;
 	private Integer sortOrder;
@@ -56,5 +57,11 @@ public class Menu extends BasicEntity{
 	}
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
+	}
+	public String getMethod() {
+		return method;
+	}
+	public void setMethod(String method) {
+		this.method = method;
 	}
 }

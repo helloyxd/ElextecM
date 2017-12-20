@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @MapperScan("com.elextec.mdm.*")
 @ComponentScan({"com.elextec.mdm"})
-//public class SampleWarApplication extends SpringBootServletInitializer {
-public class SampleWarApplication  {
+public class SampleWarApplication extends SpringBootServletInitializer {
+//public class SampleWarApplication  {
 
 	@RequestMapping("/index")
     public String index() {

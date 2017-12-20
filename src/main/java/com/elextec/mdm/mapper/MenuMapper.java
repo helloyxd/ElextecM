@@ -21,6 +21,7 @@ public interface MenuMapper {
 		@Result(id = true, property = "id", column = "id"),
 		@Result(property = "menuName",  column = "menu_name"),
         @Result(property = "menuUrl", column = "menu_url"),
+        @Result(property = "method", column = "method"),
         @Result(property = "parentId", column = "parent_id"),
 		@Result(property = "level", column = "menu_level"),
         @Result(property = "sortOrder", column = "sort_order"),
@@ -33,15 +34,15 @@ public interface MenuMapper {
     })
 	List<Menu> findAll();
 	
-	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
-			+ "VALUES(sys_guid(),#{menuName},#{menuUrl},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark},#{creater},sysdate)")
+	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
+			+ "VALUES(sys_guid(),#{menuName},#{menuUrl},#{method},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark},#{creater},sysdate)")
 	@ResultMap("menuMap")
 	void insert(Menu menu);
 	
 	@Delete("DELETE FROM mdm_menu WHERE id=#{menuId}")
 	void delById(String menuId);
 	
-	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},menu_level=#{level},"
+	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},method=#{method},menu_level=#{level},"
 			+ "sort_order=#{sortOrder},remark=#{remark} WHERE id=#{id}")
 	void update(Menu menu);
 	
@@ -68,6 +69,7 @@ public interface MenuMapper {
 		@Result(id = true, property = "id", column = "id"),
 		@Result(property = "menuName",  column = "menu_name"),
         @Result(property = "menuUrl", column = "menu_url"),
+        @Result(property = "method", column = "method"),
         @Result(property = "parentId", column = "parent_id"),
 		@Result(property = "level", column = "menu_level"),
         @Result(property = "sortOrder", column = "sort_order"),

@@ -75,6 +75,13 @@ create table MDM_Menu
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
 );
+alter table
+   MDM_Menu
+add
+   (
+   method varchar2(32)
+   );
+
 
 create table MDM_DataPermission
 (
