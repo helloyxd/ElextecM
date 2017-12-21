@@ -13,17 +13,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.TableDefinition;
-import com.elextec.mdm.mapper.TableDLLMapper;
+import com.elextec.mdm.mapper.TableDDLMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TableMapperTest {
 
 	@Autowired
-	private TableDLLMapper tableDLLMapper;
+	private TableDDLMapper tableDLLMapper;
 	
 	@Autowired
-	private ITableDLLService tableDLLService;
+	private ITableDDLService tableDLLService;
 	
 	@Test
 	public void createTable() throws Exception {
@@ -34,7 +34,7 @@ public class TableMapperTest {
 	@Test
 	public void createTableService() throws Exception {
 		TableDefinition table = new TableDefinition();
-		table.setModelId(1);
+		table.setModelId("");
 		table.setTableName("MDMTest");
 		List<ColumnDefinition> list = new ArrayList<ColumnDefinition>();
 		ColumnDefinition obj = new ColumnDefinition();

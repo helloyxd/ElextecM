@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.mockito.internal.util.collections.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.DataPermission;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
+import com.elextec.mdm.mapper.DataPermissionMapper;
 import com.elextec.mdm.mapper.RoleMapper;
 import com.elextec.mdm.service.IRoleService;
 
@@ -19,6 +20,9 @@ public class RoleService implements IRoleService {
 
 	@Autowired
 	private RoleMapper roleMapper;
+	
+	@Autowired
+	private DataPermissionMapper dataPermissionMapper;
 
 	@Override
 	public List<Role> getAllRoles() {
@@ -85,4 +89,10 @@ public class RoleService implements IRoleService {
 		return list;
 	}
 
+	@Override
+	public VoResponse addRoleDataPermission(DataPermission dataPermission) {
+		VoResponse voRes = new VoResponse();
+		dataPermissionMapper.insert(dataPermission);
+		return voRes;
+	}
 }

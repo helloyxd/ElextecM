@@ -94,6 +94,8 @@ create table MDM_DataPermission
    create_time			TIMESTAMP
 );
 
+select * from MDM_DataPermission
+
 create table MDM_DataPermission_Defined
 (
    id                   varchar2(32) primary key,
@@ -162,6 +164,16 @@ create table MDM_TableRelation
    foreign_key1         varchar2(64),
    foreign_key2         varchar2(64),
    muti_relation_table  varchar2(64)
+);
+
+create table MDM_BasicData
+(
+   id                   varchar2(32) primary key,
+   basicType            varchar2(64) not null,
+   basicValue           varchar2(64) not null,
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP	
 );
 
 

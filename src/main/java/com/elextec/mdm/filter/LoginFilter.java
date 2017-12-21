@@ -56,17 +56,21 @@ public class LoginFilter implements Filter{
 			return;
 		}
 		List<Menu> menus = user.getMenus();
+		
 		boolean flag = false;
 		for(Menu menu : menus){
-			if(menu.getMethod().equals(method) && menu.getMenuUrl().equals(url)){
-				flag = true;
+			if(method.toLowerCase().equals(menu.getMethod())){
+				if(url.equals(menu.getMenuUrl())){
+					flag = true;
+					break;
+				}
 			}
 		}
 		if(!flag){
 			res.setStatus(402);
 			return;
 		}
-		
+		chain.doFilter(request, response);
 		
 	}
 

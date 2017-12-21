@@ -132,8 +132,8 @@ public class UserController{
 		return voRes;
 	}
 	
-	@DeleteMapping(value="/{id}")
-	public Object del(@PathVariable("id") String userId) {
+	@DeleteMapping
+	public Object del(@RequestParam("id") String userId) {
 		VoResponse voRes = userService.del(userId);
 		return voRes;
 	}
@@ -144,8 +144,8 @@ public class UserController{
 		return voRes;
 	}
 	
-	@GetMapping(value="/{id}")
-	public Object getUser(@PathVariable("id") String userId){
+	@GetMapping
+	public Object getUser(@RequestParam("id") String userId){
 		VoResponse voRes = new VoResponse();
 		User user = userService.getById(userId);
 		voRes.setData(user);

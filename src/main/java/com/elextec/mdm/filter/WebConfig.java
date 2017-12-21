@@ -22,7 +22,7 @@ import com.elextec.mdm.ws.MdmService;
  * @author zhangkj
  *
  */
-@Configuration
+//@Configuration
 public class WebConfig {
 	
 	@Bean

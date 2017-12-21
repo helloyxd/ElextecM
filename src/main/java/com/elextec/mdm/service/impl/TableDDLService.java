@@ -14,17 +14,21 @@ import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.mapper.MdmModelMapper;
-import com.elextec.mdm.mapper.TableDLLMapper;
-import com.elextec.mdm.service.ITableDLLService;
+import com.elextec.mdm.mapper.TableDDLMapper;
+import com.elextec.mdm.mapper.TableDefinitionMapper;
+import com.elextec.mdm.service.ITableDDLService;
 
 @Service
-public class TableDLLService implements ITableDLLService {
+public class TableDDLService implements ITableDDLService {
 	
 	@Autowired
-	private TableDLLMapper tableDLLMapper;
+	private TableDDLMapper tableDDLMapper;
 	
 	@Autowired
 	private MdmModelMapper mdmModelMapper;
+	
+	@Autowired
+	private TableDefinitionMapper tableDefinitionMapper;
 	
 	public VoResponse createTable(TableDefinition table) {
 		VoResponse voRes = new VoResponse();
@@ -34,7 +38,7 @@ public class TableDLLService implements ITableDLLService {
 			voRes.setMessage("MDM Model is null");
 			return voRes;
 		}
-		mdmModel.getMdmModel();
+		table.setModelId(mdmModel.getId());
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE ").append(table.getTableName()).append("(");//.append("(\n");
 		List<ColumnDefinition> list = table.getColumnDefinitions();
@@ -67,35 +71,60 @@ public class TableDLLService implements ITableDLLService {
 			}
 			//sb.append("\n");
 		}
-		sb.append(");");
+		sb.append(")");
 		System.out.println(sb.toString());
 		String createSql = sb.toString();
 		try{
-			tableDLLMapper.createTable(createSql);
+			tableDDLMapper.createTable(createSql);
 		}catch(Exception ex){
+			ex.printStackTrace();
 			voRes.setCode(ResponseCodeEnum.CodeFail);
 			voRes.setSuccess(false);
 			voRes.setMessage(ex.getMessage());
+			return voRes;
 		}
 		voRes.setMessage("create table success");
+		tableDefinitionMapper.insert(table);
 		return voRes;
 	}
 	
-	
-	
-	
-	public void dropTable(String tableName) {
-		String dropTable = "";
-		tableDLLMapper.dropTable(dropTable);
+	public VoResponse dropTable(String id) {
+		VoResponse voRes = new VoResponse();
+		TableDefinition table = tableDefinitionMapper.findById(id);
+		if(table == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("TableDefinition is null");
+			return voRes;
+		}
+		String tableName = table.getTableName();
+		int count = tableDDLMapper.queryTable(tableName);
+		if(count > 0){
+			voRes.setFail(voRes);
+			voRes.setMessage("tableName " + tableName + " alreadly exist " + count + " data");
+			return voRes;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("DROP TABLE ").append(tableName);
+		System.out.println(sb.toString());
+		tableDDLMapper.dropTable(sb.toString());
+		tableDefinitionMapper.del(id);
+		return voRes;
 	}
 	
-	public void alterTable(TableDefinition table) {
+	public VoResponse alterTable(TableDefinition table) {
 		String alterTable = "";
-		tableDLLMapper.alterTable(alterTable);
+		tableDDLMapper.alterTable(alterTable);
+		return null;
 	}
 	
 	public List<Map> getDBDataType(){
-		return tableDLLMapper.getDBDataType();
+		return tableDDLMapper.getDBDataType();
 	}
-	
+
+	@Override
+	public List<TableDefinition> getAll() {
+		List<TableDefinition> list = tableDefinitionMapper.findAll();
+		return list;
+	}
+
 }
