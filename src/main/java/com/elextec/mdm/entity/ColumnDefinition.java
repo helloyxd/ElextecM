@@ -7,8 +7,8 @@ public class ColumnDefinition {
 
 	private String name;
 	private String columnComment;
-	private Map<Integer, String> dataTypeMap;
-	private List<Integer> constraints;
+	private Map<String, String> dataTypeMap;
+	private List<String> constraints;
 	
 	public String getName() {
 		return name;
@@ -16,23 +16,23 @@ public class ColumnDefinition {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Map<Integer, String> getDataTypeMap() {
-		return dataTypeMap;
-	}
-	public void setDataTypeMap(Map<Integer, String> dataTypeMap) {
-		this.dataTypeMap = dataTypeMap;
-	}
-	public List<Integer> getConstraints() {
-		return constraints;
-	}
-	public void setConstraints(List<Integer> constraints) {
-		this.constraints = constraints;
-	}
 	public String getColumnComment() {
 		return columnComment;
 	}
 	public void setColumnComment(String columnComment) {
 		this.columnComment = columnComment;
+	}
+	public Map<String, String> getDataTypeMap() {
+		return dataTypeMap;
+	}
+	public void setDataTypeMap(Map<String, String> dataTypeMap) {
+		this.dataTypeMap = dataTypeMap;
+	}
+	public List<String> getConstraints() {
+		return constraints;
+	}
+	public void setConstraints(List<String> constraints) {
+		this.constraints = constraints;
 	}
 	
 }

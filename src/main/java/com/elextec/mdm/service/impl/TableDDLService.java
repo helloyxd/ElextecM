@@ -1,5 +1,7 @@
 package com.elextec.mdm.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
 import com.elextec.mdm.service.ITableDDLService;
+import com.elextec.mdm.utils.StringUtil;
 
 @Service
 public class TableDDLService implements ITableDDLService {
@@ -39,6 +42,12 @@ public class TableDDLService implements ITableDDLService {
 			voRes.setMessage("MDM Model is null");
 			return voRes;
 		}
+		if(tableDDLMapper.queryTableName(table.getTableName().toUpperCase()) > 0){
+			voRes.setFail(voRes);
+			voRes.setMessage("tableName " + table.getTableName() + " is alreadly exist");
+			return voRes;
+		}
+		
 		table.setModelId(mdmModel.getId());
 		StringBuilder sb = new StringBuilder();
 		StringBuilder sbComment  = new StringBuilder();
@@ -51,24 +60,35 @@ public class TableDDLService implements ITableDDLService {
 			sb.append(obj.getName()).append(" ");
 			sbComment.append("EXECUTE IMMEDIATE 'COMMENT ON COLUMN ").append(table.getTableName()).append(".").append(obj.getName());
 			sbComment.append(" IS ''").append(obj.getColumnComment()).append("''';");
-			for(Integer key : obj.getDataTypeMap().keySet()){
+			for(String key : obj.getDataTypeMap().keySet()){
 				String dataType = TableDDLMap.oracleDataTypeMap.get(key);
 				switch(dataType){
 					case "CHAR":
 					case "VARCHAR2":
-					case "NUMBER":
 					case "DECIMAL":
 						sb.append(dataType).append("(").append(obj.getDataTypeMap().get(key)).append(")");
 						break;
+					case "NUMBER(P,S)":
+						sb.append("NUMBER").append("(").append(obj.getDataTypeMap().get(key)).append(")");
+						break;
 					default:
-						sb.append(dataType).append(obj.getDataTypeMap().get(key));
+						sb.append(dataType);
 						break;
 				}
 			}
-			List<Integer> constraints = obj.getConstraints();
-			if(constraints != null){
-				for(Integer i : constraints){
-					sb.append(" ").append(TableDDLMap.oracleColumnConstraintMap.get(i));
+			List<String> constraints = obj.getConstraints();
+			if(constraints != null && constraints.size() > 0){
+				for(String s : constraints){
+					switch(s){
+						case "N":
+						case "P":
+							sb.append(" ").append(TableDDLMap.oracleColumnConstraintMap.get(s));
+							break;
+						default:
+							sb.append(" ").append(s);
+							break;	
+					}
+						
 				}
 			}
 			if(iter.hasNext()){
@@ -129,16 +149,68 @@ public class TableDDLService implements ITableDDLService {
 			voRes.setMessage("TableDefinition is null");
 			return voRes;
 		}
+		String tableName = table.getTableName().toUpperCase();
+		List<Map<String, String>> list = tableDDLMapper.getColumnCommentsDefine(tableName);
+		List<Map<String, String>> listColumns = tableDDLMapper.getTableColumnsDefine(tableName);
+		String dataType = null;
+		String dataLength = null;
+		List<ColumnDefinition> listColumnsDefinition = new ArrayList<ColumnDefinition>();
 		
-		List<Map<String, String>> list = tableDDLMapper.getTableColumnDefine(table.getTableName().toUpperCase());
 		for(Map<String, String> map : list){
 			System.out.println(map);
 			ColumnDefinition entity = new ColumnDefinition();
-			entity.setName(map.get("column_name"));
-			
-			table.getColumnDefinitions().add(entity);
-			
+			entity.setName(map.get("COLUMN_NAME"));
+			entity.setColumnComment(map.get("COMMENTS"));
+			if(map.get("COLUMN_NAME").equals("ID")){
+				List<String> constraints = new ArrayList<String>();
+				constraints.add("P");
+				entity.setConstraints(constraints);
+				Map<String, String> dataTypeMap = new HashMap<String, String>();
+				dataTypeMap.put("VARCHAR2", "32");
+				entity.setDataTypeMap(dataTypeMap);
+				listColumnsDefinition.add(entity);
+				continue;
+			}
+			for(Map<String, String> map1 : listColumns){
+				if(entity.getName().equals(map1.get("COLUMN_NAME"))){
+					System.out.println(map1);
+					List<String> constraints = new ArrayList<String>();
+					constraints.add(TableDDLMap.oracleColumnConstraintMap.get(map1.get("NULLABLE")));
+					entity.setConstraints(constraints);
+					Map<String, String> dataTypeMap = new HashMap<String, String>();
+					dataType = map1.get("DATA_TYPE");
+					dataLength = String.valueOf(map1.get("DATA_LENGTH"));
+					switch(dataType){
+						case "CHAR":
+						case "VARCHAR2":
+						case "LONG":
+						case "BLOB":
+						case "FLOAT":
+						case "REAL":
+							dataTypeMap.put(dataType, dataLength);
+							break;
+						case "NUMBER":
+							if(map1.get("DATA_PRECISION") == null){
+								dataTypeMap.put("INTEGER", "");
+							}else{
+								dataTypeMap.put(dataType, String.valueOf(map1.get("DATA_PRECISION")) + 
+										"," + String.valueOf(map1.get("DATA_SCALE")));
+							}
+							break;
+						case "DATE":
+						case "TIMESTAMP(6)":
+							dataTypeMap.put(TableDDLMap.oracleDataTypeMap.get(dataType), "");
+							break;
+						default:
+							dataTypeMap.put(dataType, dataLength);
+							break;
+					}
+					entity.setDataTypeMap(dataTypeMap);
+				}
+			}
+			listColumnsDefinition.add(entity);
 		}
+		table.setColumnDefinitions(listColumnsDefinition);
 		voRes.setData(table);
 		return voRes;
 	}

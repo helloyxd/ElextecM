@@ -18,6 +18,7 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.service.ITableDDLService;
+import com.elextec.mdm.utils.StringUtil;
 
 @RestController
 @RequestMapping("table")
@@ -45,6 +46,14 @@ public class TableDDLController {
 			voRes.setNull(voRes);
 			voRes.setMessage("tableName is null");
 			return voRes;
+		}else if(!StringUtil.validateTableName(table.getTableName())){
+			voRes.setFail(voRes);
+			voRes.setMessage("表名只允许字母开头，允许30字节，允许字母数字下划线");
+			return voRes;
+		}else if(StringUtil.validateTableNameKeyWord(table.getTableName())){
+			voRes.setFail(voRes);
+			voRes.setMessage("表名不能为数据库关键字");
+			return voRes;
 		}
 		List<ColumnDefinition> list = table.getColumnDefinitions();
 		for(ColumnDefinition obj : list){
@@ -52,11 +61,19 @@ public class TableDDLController {
 				voRes.setNull(voRes);
 				voRes.setMessage("columnName is null");
 				return voRes;
+			}else if(!StringUtil.validateTableName(obj.getName())){
+				voRes.setFail(voRes);
+				voRes.setMessage("列名只允许字母开头，允许30字节，允许字母数字下划线");
+				return voRes;
+			}else if(StringUtil.validateTableNameKeyWord(obj.getName())){
+				voRes.setFail(voRes);
+				voRes.setMessage("列名"+obj.getName()+"为数据库关键字");
+				return voRes;
 			}
-			for(Integer key : obj.getDataTypeMap().keySet()){
+			for(String key : obj.getDataTypeMap().keySet()){
 				if(TableDDLMap.oracleDataTypeMap.get(key) == null){
 					voRes.setNull(voRes);
-					voRes.setMessage("dataType is null");
+					voRes.setMessage(obj.getName() + " dataType is null");
 					return voRes;
 				}
 			}

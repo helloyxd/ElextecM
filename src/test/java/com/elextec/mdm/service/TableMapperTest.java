@@ -39,12 +39,12 @@ public class TableMapperTest {
 		List<ColumnDefinition> list = new ArrayList<ColumnDefinition>();
 		ColumnDefinition obj = new ColumnDefinition();
 		obj.setName("id");
-		Map<Integer,String> dataTypeMap = new HashMap<Integer,String>();
-		dataTypeMap.put(9, "");
+		Map<String,String> dataTypeMap = new HashMap<String,String>();
+		dataTypeMap.put("", "");
 		obj.setDataTypeMap(dataTypeMap);
-		List<Integer> constraints = new ArrayList<Integer>();
-		constraints.add(1);
-		constraints.add(4);
+		List<String> constraints = new ArrayList<String>();
+		constraints.add("");
+		constraints.add("");
 		obj.setConstraints(constraints);
 		list.add(obj);
 		table.setColumnDefinitions(list);
