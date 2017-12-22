@@ -14,10 +14,11 @@ import com.elextec.mdm.common.entity.VoResult;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.mapper.UserMapper;
+import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IUserService;
 
 @Service
-public class UserService implements IUserService {
+public class UserService extends BaseService implements IUserService{
 
 	@Autowired
 	private UserMapper userMapper;
@@ -29,6 +30,7 @@ public class UserService implements IUserService {
 			vor.setMsg("用户名'" + user.getUserName() + "'已存在");
 			vor.setResult(false);
 		}else{
+			user.setCreater(getUserName());
 			userMapper.insert(user);
 			vor.setResult(true);
 		}
