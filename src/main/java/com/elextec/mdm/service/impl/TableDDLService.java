@@ -30,6 +30,7 @@ public class TableDDLService implements ITableDDLService {
 	@Autowired
 	private TableDefinitionMapper tableDefinitionMapper;
 	
+	@Override
 	public VoResponse createTable(TableDefinition table) {
 		VoResponse voRes = new VoResponse();
 		MdmModel mdmModel = mdmModelMapper.findById(table.getModelId());
@@ -40,12 +41,16 @@ public class TableDDLService implements ITableDDLService {
 		}
 		table.setModelId(mdmModel.getId());
 		StringBuilder sb = new StringBuilder();
+		StringBuilder sbComment  = new StringBuilder();
+		sbComment.append("BEGIN ");
 		sb.append("CREATE TABLE ").append(table.getTableName()).append("(");//.append("(\n");
 		List<ColumnDefinition> list = table.getColumnDefinitions();
 		Iterator<ColumnDefinition> iter = list.iterator();
 		while(iter.hasNext()){
 			ColumnDefinition obj = iter.next();
 			sb.append(obj.getName()).append(" ");
+			sbComment.append("EXECUTE IMMEDIATE 'COMMENT ON COLUMN ").append(table.getTableName()).append(".").append(obj.getName());
+			sbComment.append(" IS ''").append(obj.getColumnComment()).append("''';");
 			for(Integer key : obj.getDataTypeMap().keySet()){
 				String dataType = TableDDLMap.oracleDataTypeMap.get(key);
 				switch(dataType){
@@ -72,7 +77,9 @@ public class TableDDLService implements ITableDDLService {
 			//sb.append("\n");
 		}
 		sb.append(")");
+		sbComment.append(" END;");
 		System.out.println(sb.toString());
+		System.out.println(sbComment.toString());
 		String createSql = sb.toString();
 		try{
 			tableDDLMapper.createTable(createSql);
@@ -84,10 +91,12 @@ public class TableDDLService implements ITableDDLService {
 			return voRes;
 		}
 		voRes.setMessage("create table success");
+		tableDDLMapper.createTable(sbComment.toString());
 		tableDefinitionMapper.insert(table);
 		return voRes;
 	}
 	
+	@Override
 	public VoResponse dropTable(String id) {
 		VoResponse voRes = new VoResponse();
 		TableDefinition table = tableDefinitionMapper.findById(id);
@@ -111,20 +120,44 @@ public class TableDDLService implements ITableDDLService {
 		return voRes;
 	}
 	
+	@Override
+	public VoResponse getTableDefinition(String id){
+		VoResponse voRes = new VoResponse();
+		TableDefinition table = tableDefinitionMapper.findById(id);
+		if(table == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("TableDefinition is null");
+			return voRes;
+		}
+		
+		List<Map<String, String>> list = tableDDLMapper.getTableColumnDefine(table.getTableName().toUpperCase());
+		for(Map<String, String> map : list){
+			System.out.println(map);
+			ColumnDefinition entity = new ColumnDefinition();
+			entity.setName(map.get("column_name"));
+			
+			table.getColumnDefinitions().add(entity);
+			
+		}
+		voRes.setData(table);
+		return voRes;
+	}
+	
 	public VoResponse alterTable(TableDefinition table) {
 		String alterTable = "";
 		tableDDLMapper.alterTable(alterTable);
 		return null;
 	}
 	
-	public List<Map> getDBDataType(){
-		return tableDDLMapper.getDBDataType();
-	}
-
 	@Override
 	public List<TableDefinition> getAll() {
 		List<TableDefinition> list = tableDefinitionMapper.findAll();
 		return list;
 	}
 
+	@Override
+	public TableDefinition getById(String id){
+		TableDefinition table = tableDefinitionMapper.findById(id);
+		return table;
+	}
 }

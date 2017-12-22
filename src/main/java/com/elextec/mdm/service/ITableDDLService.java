@@ -1,7 +1,6 @@
 package com.elextec.mdm.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.TableDefinition;
@@ -14,8 +13,10 @@ public interface ITableDDLService {
 	
 	public VoResponse alterTable(TableDefinition table);
 	
-	public List<Map> getDBDataType();
-	
 	public List<TableDefinition> getAll();
+	
+	public TableDefinition getById(String id);
+
+	VoResponse getTableDefinition(String id);
 	
 }

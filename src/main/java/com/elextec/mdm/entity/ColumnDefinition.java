@@ -6,6 +6,7 @@ import java.util.Map;
 public class ColumnDefinition {
 
 	private String name;
+	private String columnComment;
 	private Map<Integer, String> dataTypeMap;
 	private List<Integer> constraints;
 	
@@ -26,6 +27,12 @@ public class ColumnDefinition {
 	}
 	public void setConstraints(List<Integer> constraints) {
 		this.constraints = constraints;
+	}
+	public String getColumnComment() {
+		return columnComment;
+	}
+	public void setColumnComment(String columnComment) {
+		this.columnComment = columnComment;
 	}
 	
 }

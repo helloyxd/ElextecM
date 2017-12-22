@@ -33,6 +33,11 @@ public class TableDDLController {
 		return voRes;
 	}
 	
+	@GetMapping
+	public Object getById(@RequestParam("id") String id){
+		return tableDDLService.getTableDefinition(id);
+	}
+	
 	@PostMapping
 	public Object create(@RequestBody TableDefinition table){
 		VoResponse voRes = new VoResponse();

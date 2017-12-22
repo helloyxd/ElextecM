@@ -25,12 +25,7 @@ public interface TableDDLMapper {
 	@ResultType(Integer.class)
 	public int queryTable(@Param("tableName") String tableName);
 	
-    List<Map> getDBDataType();
-	
-	@Select("select COLUMN_NAME,COLUMN_TYPE from information_schema.columns where TABLE_NAME=#{tableName}")
-    @Results({
-        @Result(property = "columnName",  column = "COLUMN_NAME"),
-        @Result(property = "columnType",  column = "COLUMN_TYPE")
-    })
-	List<Map> getTableColumnDefine(@Param("tableName") String tableName);
+	@Select("SELECT column_name,comments FROM user_col_comments WHERE table_name=#{tableName}")
+    @ResultType(List.class)
+	List<Map<String, String>> getTableColumnDefine(@Param("tableName") String tableName);
 }
