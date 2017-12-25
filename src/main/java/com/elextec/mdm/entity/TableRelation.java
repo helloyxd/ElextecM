@@ -4,12 +4,14 @@ import com.elextec.mdm.common.entity.BasicEntity;
 
 public class TableRelation extends BasicEntity {
 
-	private String table1;
+	private String table1;//表1 ID
+	private TableDefinition tableDefinition1;
 	private String table2;
+	private TableDefinition tableDefinition2;
 	private int relation;
-	private String foreignKey1;
-	private String foreignKey2;
-	private String mutiRelationTable;
+	private String foreignKey1;//表1的外键字段，即表2的主键，默认表名_id
+	private String foreignKey2;//表2的外键字段，即表1的主键，默认表名_id
+	private String mutiRelationTable;//N对N时的中间表
 	
 	public String getTable1() {
 		return table1;
@@ -46,6 +48,18 @@ public class TableRelation extends BasicEntity {
 	}
 	public void setMutiRelationTable(String mutiRelationTable) {
 		this.mutiRelationTable = mutiRelationTable;
+	}
+	public TableDefinition getTableDefinition1() {
+		return tableDefinition1;
+	}
+	public void setTableDefinition1(TableDefinition tableDefinition1) {
+		this.tableDefinition1 = tableDefinition1;
+	}
+	public TableDefinition getTableDefinition2() {
+		return tableDefinition2;
+	}
+	public void setTableDefinition2(TableDefinition tableDefinition2) {
+		this.tableDefinition2 = tableDefinition2;
 	}
 	
 	

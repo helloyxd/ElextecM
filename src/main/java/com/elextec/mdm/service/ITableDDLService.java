@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.entity.TableRelation;
 
 public interface ITableDDLService {
 	
@@ -18,5 +19,7 @@ public interface ITableDDLService {
 	public TableDefinition getById(String id);
 
 	VoResponse getTableDefinition(String id);
+	
+	VoResponse addTableRelation(TableRelation tableRelation);
 	
 }

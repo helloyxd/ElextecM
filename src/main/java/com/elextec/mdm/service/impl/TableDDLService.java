@@ -11,18 +11,23 @@ import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.ResponseCodeEnum;
+import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.common.entity.constant.TableDDLMap;
+import com.elextec.mdm.common.entity.constant.TableRelationEnum;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
+import com.elextec.mdm.mapper.TableRelationMapper;
+import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
 
 @Service
-public class TableDDLService implements ITableDDLService {
+public class TableDDLService extends BaseService implements ITableDDLService {
 	
 	@Autowired
 	private TableDDLMapper tableDDLMapper;
@@ -32,6 +37,9 @@ public class TableDDLService implements ITableDDLService {
 	
 	@Autowired
 	private TableDefinitionMapper tableDefinitionMapper;
+	
+	@Autowired
+	private TableRelationMapper tableRelationMapper;
 	
 	@Override
 	public VoResponse createTable(TableDefinition table) {
@@ -231,5 +239,73 @@ public class TableDDLService implements ITableDDLService {
 	public TableDefinition getById(String id){
 		TableDefinition table = tableDefinitionMapper.findById(id);
 		return table;
+	}
+
+	@Override
+	public VoResponse addTableRelation(TableRelation tableRelation) {
+		VoResponse voRes = new VoResponse();
+		TableDefinition table = tableDefinitionMapper.findById(tableRelation.getTable1());
+		if(table == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("table1 is null");
+			return voRes;
+		}
+		TableDefinition table2 = tableDefinitionMapper.findById(tableRelation.getTable2());
+		if(table2 == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("table2 is null");
+			return voRes;
+		}
+		String foreignKey1 = null;
+		String foreignKey2 = null;
+		if(tableRelation.getRelation() == TableRelationEnum.Relation11){
+			foreignKey1 = table2.getTableName() + "_id";
+			foreignKey2 = table.getTableName() + "_id";
+			tableRelation.setForeignKey1(foreignKey1);
+			tableRelation.setForeignKey2(foreignKey2);
+		}else if(tableRelation.getRelation() == TableRelationEnum.Relation1N){
+			foreignKey2 = table.getTableName() + "_id";
+			tableRelation.setForeignKey2(foreignKey2);
+		}else if(tableRelation.getRelation() == TableRelationEnum.RelationNN){
+			foreignKey1 = table2.getTableName() + "_id";
+			foreignKey2 = table.getTableName() + "_id";
+			if(StringUtil.validateTableName(tableRelation.getMutiRelationTable())){
+				voRes.setFail(voRes);
+				voRes.setMessage("表名只允许字母开头，允许30字节，允许字母数字下划线");
+				return voRes;
+			}else if(StringUtil.validateTableNameKeyWord(tableRelation.getMutiRelationTable())){
+				voRes.setFail(voRes);
+				voRes.setMessage("表名不能为数据库关键字");
+				return voRes;
+			}
+			if(tableDDLMapper.queryTableName(tableRelation.getMutiRelationTable().toUpperCase()) > 0){
+				voRes.setFail(voRes);
+				voRes.setMessage("tableName " + table.getTableName() + " is alreadly exist");
+				return voRes;
+			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("CREATE TABLE ").append(tableRelation.getMutiRelationTable()).append("(");
+			sb.append("id varchar2(32) primary key,");
+			sb.append(foreignKey1).append(" varchar2(32) not null,");
+			sb.append(foreignKey2).append(" varchar2(32) not null)");
+			System.out.println(sb.toString());
+			try{
+				tableDDLMapper.createTable(sb.toString());
+			}catch(Exception ex){
+				ex.printStackTrace();
+				voRes.setCode(ResponseCodeEnum.CodeFail);
+				voRes.setSuccess(false);
+				voRes.setMessage(ex.getMessage());
+				return voRes;
+			}
+		}else{
+			voRes.setNull(voRes);
+			voRes.setMessage("表关系异常");
+			return voRes;
+		}
+		tableRelation.setStatus(StatusEnum.StatusEnable);
+		tableRelation.setCreater(getUserName());
+		tableRelationMapper.insert(tableRelation);
+		return voRes;
 	}
 }

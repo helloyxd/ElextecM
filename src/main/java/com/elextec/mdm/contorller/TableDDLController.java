@@ -17,6 +17,7 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.TableDDLMap;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
 
@@ -95,6 +96,12 @@ public class TableDDLController {
 		map.put("DataTypeMap", TableDDLMap.oracleDataTypeMap);
 		map.put("ColumnConstraintMap", TableDDLMap.oracleColumnConstraintMap);
 		voRes.setData(map);
+		return voRes;
+	}
+	
+	@PostMapping("addTableRelation")
+	public Object addTableRelation(@RequestBody TableRelation tableRelation){
+		VoResponse voRes = tableDDLService.addTableRelation(tableRelation);
 		return voRes;
 	}
 }
