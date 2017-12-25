@@ -1,4 +1,4 @@
-package com.elextec.mdm.common.entity;
+package com.elextec.mdm.common.entity.constant;
 
 import java.util.HashMap;
 import java.util.Map;

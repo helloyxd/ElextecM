@@ -1,5 +1,7 @@
 package com.elextec.mdm.common.entity;
 
+import com.elextec.mdm.common.entity.constant.ResponseCodeEnum;
+
 public class VoResponse {
 	private Integer code;
 	private String message;

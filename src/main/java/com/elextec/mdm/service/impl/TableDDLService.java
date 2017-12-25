@@ -9,9 +9,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.elextec.mdm.common.entity.ResponseCodeEnum;
-import com.elextec.mdm.common.entity.TableDDLMap;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.common.entity.constant.ResponseCodeEnum;
+import com.elextec.mdm.common.entity.constant.TableDDLMap;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.TableDefinition;

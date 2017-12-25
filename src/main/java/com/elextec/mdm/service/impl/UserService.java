@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.PageQuery;
-import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
+import com.elextec.mdm.common.entity.constant.UserStatusEnum;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.mapper.UserMapper;

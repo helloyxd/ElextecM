@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elextec.mdm.common.entity.TableDDLMap;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.common.entity.constant.TableDDLMap;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.service.ITableDDLService;

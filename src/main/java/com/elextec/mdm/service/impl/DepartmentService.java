@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.elextec.mdm.common.entity.ResponseCodeEnum;
-import com.elextec.mdm.common.entity.StatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.common.entity.constant.ResponseCodeEnum;
+import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.mapper.DepartmentMapper;
 import com.elextec.mdm.service.IDepartmentService;
