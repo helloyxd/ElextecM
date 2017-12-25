@@ -20,7 +20,11 @@ public class BaseService {
 	}
 	
 	public String getUserName(){
-		String username = ((User)session.getAttribute("mdm_user")).getUserName();
+		Object obj = session.getAttribute("mdm_user");
+		String username = "auto";
+		if(obj != null){
+			username = ((User)obj).getUserName();
+		}
 		return username;
 	}
 	

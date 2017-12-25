@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.elextec.mdm.common.entity.PageQuery;
+import com.elextec.mdm.entity.DataPermissionDefined;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 
@@ -31,6 +32,21 @@ public class MapperProvider {
         MessageFormat mf = new MessageFormat("INTO mdm_role_menu(id,role_id,menu_id,role_type) "
         		+ "VALUES(sys_guid(), #'{'role.id}, #'{'role.menus[{0}].id}, 0) ");
         for(int i = 0; i < role.getMenus().size(); i++) {
+        	sb.append(mf.format(new Object[]{i}));
+        }
+        sb.append("SELECT 1 FROM DUAL");
+        System.out.println(sb);
+		return sb.toString();
+	}
+	
+	public String addDataPermissions(Map<String, DataPermissionDefined> map){
+		DataPermissionDefined entity = map.get("dataPermissionDefined");
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT ALL ");
+        MessageFormat mf = new MessageFormat("INTO mdm_datapermission(id,defined_id,role_id,permission_value,create_time,creater,status) "
+        		+ "VALUES(sys_guid(), #'{'dataPermissionDefined.id}, #'{'dataPermissionDefined.dataPermission[{0}].roleId}, "
+        		+ "#'{'dataPermissionDefined.dataPermission[{0}].permissionValue}, sysdate, #'{'dataPermissionDefined.dataPermission[{0}].creater}, 0) ");
+        for(int i = 0; i < entity.getDataPermission().size(); i++) {
         	sb.append(mf.format(new Object[]{i}));
         }
         sb.append("SELECT 1 FROM DUAL");

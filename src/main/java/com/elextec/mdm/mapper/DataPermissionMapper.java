@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
@@ -44,4 +45,9 @@ public interface DataPermissionMapper {
     
     @Update("UPDATE mdm_datapermission SET permission_value=#{permissionValue} WHERE id =#{id}")
     void update(DataPermission dataPermission);
+    
+    @Select("SELECT * FROM mdm_datapermission WHERE defined_id=#{definedId}")
+    @ResultMap("datapermissionMap")
+    List<DataPermission> findByDefinedId(String definedId);
+    
 }

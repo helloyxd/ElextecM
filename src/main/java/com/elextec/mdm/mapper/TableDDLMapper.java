@@ -29,6 +29,10 @@ public interface TableDDLMapper {
 	@ResultType(Integer.class)
 	public int queryTableName(@Param("tableName") String tableName);
 	
+	@Select("SELECT count(*) FROM user_tab_columns WHERE table_name = #{tableName} AND column_name = #{columnName}")
+	@ResultType(Integer.class)
+	public int queryColumnName(@Param("tableName") String tableName, @Param("columnName") String columnName);
+	
 	@Select("SELECT table_name,comments FROM user_col_comments WHERE table_name=#{tableName}")
     @ResultType(List.class)
 	List<Map<String, String>> getTableCommentsDefine(@Param("tableName") String tableName);
@@ -41,4 +45,6 @@ public interface TableDDLMapper {
 			+ "FROM user_tab_columns WHERE table_Name=#{tableName}")
     @ResultType(List.class)
 	List<Map<String, String>> getTableColumnsDefine(@Param("tableName") String tableName);
+	
+	
 }
