@@ -3,8 +3,9 @@ package com.elextec.mdm.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
@@ -43,11 +44,18 @@ public interface DataPermissionMapper {
     @Delete("DELETE FROM mdm_datapermission WHERE id =#{id}")
     void del(String id);
     
+    @DeleteProvider(type = MapperProvider.class, method = "delAll")
+    void delAll(@Param("tableName")String tableName, @Param("ids")List<String> ids);
+    
     @Update("UPDATE mdm_datapermission SET permission_value=#{permissionValue} WHERE id =#{id}")
     void update(DataPermission dataPermission);
     
     @Select("SELECT * FROM mdm_datapermission WHERE defined_id=#{definedId}")
     @ResultMap("datapermissionMap")
     List<DataPermission> findByDefinedId(String definedId);
+    
+    @Select("SELECT * FROM mdm_datapermission WHERE id=#{id}")
+    @ResultMap("datapermissionMap")
+    DataPermission findById(String id);
     
 }

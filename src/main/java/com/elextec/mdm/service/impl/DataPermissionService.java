@@ -1,5 +1,6 @@
 package com.elextec.mdm.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,13 +66,35 @@ public class DataPermissionService extends BaseService implements IDataPermissio
 			}
 			e.setCreater(userName);
 		}
-		entity.setCreater(userName);
-		entity.setStatus(StatusEnum.StatusEnable);
-		dataPermissionDefinedMapper.insert(entity);
-		DataPermissionDefined newEntity = dataPermissionDefinedMapper.findByName(entity.getTableId(), entity.getPermissionField());
-		entity.setId(newEntity.getId());
-		dataPermissionDefinedMapper.addDataPermissions(entity);
-		return voRes;
+		DataPermissionDefined newEntity = null;
+		//add
+		if(entity.getId() == null || entity.getId().equals("")){
+			newEntity = dataPermissionDefinedMapper.findByName(entity.getTableId(), entity.getPermissionField());
+			if(newEntity != null){
+				voRes.setFail(voRes);
+				voRes.setMessage("数据权限定义表字段已经存在！");
+				return voRes;
+			}
+			entity.setCreater(userName);
+			entity.setStatus(StatusEnum.StatusEnable);
+			dataPermissionDefinedMapper.insert(entity);
+			newEntity = dataPermissionDefinedMapper.findByName(entity.getTableId(), entity.getPermissionField());
+			entity.setId(newEntity.getId());
+			dataPermissionDefinedMapper.addDataPermissions(entity);
+			return voRes;
+		//update
+		}else{
+			newEntity = dataPermissionDefinedMapper.findById(entity.getId());
+			if(newEntity == null){
+				voRes.setNull(voRes);
+				voRes.setMessage("数据权限定义表不存在");
+				return voRes;
+			}
+			delDataPermissions(newEntity.getDataPermission());
+			dataPermissionDefinedMapper.addDataPermissions(entity);
+			return voRes;
+		}
+		
 	}
 
 	@Override
@@ -79,6 +102,46 @@ public class DataPermissionService extends BaseService implements IDataPermissio
 		List<DataPermissionDefined> list = dataPermissionDefinedMapper.findAll();
 		return list;
 	}
+
+	@Override
+	public VoResponse delDataPermission(String id) {
+		VoResponse voRes = new VoResponse();
+		DataPermission dataPermission = dataPermissionMapper.findById(id);
+		if(dataPermission != null){
+			dataPermissionMapper.del(id);
+		}else{
+			voRes.setNull(voRes);
+		}
+		return voRes;
+	}
+
+	@Override
+	public VoResponse delDataPermissionDefined(String id) {
+		VoResponse voRes = new VoResponse();
+		DataPermissionDefined defined = dataPermissionDefinedMapper.findById(id);
+		if(defined == null){
+			voRes.setNull(voRes);
+		}else{
+			List<DataPermission> list = defined.getDataPermission();
+			if(list != null && list.size() > 0){
+				List<String> ids = new ArrayList<String>();
+				for(DataPermission e : list){
+					ids.add(e.getId());
+				}
+				dataPermissionMapper.delAll("mdm_datapermission", ids);
+			}
+			dataPermissionDefinedMapper.del(id);
+		}
+		return voRes;
+	}
 	
-	
+	public void delDataPermissions(List<DataPermission> list){
+		if(list != null && list.size() > 0){
+			List<String> ids = new ArrayList<String>();
+			for(DataPermission e : list){
+				ids.add(e.getId());
+			}
+			dataPermissionMapper.delAll("mdm_datapermission", ids);
+		}
+	}
 }

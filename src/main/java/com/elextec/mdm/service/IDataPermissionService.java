@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.elextec.mdm.service;
 
 import java.util.List;
@@ -17,4 +14,8 @@ public interface IDataPermissionService {
 	VoResponse addDataPermissionDefined(DataPermissionDefined dataPermissionDefined);
 	
 	List<DataPermissionDefined> getAll();
+	
+	VoResponse delDataPermission(String id);
+	
+	VoResponse delDataPermissionDefined(String id);
 }

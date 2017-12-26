@@ -8,7 +8,7 @@ import com.elextec.mdm.entity.User;
 
 public class BaseService {
 
-	@Autowired  
+	@Autowired
 	private HttpSession session;
 
 	public HttpSession getSession() {

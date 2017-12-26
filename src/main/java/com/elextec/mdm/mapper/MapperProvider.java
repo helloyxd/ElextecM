@@ -2,6 +2,7 @@ package com.elextec.mdm.mapper;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.elextec.mdm.common.entity.PageQuery;
@@ -88,6 +89,20 @@ public class MapperProvider {
 		return sb.toString();
 	}
 	
+	public String delAll(Map<String, Object> map) throws Exception{
+		StringBuilder sb = new StringBuilder();
+		String tableName = (String) map.get("tableName");
+		@SuppressWarnings("unchecked")
+		List<String> ids = (List<String>) map.get("ids");
+		sb.append("DELETE FROM ").append(tableName).append(" WHERE id in(");
+		for(String id : ids){
+			sb.append("'").append(id).append("',");
+		}
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append(")");
+		System.out.println(sb);
+		return sb.toString();
+	}
 	
 	public String test(Map<String, Role> map){
 		StringBuilder sb = new StringBuilder();
