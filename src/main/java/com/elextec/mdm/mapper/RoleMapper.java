@@ -29,7 +29,7 @@ public interface RoleMapper {
 	    @Result(property = "menus", column = "id",
 	    	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenusByRoleId") ),
 	    @Result(property = "dataPermissions", column = "id",
-	    	many = @Many(select = "com.elextec.mdm.mapper.DataPermissionMapper.findByRoleId") ),
+	    	many = @Many(select = "com.elextec.mdm.mapper.DataPermissionMapper.findDatasByRoleId") ),
     })
     List<Role> findRoleByName(String roleName);
 
@@ -85,6 +85,14 @@ public interface RoleMapper {
      * 根据角色ID，删除角色的数据权限信息
      * @param roleId
      */
-    @Delete("DELETE FROM mdm_datapermission WHERE role_id=#{roleId}")
+    @Delete("DELETE FROM mdm_role_data WHERE role_id=#{roleId}")
     void delRoleDataPermission(String roleId);
+    
+    /**
+     * 新增角色的数据权限信息
+     * 
+     * @param user
+     */
+    @InsertProvider(type = MapperProvider.class, method = "addRoleDataPermission")
+    void addRoleDataPermission(@Param("role") Role role);
 }

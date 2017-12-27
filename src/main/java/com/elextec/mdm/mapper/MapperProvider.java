@@ -40,6 +40,20 @@ public class MapperProvider {
 		return sb.toString();
 	}
 	
+	public String addRoleDataPermission(Map<String, Role> map){
+		Role role = map.get("role");
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT ALL ");
+        MessageFormat mf = new MessageFormat("INTO mdm_role_data(id,role_id,data_id,role_type) "
+        		+ "VALUES(sys_guid(), #'{'role.id}, #'{'role.dataPermissions[{0}].id}, 0) ");
+        for(int i = 0; i < role.getDataPermissions().size(); i++) {
+        	sb.append(mf.format(new Object[]{i}));
+        }
+        sb.append("SELECT 1 FROM DUAL");
+        System.out.println(sb);
+		return sb.toString();
+	}
+	
 	public String addDataPermissions(Map<String, DataPermissionDefined> map){
 		DataPermissionDefined entity = map.get("dataPermissionDefined");
 		StringBuilder sb = new StringBuilder();

@@ -25,7 +25,6 @@ public interface DataPermissionMapper {
 	value = {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "definedId", column = "defined_id"),
-	    @Result(property = "roleId", column = "role_id"),
 	    @Result(property = "permissionValue", column = "permission_value"),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"), 
@@ -33,12 +32,17 @@ public interface DataPermissionMapper {
 	})
     List<DataPermission> findAll();
     
-    @Select("SELECT * FROM mdm_datapermission WHERE role_id = #{roleId}")
-    @ResultMap("datapermissionMap")
-    List<DataPermission> findByRoleId(String roleId);
+    /**
+	 * 根据角色ID查询角色的数据权限信息
+	 * @param roleId
+	 * @return
+	 */
+	@Select("SELECT * FROM mdm_datapermission WHERE id IN (SELECT data_id FROM mdm_role_data WHERE role_id = #{roleId})")
+	@ResultMap("datapermissionMap")
+    List<DataPermission> findDatasByRoleId(String roleId);
     
-    @Insert("INSERT INTO mdm_datapermission(id,defined_id,role_id,permission_value,status,creater,create_time)"
-	    + " VALUES(sys_guid(), #{definedId}, #{roleId}, #{permissionValue}, #{status}, #{creater}, sysdate)")
+    @Insert("INSERT INTO mdm_datapermission(id,defined_id,permission_value,status,creater,create_time)"
+	    + " VALUES(sys_guid(), #{definedId}, #{permissionValue}, #{status}, #{creater}, sysdate)")
     void insert(DataPermission dataPermission);
     
     @Delete("DELETE FROM mdm_datapermission WHERE id =#{id}")

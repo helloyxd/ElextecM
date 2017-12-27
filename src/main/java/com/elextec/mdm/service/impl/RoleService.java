@@ -59,9 +59,40 @@ public class RoleService implements IRoleService {
 	@Override
 	public VoResponse updateRole(Role role) {
 		VoResponse voRes = new VoResponse();
-		roleMapper.update(role);
-		roleMapper.delRoleMenus(role.getId());
-		roleMapper.addRoleMenus(role);
+		String msg = "";
+		Role oldRole = roleMapper.findRoleById(role.getId());
+		boolean flag = false;
+		if(oldRole == null){
+			voRes.setNull(voRes);
+			return voRes;
+		}else if(role.getRoleName() != null && !oldRole.getRoleName().equals(role.getRoleName())){
+			flag = true;
+		}else if(role.getRoleDesc() != null &&  !oldRole.getRoleDesc().equals(role.getRoleDesc())){
+			flag = true;
+		}
+		if(flag){
+			if(!oldRole.getRoleName().equals(role.getRoleName())){
+				List<Role> list = roleMapper.findRoleByName(role.getRoleName());
+				if(list != null && list.size() > 0 ){
+					voRes.setFail(voRes);
+					voRes.setMessage("roleName is exist");
+					return voRes;
+				}
+			}
+			roleMapper.update(role);
+			msg = "角色更新成功;";
+		}
+		if(role.getMenus() != null){
+			roleMapper.delRoleMenus(role.getId());
+			roleMapper.addRoleMenus(role);
+			msg += "角色上菜单更新成功;";
+		}
+		if(role.getDataPermissions() != null){
+			roleMapper.delRoleDataPermission(role.getId());
+			roleMapper.addRoleDataPermission(role);
+			msg += "角色上数据权限更新成功;";
+		}
+		voRes.setMessage(msg);
 		return voRes;
 	}
 
