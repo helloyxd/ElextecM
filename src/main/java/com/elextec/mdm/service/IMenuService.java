@@ -1,11 +1,15 @@
 package com.elextec.mdm.service;
 
+import java.util.List;
+
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.Menu;
 
 public interface IMenuService {
 
-	Object getAllMenus();
+	List<Menu> getAllMenus();
+	
+	List<Menu> getMenus(String level);
 
 	VoResponse delMenu(String id);
 

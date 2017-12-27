@@ -15,7 +15,24 @@ import com.elextec.mdm.entity.Menu;
 
 public interface MenuMapper {
 
-	@Select("SELECT * FROM mdm_menu WHERE menu_level=1 ORDER BY sort_order")
+	@Select("SELECT * FROM mdm_menu ORDER BY sort_order")
+	@Results(id="menuMapOnly",
+	value={
+		@Result(id = true, property = "id", column = "id"),
+		@Result(property = "menuName",  column = "menu_name"),
+        @Result(property = "menuUrl", column = "menu_url"),
+        @Result(property = "method", column = "method"),
+        @Result(property = "parentId", column = "parent_id"),
+		@Result(property = "level", column = "menu_level"),
+        @Result(property = "sortOrder", column = "sort_order"),
+        @Result(property = "remark", column = "remark"),
+        @Result(property = "status", column = "status"),
+		@Result(property = "createTime", column = "create_time"),
+		@Result(property = "creater", column = "creater")
+    })
+	List<Menu> findAll();
+	
+	@Select("SELECT * FROM mdm_menu WHERE menu_level=#{level} ORDER BY sort_order")
 	@Results(id="menuMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -32,7 +49,7 @@ public interface MenuMapper {
         @Result(property = "menus", column = "id",
             	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenuByParentId"))
     })
-	List<Menu> findAll();
+	List<Menu> findByLevel(String level);
 	
 	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
 			+ "VALUES(sys_guid(),#{menuName},#{menuUrl},#{method},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark},#{creater},sysdate)")
@@ -43,7 +60,7 @@ public interface MenuMapper {
 	void delById(String menuId);
 	
 	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},method=#{method},menu_level=#{level},"
-			+ "sort_order=#{sortOrder},remark=#{remark} WHERE id=#{id}")
+			+ "sort_order=#{sortOrder},parent_id=#{parentId},remark=#{remark} WHERE id=#{id}")
 	void update(Menu menu);
 	
 	@Select("SELECT * FROM mdm_menu WHERE parent_id = #{parentId}")
@@ -64,20 +81,8 @@ public interface MenuMapper {
 	 * @return
 	 */
 	@Select("SELECT * FROM mdm_menu WHERE id IN (SELECT menu_id FROM mdm_role_menu WHERE role_id = #{roleId})")
-	@Results(id="menuMapOnly",
-	value={
-		@Result(id = true, property = "id", column = "id"),
-		@Result(property = "menuName",  column = "menu_name"),
-        @Result(property = "menuUrl", column = "menu_url"),
-        @Result(property = "method", column = "method"),
-        @Result(property = "parentId", column = "parent_id"),
-		@Result(property = "level", column = "menu_level"),
-        @Result(property = "sortOrder", column = "sort_order"),
-        @Result(property = "remark", column = "remark"),
-        @Result(property = "status", column = "status"),
-		@Result(property = "createTime", column = "create_time"),
-		@Result(property = "creater", column = "creater")
-    })
+	@ResultMap("menuMapOnly")
     List<Menu> findMenusByRoleId(String roleId);
+	
 	
 }

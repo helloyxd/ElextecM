@@ -3,7 +3,6 @@ package com.elextec.mdm.contorller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +25,13 @@ public class MenuController {
 	public Object getAllMenus() {
 		VoResponse voResponse = new VoResponse();
 		voResponse.setData(menuService.getAllMenus());
+		return voResponse;
+	}
+	
+	@GetMapping
+	public Object getMenus(@RequestParam("level") String level) {
+		VoResponse voResponse = new VoResponse();
+		voResponse.setData(menuService.getMenus(level));
 		return voResponse;
 	}
 	

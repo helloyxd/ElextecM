@@ -18,8 +18,14 @@ public class MenuService implements IMenuService{
 	private MenuMapper menuMapper;
 	
 	@Override
-	public Object getAllMenus() {
+	public List<Menu> getAllMenus() {
 		List<Menu> list = menuMapper.findAll();
+		return list;
+	}
+	
+	@Override
+	public List<Menu> getMenus(String level) {
+		List<Menu> list = menuMapper.findByLevel(level);
 		return list;
 	}
 	

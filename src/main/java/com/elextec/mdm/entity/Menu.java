@@ -9,6 +9,7 @@ public class Menu extends BasicEntity{
 	private String menuName;
 	private String menuUrl;
 	private String method;
+	private String icon;
 	private String parentId;
 	private Integer level;
 	private Integer sortOrder;
@@ -63,5 +64,11 @@ public class Menu extends BasicEntity{
 	}
 	public void setMethod(String method) {
 		this.method = method;
+	}
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 }
