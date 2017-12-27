@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
@@ -69,7 +70,7 @@ public interface DepartmentMapper {
 	 */
 	@Select("SELECT * FROM mdm_department WHERE id = #{departmentId}")
 	@ResultMap("departmentMap")
-	Department findAllDepartmentsById(int departmentId);
+	Department findAllDepartmentsById(String departmentId);
 	
 	/**
 	 * 根据parentId查找下级部门信息
@@ -78,16 +79,16 @@ public interface DepartmentMapper {
 	 */
 	@Select("SELECT * FROM mdm_department WHERE parent_id = #{parentId}")
 	@ResultMap("departmentMap")
-	Department findDepartmentByParentId(int parentId);
+	Department findDepartmentByParentId(String parentId);
 	
 	/**
      * 根据部门ID，删除部门信息
      * @param id
      */
     @Delete("DELETE FROM mdm_department WHERE id=#{id}")
-    void delById(int id);
+    void delById(String id);
     
     @Select("SELECT * FROM mdm_department WHERE depart_code = #{departCode} OR depart_name = #{departName}")
     @ResultMap("departmentMapOnly")
-    List<Department> findByCodeOrName(String departCode,String departName);
+    List<Department> findByCodeOrName(@Param("departCode")String departCode,@Param("departName")String departName);
 }

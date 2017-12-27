@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.elextec.mdm.common.entity.BasicEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class User extends BasicEntity implements Serializable{
 
@@ -25,6 +26,7 @@ public class User extends BasicEntity implements Serializable{
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	@JsonIgnore
 	public String getUserPassword() {
 		return userPassword;
 	}
@@ -49,6 +51,7 @@ public class User extends BasicEntity implements Serializable{
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+	@JsonIgnore
 	public String getSessionId() {
 		return sessionId;
 	}

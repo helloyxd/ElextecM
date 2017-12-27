@@ -120,11 +120,8 @@ public class UserController{
 	@GetMapping("/getPage")
 	public Object getPage(@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
-			@RequestParam(value = "userName") String userName) {
+			@RequestParam(value = "userName", required = false) String userName) {
 		VoResponse voRes = new VoResponse();
-		//logger.debug("/getPage");
-		//logger.error("test");
-		//logger.warn("11111");
 		User user = new User();
 		user.setUserName(userName);
 		voRes.setData(userService.getPage(user, page, pageSize));
@@ -149,8 +146,5 @@ public class UserController{
 		User user = userService.getById(userId);
 		voRes.setData(user);
 		return voRes;
-	}
-	
-	public static void main(String[] args) {
 	}
 }

@@ -10,10 +10,11 @@ import com.elextec.mdm.common.entity.constant.ResponseCodeEnum;
 import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.mapper.DepartmentMapper;
+import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IDepartmentService;
 
 @Service
-public class DepartmentService implements IDepartmentService{
+public class DepartmentService extends BaseService implements IDepartmentService{
 
 	@Autowired
 	private DepartmentMapper departmentMapper;
@@ -24,7 +25,7 @@ public class DepartmentService implements IDepartmentService{
 	}
 
 	@Override
-	public VoResponse delDepartment(int id) {
+	public VoResponse delDepartment(String id) {
 		VoResponse vo = new VoResponse();
 		Department department = departmentMapper.findAllDepartmentsById(id);
 		if(department == null){
@@ -60,6 +61,7 @@ public class DepartmentService implements IDepartmentService{
 				return vo;
 			}
 		}
+		department.setCreater(getUserName());
 		department.setStatus(StatusEnum.StatusEnable);
 		departmentMapper.insert(department);
 		vo.setMessage("add department success");

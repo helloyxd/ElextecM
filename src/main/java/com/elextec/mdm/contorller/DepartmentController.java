@@ -29,7 +29,7 @@ public class DepartmentController {
 	}
 	
 	@DeleteMapping
-	public Object del(@RequestParam("id") int id) {
+	public Object del(@RequestParam("id") String id) {
 		VoResponse voResponse = departmentService.delDepartment(id);
 		return voResponse;
 	}
