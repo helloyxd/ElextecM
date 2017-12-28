@@ -1,3 +1,13 @@
+delete from MDM_DATAPERMISSION_DEFINED
+drop table mdm_product
+drop table mdm_productinfo
+
+INSERT ALL INTO mdm_datapermission(id,definedId,roleId,permissionValue,createTime,creater,status)
+VALUES(sys_guid(), ?, ?, ?, sysdate, ?, 0) 
+INTO mdm_datapermission(id,definedId,roleId,permissionValue,createTime,creater,status) 
+VALUES(sys_guid(), ?, ?, ?, sysdate, ?, 0) 
+SELECT 1 FROM DUAL
+
 
 create table MDM_User
 (
@@ -62,6 +72,21 @@ create table MDM_Role_Menu
    role_type            number(1) not null
 );
 
+alter table
+   MDM_Role_Menu
+modify
+   (
+   role_type number(1) null
+   );
+
+create table MDM_Role_Data
+(
+   id                   varchar2(32) primary key,
+   role_id              varchar2(32) not null,
+   data_id              varchar2(32) not null,
+   role_type            number(1) null
+);
+
 create table MDM_Menu
 (
    id 					varchar2(32) primary key,
@@ -81,7 +106,26 @@ add
    (
    method varchar2(32)
    );
-
+   
+   alter table
+   MDM_Menu
+add
+   (
+   icon varchar2(64)
+   );
+alter table
+   MDM_Menu
+modify
+   (
+   menu_url varchar2(32) null
+   );
+   
+alter table
+   MDM_Menu
+modify
+   (
+   menu_level number(4) default 0
+   );
 
 create table MDM_DataPermission
 (
@@ -95,6 +139,18 @@ create table MDM_DataPermission
 );
 
 select * from MDM_DataPermission
+
+alter table
+   MDM_DataPermission
+modify
+   (
+   role_id varchar2(32) null
+   );
+   
+alter table
+   MDM_DataPermission
+drop (role_id)
+ 
 
 create table MDM_DataPermission_Defined
 (
@@ -155,6 +211,13 @@ create table MDM_TableDefinition
    create_time			TIMESTAMP
 );
 
+alter table
+   MDM_TableDefinition
+add
+   (
+   isMenu  number(1) default 0
+   );
+
 create table MDM_TableRelation
 (
    id                   varchar2(32) primary key,
@@ -163,8 +226,12 @@ create table MDM_TableRelation
    relation             number(1),
    foreign_key1         varchar2(64),
    foreign_key2         varchar2(64),
-   muti_relation_table  varchar2(64)
+   muti_relation_table  varchar2(64),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP	
 );
+
 
 create table MDM_BasicData
 (
