@@ -1,5 +1,8 @@
 package com.elextec.mdm.contorller;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.IMenuService;
+import com.elextec.mdm.service.ITableDDLService;
 
 @RestController
 @RequestMapping("menu")
@@ -21,6 +28,9 @@ public class MenuController {
 	@Autowired
 	private IMenuService menuService;
 	
+	@Autowired
+	private IMdmModelService mdmModelService;
+	
 	@GetMapping("/getAll")
 	public Object getAllMenus() {
 		VoResponse voResponse = new VoResponse();
@@ -28,10 +38,51 @@ public class MenuController {
 		return voResponse;
 	}
 	
+	@GetMapping("/getTree")
+	public Object getAllMenusTree() {
+		VoResponse voResponse = new VoResponse();
+		voResponse.setData(menuService.getAllMenusTree());
+		return voResponse;
+	}
+	
 	@GetMapping
 	public Object getMenus(@RequestParam("level") String level) {
 		VoResponse voResponse = new VoResponse();
-		voResponse.setData(menuService.getMenus(level));
+		List<Menu> list = menuService.getMenus(level);
+		List<MdmModel> listModel = mdmModelService.getAll();
+		List<Menu> definedMenus = new LinkedList<Menu>();
+		for(MdmModel model : listModel){
+			Menu menu = new Menu();
+			menu.setMenuName(model.getMdmModel());
+			menu.setMenuUrl("");
+			List<Menu> definedSubMenus = new LinkedList<Menu>();
+			for(TableDefinition table : model.getTableDefinitions()){
+				if(table.getIsMenu()){
+					Menu subMenu = new Menu();
+					subMenu.setMenuName(table.getTableLabel());
+					subMenu.setMenuUrl("");
+					definedSubMenus.add(subMenu);
+					menu.setMenus(definedSubMenus);
+				}
+			}
+			definedMenus.add(menu);
+		}
+		for(Menu menu : list){
+			if(menu.getLevel() < 1){
+				for(Menu menu1 : menu.getMenus()){
+					if(menu1.getMenuName().equals("主数据管理")){
+						menu1.setMenus(definedMenus);
+						break;
+					}
+				}
+			}else if(menu.getLevel() == 1){
+				if(menu.getMenuName().equals("主数据管理")){
+					menu.setMenus(definedMenus);
+					break;
+				}
+			}
+		}
+		voResponse.setData(list);
 		return voResponse;
 	}
 	

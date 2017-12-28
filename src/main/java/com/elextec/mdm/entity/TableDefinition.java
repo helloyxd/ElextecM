@@ -9,6 +9,7 @@ public class TableDefinition extends BasicEntity{
 	private String tableName;
 	private String tableLabel;//table标签名
 	private String modelId;//模块ID
+	private Boolean isMenu;
 	private List<ColumnDefinition> columnDefinitions;//字段属性
 	
 	public String getTableName() {
@@ -34,6 +35,12 @@ public class TableDefinition extends BasicEntity{
 	}
 	public void setTableLabel(String tableLabel) {
 		this.tableLabel = tableLabel;
+	}
+	public Boolean getIsMenu() {
+		return isMenu;
+	}
+	public void setIsMenu(Boolean isMenu) {
+		this.isMenu = isMenu;
 	}
 	
 }

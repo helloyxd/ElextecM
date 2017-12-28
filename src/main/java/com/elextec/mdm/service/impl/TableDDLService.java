@@ -308,4 +308,16 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		tableRelationMapper.insert(tableRelation);
 		return voRes;
 	}
+
+	@Override
+	public List<TableRelation> getTableRelations() {
+		List<TableRelation> list = tableRelationMapper.findAll();
+		return list;
+	}
+
+	@Override
+	public List<TableDefinition> getByModelId(String modelId) {
+		List<TableDefinition> list = tableDefinitionMapper.findByModelId(modelId);
+		return list;
+	}
 }

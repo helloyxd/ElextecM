@@ -22,4 +22,7 @@ public interface ITableDDLService {
 	
 	VoResponse addTableRelation(TableRelation tableRelation);
 	
+	public List<TableRelation> getTableRelations();
+	
+	public List<TableDefinition> getByModelId(String modelId);
 }

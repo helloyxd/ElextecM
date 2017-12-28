@@ -41,5 +41,7 @@ public interface TableDefinitionMapper {
 	@ResultMap("tableDefinitionMap")
 	TableDefinition findById(String id);
 	
-	
+	@Select("SELECT * FROM mdm_tabledefinition where model_id = #{modelId}")
+	@ResultMap("tableDefinitionMap")
+	List<TableDefinition> findByModelId(String modelId);
 }

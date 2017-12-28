@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
@@ -25,9 +26,11 @@ public interface MdmModelMapper {
     	value = { 
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "mdmModel", column = "mdm_model"),
+	    @Result(property = "tableDefinitions", column = "id",
+    		many = @Many(select = "com.elextec.mdm.mapper.TableDefinitionMapper.findByModelId") ),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
-	    @Result(property = "creater", column = "creater") 
+	    @Result(property = "creater", column = "creater")
 	})
 	List<MdmModel> findAll();
 	

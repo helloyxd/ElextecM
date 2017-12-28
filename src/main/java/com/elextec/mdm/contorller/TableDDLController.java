@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -103,5 +104,37 @@ public class TableDDLController {
 	public Object addTableRelation(@RequestBody TableRelation tableRelation){
 		VoResponse voRes = tableDDLService.addTableRelation(tableRelation);
 		return voRes;
+	}
+	
+	@GetMapping("getTableRelations")
+	public Object getTableRelations(){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(tableDDLService.getTableRelations());
+		return voRes;
+	}
+	
+	
+	@GetMapping("defined/{}")
+	public Object getDefinedData(){
+		
+		return null;
+	}
+	
+	@PostMapping("defined/{}")
+	public Object postDefinedData(){
+		
+		return null;
+	}
+	
+	@DeleteMapping("defined/{}")
+	public Object delDefinedData(){
+		
+		return null;
+	}
+	
+	@PutMapping("defined/{}")
+	public Object updateDefinedData(){
+		
+		return null;
 	}
 }

@@ -9,6 +9,8 @@ public interface IMenuService {
 
 	List<Menu> getAllMenus();
 	
+	List<Menu> getAllMenusTree();
+	
 	List<Menu> getMenus(String level);
 
 	VoResponse delMenu(String id);

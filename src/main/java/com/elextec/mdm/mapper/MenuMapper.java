@@ -32,6 +32,25 @@ public interface MenuMapper {
     })
 	List<Menu> findAll();
 	
+	@Select("SELECT * FROM mdm_menu WHERE menu_level<=0 ORDER BY sort_order")
+	@Results(id="menuMapAll",
+	value={
+		@Result(id = true, property = "id", column = "id"),
+		@Result(property = "menuName",  column = "menu_name"),
+        @Result(property = "menuUrl", column = "menu_url"),
+        @Result(property = "method", column = "method"),
+        @Result(property = "parentId", column = "parent_id"),
+		@Result(property = "level", column = "menu_level"),
+        @Result(property = "sortOrder", column = "sort_order"),
+        @Result(property = "remark", column = "remark"),
+        @Result(property = "status", column = "status"),
+		@Result(property = "createTime", column = "create_time"),
+		@Result(property = "creater", column = "creater"),
+        @Result(property = "menus", column = "id",
+            	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenusByParentId"))
+    })
+	List<Menu> findAllMenusTree();
+	
 	@Select("SELECT * FROM mdm_menu WHERE menu_level=#{level} ORDER BY sort_order")
 	@Results(id="menuMap",
 	value={
@@ -63,7 +82,21 @@ public interface MenuMapper {
 			+ "sort_order=#{sortOrder},parent_id=#{parentId},remark=#{remark} WHERE id=#{id}")
 	void update(Menu menu);
 	
-	@Select("SELECT * FROM mdm_menu WHERE parent_id = #{parentId}")
+	/**
+	 * 获取下级所有菜单
+	 * @param parentId
+	 * @return
+	 */
+	@Select("SELECT * FROM mdm_menu WHERE parent_id=#{parentId}")
+	@ResultMap("menuMapAll")
+	Menu findMenusByParentId(String parentId);
+	
+	/**
+	 * 获取下级菜单，不包括按钮功能菜单
+	 * @param parentId
+	 * @return
+	 */
+	@Select("SELECT * FROM mdm_menu WHERE parent_id=#{parentId} AND menu_level<1000")
 	@ResultMap("menuMap")
 	Menu findMenuByParentId(String parentId);
 	

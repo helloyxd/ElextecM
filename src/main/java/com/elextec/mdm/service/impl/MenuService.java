@@ -24,6 +24,12 @@ public class MenuService implements IMenuService{
 	}
 	
 	@Override
+	public List<Menu> getAllMenusTree() {
+		List<Menu> list = menuMapper.findAllMenusTree();
+		return list;
+	}
+	
+	@Override
 	public List<Menu> getMenus(String level) {
 		List<Menu> list = menuMapper.findByLevel(level);
 		return list;
