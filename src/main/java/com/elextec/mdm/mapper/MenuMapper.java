@@ -70,6 +70,10 @@ public interface MenuMapper {
     })
 	List<Menu> findByLevel(String level);
 	
+	@Select("SELECT * FROM mdm_menu WHERE menu_name=#{menuName}")
+	@ResultMap("menuMapOnly")
+	List<Menu> findByName(String menuName);
+	
 	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
 			+ "VALUES(sys_guid(),#{menuName},#{menuUrl},#{method},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark},#{creater},sysdate)")
 	@ResultMap("menuMap")

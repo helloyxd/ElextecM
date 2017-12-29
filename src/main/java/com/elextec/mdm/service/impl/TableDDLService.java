@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.elextec.mdm.common.entity.VoResponse;
@@ -27,6 +26,8 @@ import com.elextec.mdm.mapper.TableRelationMapper;
 import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class TableDDLService extends BaseService implements ITableDDLService {
@@ -43,8 +44,8 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	@Autowired
 	private TableRelationMapper tableRelationMapper;
 	
-	@Transactional
 	@Override
+	@Transactional
 	public VoResponse createTable(TableDefinition table) {
 		VoResponse voRes = new VoResponse();
 		MdmModel mdmModel = mdmModelMapper.findById(table.getModelId());
@@ -58,7 +59,6 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			voRes.setMessage("tableName " + table.getTableName() + " is alreadly exist");
 			return voRes;
 		}
-		
 		table.setModelId(mdmModel.getId());
 		StringBuilder sb = new StringBuilder();
 		StringBuilder sbComment  = new StringBuilder();
@@ -99,7 +99,6 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 							sb.append(" ").append(s);
 							break;	
 					}
-						
 				}
 			}
 			if(iter.hasNext()){

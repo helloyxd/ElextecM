@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.elextec.mdm.common.entity.PageQuery;
-import com.elextec.mdm.common.entity.StatusEnum;
-import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.common.entity.constant.StatusEnum;
+import com.elextec.mdm.common.entity.constant.UserStatusEnum;
 import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;

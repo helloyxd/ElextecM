@@ -13,43 +13,48 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.TableDefinition;
-import com.elextec.mdm.mapper.TableDDLMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TableMapperTest {
 
 	@Autowired
-	private TableDDLMapper tableDLLMapper;
+	private ITableDDLService tableDDLService;
 	
-	@Autowired
-	private ITableDDLService tableDLLService;
-	
-	@Test
+	//@Test
 	public void createTable() throws Exception {
 		String sql = "";
-		tableDLLMapper.createTable(sql);
 	}
 	
 	@Test
 	public void createTableService() throws Exception {
 		TableDefinition table = new TableDefinition();
-		table.setModelId("");
-		table.setTableName("MDMTest");
+		table.setModelId("B1536179075A492B96192DE9EDA69CEA");
+		table.setTableName("MDMTest9");
+		table.setTableLabel("测试");
+		table.setCreater("sys");
+		table.setStatus(0);
 		List<ColumnDefinition> list = new ArrayList<ColumnDefinition>();
 		ColumnDefinition obj = new ColumnDefinition();
 		obj.setName("id");
 		Map<String,String> dataTypeMap = new HashMap<String,String>();
-		dataTypeMap.put("", "");
+		dataTypeMap.put("VARCHAR2", "32");
 		obj.setDataTypeMap(dataTypeMap);
 		List<String> constraints = new ArrayList<String>();
-		constraints.add("");
-		constraints.add("");
+		constraints.add("P");
 		obj.setConstraints(constraints);
 		list.add(obj);
 		table.setColumnDefinitions(list);
-		tableDLLService.createTable(table);
-		
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.println(mapper.writeValueAsString(tableDDLService.createTable(table)));
 	}
 	
+	
+	@Test
+	public void getALL() throws Exception {
+		
+		ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(tableDDLService.getAll()));
+	}
 }
