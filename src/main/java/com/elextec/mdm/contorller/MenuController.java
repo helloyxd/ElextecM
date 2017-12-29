@@ -54,16 +54,19 @@ public class MenuController {
 		for(MdmModel model : listModel){
 			Menu menu = new Menu();
 			menu.setMenuName(model.getMdmModel());
-			menu.setMenuUrl("");
 			List<Menu> definedSubMenus = new LinkedList<Menu>();
 			for(TableDefinition table : model.getTableDefinitions()){
 				if(table.getIsMenu()){
 					Menu subMenu = new Menu();
 					subMenu.setMenuName(table.getTableLabel());
-					subMenu.setMenuUrl("");
+					subMenu.setMenuUrl("/table/defined/"+table.getTableName());
 					definedSubMenus.add(subMenu);
 					menu.setMenus(definedSubMenus);
 				}
+			}
+			if(menu.getMenus() != null && menu.getMenus().size() == 1){
+				menu.setMenuUrl(menu.getMenus().get(0).getMenuUrl());
+				menu.setMenus(null);
 			}
 			definedMenus.add(menu);
 		}

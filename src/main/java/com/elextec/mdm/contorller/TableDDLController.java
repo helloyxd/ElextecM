@@ -114,26 +114,26 @@ public class TableDDLController {
 	}
 	
 	
-	@GetMapping("defined/{}")
-	public Object getDefinedData(){
+	@GetMapping("defined")
+	public Object getDefinedData(@RequestParam("id") String id){
 		
 		return null;
 	}
 	
-	@PostMapping("defined/{}")
-	public Object postDefinedData(){
+	@PostMapping("defined")
+	public Object postDefinedData(@RequestParam("id") String id){
 		
 		return null;
 	}
 	
-	@DeleteMapping("defined/{}")
-	public Object delDefinedData(){
+	@DeleteMapping("defined")
+	public Object delDefinedData(@RequestParam("id") String id){
 		
 		return null;
 	}
 	
-	@PutMapping("defined/{}")
-	public Object updateDefinedData(){
+	@PutMapping("defined")
+	public Object updateDefinedData(@RequestParam("id") String id){
 		
 		return null;
 	}

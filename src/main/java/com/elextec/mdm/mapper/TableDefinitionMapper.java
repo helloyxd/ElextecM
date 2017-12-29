@@ -17,8 +17,8 @@ import com.elextec.mdm.entity.TableDefinition;
  */
 public interface TableDefinitionMapper {
 	
-	@Insert("INSERT INTO mdm_tabledefinition(id,table_name,table_label,model_id,status,creater,create_time)"
-		    + " VALUES(sys_guid(), #{tableName}, #{tableLabel}, #{modelId}, #{status}, #{creater}, sysdate)")
+	@Insert("INSERT INTO mdm_tabledefinition(id,table_name,table_label,model_id,isMenu,status,creater,create_time)"
+		    + " VALUES(sys_guid(), #{tableName}, #{tableLabel}, #{modelId}, #{isMenu,jdbcType=BIT}, #{status}, #{creater}, sysdate)")
 	void insert(TableDefinition table);
 	
 	@Delete("DELETE FROM mdm_tabledefinition WHERE id = #{id}")
@@ -31,6 +31,7 @@ public interface TableDefinitionMapper {
 	    @Result(property = "tableName", column = "table_name"),
 	    @Result(property = "tableLabel", column = "table_label"),
 	    @Result(property = "modelId", column = "model_id"),
+	    @Result(property = "isMenu", column = "isMenu"),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater") 

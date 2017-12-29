@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.ResponseCodeEnum;
@@ -41,6 +43,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	@Autowired
 	private TableRelationMapper tableRelationMapper;
 	
+	@Transactional
 	@Override
 	public VoResponse createTable(TableDefinition table) {
 		VoResponse voRes = new VoResponse();
