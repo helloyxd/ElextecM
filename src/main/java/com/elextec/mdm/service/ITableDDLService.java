@@ -25,4 +25,12 @@ public interface ITableDDLService {
 	public List<TableRelation> getTableRelations();
 	
 	public List<TableDefinition> getByModelId(String modelId);
+	
+	public VoResponse getDefinedData(String modelName, String tableName);
+	
+	public VoResponse postDefinedData(String modelName, String tableName);
+	
+	public VoResponse delDefinedData(String modelName, String tableName);
+	
+	public VoResponse updateDefinedData(String modelName, String tableName);
 }

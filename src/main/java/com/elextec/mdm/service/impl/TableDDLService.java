@@ -17,17 +17,17 @@ import com.elextec.mdm.common.entity.constant.TableDDLMap;
 import com.elextec.mdm.common.entity.constant.TableRelationEnum;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmModel;
+import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.mapper.MdmModelMapper;
+import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
 import com.elextec.mdm.mapper.TableRelationMapper;
 import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class TableDDLService extends BaseService implements ITableDDLService {
@@ -43,6 +43,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	
 	@Autowired
 	private TableRelationMapper tableRelationMapper;
+	
+	@Autowired
+	private MenuMapper menuMapper;
 	
 	@Override
 	@Transactional
@@ -121,8 +124,61 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			return voRes;
 		}
 		voRes.setMessage("create table success");
-		tableDDLMapper.createTable(sbComment.toString());
-		tableDefinitionMapper.insert(table);
+		try{
+			tableDDLMapper.createTable(sbComment.toString());
+			table.setCreater(getUserName());
+			if(table.getIsMenu() != null && table.getIsMenu()){
+				List<Menu> listMenu = menuMapper.findByName(mdmModel.getMdmModel());
+				String parentId = null;
+				if(listMenu != null && listMenu.size() > 0){
+					parentId = listMenu.get(0).getId();
+				}
+				Menu mainMenu = new Menu();
+				mainMenu.setCreater(getUserName());
+				mainMenu.setLevel(100);
+				mainMenu.setMenuName(table.getTableLabel());
+				mainMenu.setMenuUrl("");
+				mainMenu.setMethod("");
+				mainMenu.setParentId(parentId);
+				mainMenu.setStatus(StatusEnum.StatusEnable);
+				menuMapper.insert(mainMenu);
+				parentId = mainMenu.getId();
+				//创建menu
+				Menu menu = new Menu();
+				menu.setCreater(getUserName());
+				menu.setLevel(1000);
+				menu.setMenuName("新增");
+				menu.setMenuUrl("table/defined");
+				menu.setMethod("post");
+				menu.setSortOrder(1);
+				menu.setStatus(StatusEnum.StatusEnable);
+				menu.setParentId(parentId);
+				menuMapper.insert(menu);
+				menu.setMenuName("删除");
+				menu.setMethod("delete");
+				menuMapper.insert(menu);
+				menu.setMenuName("修改");
+				menu.setMethod("put");
+				menuMapper.insert(menu);
+				menu.setMenuName("查询");
+				menu.setMethod("get");
+				menuMapper.insert(menu);
+			}else{
+				table.setIsMenu(false);
+			}
+			table.setStatus(StatusEnum.StatusEnable);
+			tableDefinitionMapper.insert(table);
+		}catch(Exception ex){
+			ex.printStackTrace();
+			voRes.setCode(ResponseCodeEnum.CodeFail);
+			voRes.setSuccess(false);
+			voRes.setMessage(ex.getMessage());
+			StringBuilder sbDrop = new StringBuilder();
+			sbDrop.append("DROP TABLE ").append(table.getTableName());
+			System.out.println(sbDrop.toString());
+			tableDDLMapper.dropTable(sbDrop.toString());
+			return voRes;
+		}
 		return voRes;
 	}
 	
@@ -321,5 +377,38 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	public List<TableDefinition> getByModelId(String modelId) {
 		List<TableDefinition> list = tableDefinitionMapper.findByModelId(modelId);
 		return list;
+	}
+
+	@Override
+	public VoResponse getDefinedData(String modelName, String tableName) {
+		VoResponse voRes = new VoResponse();
+		List<MdmModel> listModel =  mdmModelMapper.findByName(modelName);
+		if(listModel == null || listModel.size() == 0){
+			voRes.setNull(voRes);
+			return voRes;
+		}
+		MdmModel model = listModel.get(0);
+		List<TableDefinition> listTable = tableDefinitionMapper.findByModelId(model.getId());
+		
+		
+		return null;
+	}
+
+	@Override
+	public VoResponse postDefinedData(String modelName, String tableName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public VoResponse delDefinedData(String modelName, String tableName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public VoResponse updateDefinedData(String modelName, String tableName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

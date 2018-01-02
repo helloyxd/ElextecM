@@ -19,7 +19,6 @@ import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.IMenuService;
-import com.elextec.mdm.service.ITableDDLService;
 
 @RestController
 @RequestMapping("menu")
@@ -49,42 +48,6 @@ public class MenuController {
 	public Object getMenus(@RequestParam("level") String level) {
 		VoResponse voResponse = new VoResponse();
 		List<Menu> list = menuService.getMenus(level);
-		List<MdmModel> listModel = mdmModelService.getAll();
-		List<Menu> definedMenus = new LinkedList<Menu>();
-		for(MdmModel model : listModel){
-			Menu menu = new Menu();
-			menu.setMenuName(model.getMdmModel());
-			List<Menu> definedSubMenus = new LinkedList<Menu>();
-			for(TableDefinition table : model.getTableDefinitions()){
-				if(table.getIsMenu()){
-					Menu subMenu = new Menu();
-					subMenu.setMenuName(table.getTableLabel());
-					subMenu.setMenuUrl("/table/defined/"+table.getTableName());
-					definedSubMenus.add(subMenu);
-					menu.setMenus(definedSubMenus);
-				}
-			}
-			if(menu.getMenus() != null && menu.getMenus().size() == 1){
-				menu.setMenuUrl(menu.getMenus().get(0).getMenuUrl());
-				menu.setMenus(null);
-			}
-			definedMenus.add(menu);
-		}
-		for(Menu menu : list){
-			if(menu.getLevel() < 1){
-				for(Menu menu1 : menu.getMenus()){
-					if(menu1.getMenuName().equals("主数据管理")){
-						menu1.setMenus(definedMenus);
-						break;
-					}
-				}
-			}else if(menu.getLevel() == 1){
-				if(menu.getMenuName().equals("主数据管理")){
-					menu.setMenus(definedMenus);
-					break;
-				}
-			}
-		}
 		voResponse.setData(list);
 		return voResponse;
 	}

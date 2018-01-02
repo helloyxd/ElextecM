@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -114,27 +116,23 @@ public class TableDDLController {
 	}
 	
 	
-	@GetMapping("defined")
-	public Object getDefinedData(@RequestParam("id") String id){
-		
-		return null;
+	@GetMapping("defined/{modelId}/{tableId}")
+	public Object getDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
+		return tableDDLService.getDefinedData(modelId, tableId);
 	}
 	
-	@PostMapping("defined")
-	public Object postDefinedData(@RequestParam("id") String id){
-		
-		return null;
+	@PostMapping("defined/{modelId}/{tableId}")
+	public Object postDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId ){
+		return tableDDLService.postDefinedData(modelId, tableId);
 	}
 	
-	@DeleteMapping("defined")
-	public Object delDefinedData(@RequestParam("id") String id){
-		
-		return null;
+	@DeleteMapping("defined/{modelId}/{tableId}")
+	public Object delDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
+		return tableDDLService.delDefinedData(modelId, tableId);
 	}
 	
-	@PutMapping("defined")
-	public Object updateDefinedData(@RequestParam("id") String id){
-		
-		return null;
+	@PutMapping("defined/{modelId}/{tableId}")
+	public Object updateDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
+		return tableDDLService.updateDefinedData(modelId, tableId);
 	}
 }

@@ -46,6 +46,6 @@ public interface TableRelationMapper {
 	})
 	List<TableRelation> findAll();
 	
-	
-	
+	@Select("SELECT * FROM mdm_tablerelation WHERE table1 = #{tableName}")
+	List<TableRelation> findByTableName(String tableName);
 }

@@ -9,7 +9,9 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.entity.Menu;
 
@@ -70,13 +72,15 @@ public interface MenuMapper {
     })
 	List<Menu> findByLevel(String level);
 	
-	@Select("SELECT * FROM mdm_menu WHERE menu_name=#{menuName}")
-	@ResultMap("menuMapOnly")
+	@Select("SELECT * FROM mdm_menu WHERE menu_name=#{menuName} ")
+	@ResultMap("menuMap")
 	List<Menu> findByName(String menuName);
 	
 	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
-			+ "VALUES(sys_guid(),#{menuName},#{menuUrl},#{method},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark},#{creater},sysdate)")
-	@ResultMap("menuMap")
+			+ "VALUES(#{id},#{menuName},#{menuUrl},#{method},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark,jdbcType=VARCHAR},#{creater},sysdate)")
+	@SelectKey(before = true, keyProperty = "id",
+		resultType = String.class, statementType = StatementType.STATEMENT,
+		statement="SELECT sys_guid() FROM dual")
 	void insert(Menu menu);
 	
 	@Delete("DELETE FROM mdm_menu WHERE id=#{menuId}")
