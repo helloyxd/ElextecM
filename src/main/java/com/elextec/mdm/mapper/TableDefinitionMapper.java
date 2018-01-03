@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
@@ -45,4 +46,8 @@ public interface TableDefinitionMapper {
 	@Select("SELECT * FROM mdm_tabledefinition where model_id = #{modelId}")
 	@ResultMap("tableDefinitionMap")
 	List<TableDefinition> findByModelId(String modelId);
+	
+	@Select("SELECT * FROM mdm_tabledefinition where model_id = #{id} AND table_name = #{name}")
+	@ResultMap("tableDefinitionMap")
+	List<TableDefinition> findByModelIdAndName(@Param("id")String modelId, @Param("name")String tableName);
 }

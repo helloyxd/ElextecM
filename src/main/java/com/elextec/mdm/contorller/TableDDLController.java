@@ -9,6 +9,7 @@ import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -115,9 +116,8 @@ public class TableDDLController {
 		return voRes;
 	}
 	
-	
 	@GetMapping("defined/{modelId}/{tableId}")
-	public Object getDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
+	public Object getDefinedData(@PathVariable("modelId") String modelId, @PathVariable("tableId") String tableId){
 		return tableDDLService.getDefinedData(modelId, tableId);
 	}
 	

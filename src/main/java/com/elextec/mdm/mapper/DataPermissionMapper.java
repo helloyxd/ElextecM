@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
@@ -26,11 +27,35 @@ public interface DataPermissionMapper {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "definedId", column = "defined_id"),
 	    @Result(property = "permissionValue", column = "permission_value"),
+	    @Result(property = "dataPermissionDefined", column = "defined_id",
+			many = @Many(select = "com.elextec.mdm.mapper.DataPermissionDefinedMapper.findByIdOnly")),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"), 
 	    @Result(property = "creater", column = "creater")
 	})
     List<DataPermission> findAll();
+    
+    /**
+	 * 根据UserID和tableId查询用户的数据权限信息
+	 * @return
+	 */
+	@Select("SELECT * FROM mdm_datapermission "
+			+ "WHERE defined_id IN (SELECT id FROM mdm_datapermission_defined WHERE table_id = #{tableId}) "
+			+ "AND id IN (SELECT data_id FROM mdm_role_data "
+			+ "WHERE role_id IN (SELECT role_id FROM mdm_user_role WHERE user_id = #{userId}))")
+	@ResultMap("datapermissionMap")
+    List<DataPermission> findDatasByUserIdAndTable(@Param("userId")String userId, @Param("tableId")String tableId);
+	
+	/**
+	 * 根据UserID和dataDefinedId查询用户的数据权限信息
+	 * @return
+	 */
+	@Select("SELECT * FROM mdm_datapermission "
+			+ "WHERE defined_id = #{definedId} "
+			+ "AND id IN (SELECT data_id FROM mdm_role_data "
+			+ "WHERE role_id IN (SELECT role_id FROM mdm_user_role WHERE user_id = #{userId}))")
+	@ResultMap("datapermissionMap")
+    List<DataPermission> findDatasByUserIdAndDataDefined(@Param("userId")String userId, @Param("definedId")String dataDefinedId);
     
     /**
 	 * 根据角色ID查询角色的数据权限信息

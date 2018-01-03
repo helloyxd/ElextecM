@@ -46,5 +46,8 @@ public interface TableDDLMapper {
     @ResultType(List.class)
 	List<Map<String, String>> getTableColumnsDefine(@Param("tableName") String tableName);
 	
+	@Select("SELECT * FROM ${tableName} WHERE ${queryParam}")
+	@ResultType(List.class)
+	List<Object> findTable(@Param("tableName") String tableName, @Param("queryParam") String queryParam);
 	
 }

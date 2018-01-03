@@ -16,10 +16,15 @@ import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.common.entity.constant.TableDDLMap;
 import com.elextec.mdm.common.entity.constant.TableRelationEnum;
 import com.elextec.mdm.entity.ColumnDefinition;
+import com.elextec.mdm.entity.DataPermission;
+import com.elextec.mdm.entity.DataPermissionDefined;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
+import com.elextec.mdm.mapper.DataPermissionDefinedMapper;
+import com.elextec.mdm.mapper.DataPermissionMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
@@ -46,6 +51,12 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	
 	@Autowired
 	private MenuMapper menuMapper;
+	
+	@Autowired
+	private DataPermissionDefinedMapper dataPermissionDefinedMapper;
+	
+	@Autowired
+	private DataPermissionMapper dataPermissionMapper;
 	
 	@Override
 	@Transactional
@@ -388,10 +399,43 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			return voRes;
 		}
 		MdmModel model = listModel.get(0);
-		List<TableDefinition> listTable = tableDefinitionMapper.findByModelId(model.getId());
+		List<TableDefinition> listTable = tableDefinitionMapper.findByModelIdAndName(model.getId(), tableName);
+		if(listTable == null || listTable.size() == 0){
+			voRes.setNull(voRes);
+			return voRes;
+		}
+		TableDefinition table = listTable.get(0);
+		List<TableRelation> listRelation = tableRelationMapper.findByTableId(table.getId());
+		List<DataPermissionDefined> listDataPermissionDefined = dataPermissionDefinedMapper.findByTableId(table.getId());
 		
-		
-		return null;
+		if(listRelation == null || listRelation.size() == 0){
+			//List<Object> listObj = tableDDLMapper.findTable(table.getTableName());
+			
+		}else{
+			
+		}
+		StringBuilder sb = new StringBuilder();
+		if(listDataPermissionDefined == null || listDataPermissionDefined.size() == 0){
+			
+		}else{
+			sb.append("1=1");
+			List<DataPermission> listData = null;
+			for(DataPermissionDefined dataDefined : listDataPermissionDefined){
+				listData = dataPermissionMapper.findDatasByUserIdAndDataDefined(getUserId(), dataDefined.getId());
+				if(listData == null || listData.size() == 0){
+					return voRes;
+				}
+				sb.append(" AND ").append(dataDefined.getPermissionField()).append(" IN (");
+				for(DataPermission data : listData){
+					sb.append("'").append(data.getPermissionValue()).append("',");
+				}
+				sb.deleteCharAt(sb.length() - 1);
+				sb.append(")");
+			}
+			List<Object> listObj = tableDDLMapper.findTable(table.getTableName(), sb.toString());
+			voRes.setData(listObj);
+		}
+		return voRes;
 	}
 
 	@Override

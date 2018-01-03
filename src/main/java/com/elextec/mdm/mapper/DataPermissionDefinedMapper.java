@@ -26,7 +26,7 @@ public interface DataPermissionDefinedMapper {
     	    @Result(id = true, property = "id", column = "id"),
     	    @Result(property = "tableId", column = "table_id"),
     	    @Result(property = "tableDefinition", column = "table_id",
-    		many = @Many(select = "com.elextec.mdm.mapper.TableDefinitionMapper.findById")),
+    			many = @Many(select = "com.elextec.mdm.mapper.TableDefinitionMapper.findById")),
     	    @Result(property = "permissionField", column = "permission_field"),
     	    @Result(property = "dataPermission", column = "id",
         		many = @Many(select = "com.elextec.mdm.mapper.DataPermissionMapper.findByDefinedId")),
@@ -46,6 +46,22 @@ public interface DataPermissionDefinedMapper {
 	@Select("SELECT * FROM mdm_datapermission_defined WHERE id = #{id}")
 	@ResultMap("datapermissionDefineMap")
 	DataPermissionDefined findById(String id);
+	
+	@Select("SELECT * FROM mdm_datapermission_defined WHERE id = #{id}")
+	@Results(id = "datapermissionDefineMapOnly",
+	value = {
+	    @Result(id = true, property = "id", column = "id"),
+	    @Result(property = "tableId", column = "table_id"),
+	    @Result(property = "permissionField", column = "permission_field"),
+	    @Result(property = "status", column = "status"),
+	    @Result(property = "createTime", column = "create_time"), 
+	    @Result(property = "creater", column = "creater")
+	})
+	DataPermissionDefined findByIdOnly(String id);
+	
+	@Select("SELECT * FROM mdm_datapermission_defined WHERE table_id = #{tableId}")
+	@ResultMap("datapermissionDefineMap")
+	List<DataPermissionDefined> findByTableId(String tableId);
 	
 	@Select("SELECT * FROM mdm_datapermission_defined WHERE table_id = #{tableId} AND permission_field = #{permissionField}")
 	@ResultMap("datapermissionDefineMap")

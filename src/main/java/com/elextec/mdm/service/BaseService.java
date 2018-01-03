@@ -28,4 +28,12 @@ public class BaseService {
 		return username;
 	}
 	
+	public String getUserId(){
+		Object obj = session.getAttribute("mdm_user");
+		String userId = "798D5F70C6434815A1A3194C48695EC4";
+		if(obj != null){
+			userId = ((User)obj).getId();
+		}
+		return userId;
+	}
 }

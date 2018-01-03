@@ -67,7 +67,6 @@ public interface RoleMapper {
 
     /**
      * 新增角色的菜单权限信息
-     * 
      * @param user
      */
     @InsertProvider(type = MapperProvider.class, method = "addRoleMenus")
@@ -75,7 +74,6 @@ public interface RoleMapper {
 
     /**
      * 根据角色ID，删除角色的菜单信息
-     * 
      * @param roleId
      */
     @Delete("DELETE FROM mdm_role_menu WHERE role_id=#{roleId}")
@@ -90,7 +88,6 @@ public interface RoleMapper {
     
     /**
      * 新增角色的数据权限信息
-     * 
      * @param user
      */
     @InsertProvider(type = MapperProvider.class, method = "addRoleDataPermission")

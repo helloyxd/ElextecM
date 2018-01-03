@@ -26,7 +26,6 @@ public class User extends BasicEntity implements Serializable{
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	@JsonIgnore
 	public String getUserPassword() {
 		return userPassword;
 	}
