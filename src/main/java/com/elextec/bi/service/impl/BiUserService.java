@@ -8,6 +8,7 @@ import com.elextec.bi.entity.BiUser;
 import com.elextec.bi.mapper.BiUserMapper;
 import com.elextec.bi.service.BiBaseService;
 import com.elextec.bi.service.IBiUserService;
+import com.elextec.bi.utils.MD5Util;
 import com.elextec.mdm.entity.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,9 @@ public class BiUserService extends BiBaseService implements IBiUserService{
 			vor.setMsg("用户名'" + user.getUserName() + "'已存在");
 			vor.setResult(false);
 		}else{
+			//密码MD5加密
+			String rePassword = MD5Util.encode(user.getUserPassword());
+			user.setUserPassword(rePassword);
 			user.setStatus(UserStatusEnum.UserStatusNormal);
 			user.setCreater(getUserName());
 			biUserMapper.insert(user);

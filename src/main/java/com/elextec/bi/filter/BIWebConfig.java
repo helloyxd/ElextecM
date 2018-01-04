@@ -2,7 +2,6 @@ package com.elextec.bi.filter;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.Filter;
 
@@ -10,12 +9,12 @@ import javax.servlet.Filter;
  * @author zhangkj
  *
  */
-@Configuration
-public class BIWebConfig {
+//@Configuration
+public class BiWebConfig {
 
 	@Bean
 	public Filter getBiLoginFilter() {
-		return new BILoginFilter();
+		return new BiLoginFilter();
 	}
 	
 

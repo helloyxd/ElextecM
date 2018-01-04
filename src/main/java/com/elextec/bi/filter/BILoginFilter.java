@@ -16,9 +16,9 @@ import java.util.List;
  * @author zhangkj
  *
  */
-public class BILoginFilter implements Filter{
+public class BiLoginFilter implements Filter{
 
-	private static final Logger logger = LoggerFactory.getLogger(BILoginFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(BiLoginFilter.class);
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
