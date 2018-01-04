@@ -34,7 +34,7 @@ public interface MenuMapper {
     })
 	List<Menu> findAll();
 	
-	@Select("SELECT * FROM mdm_menu WHERE menu_level<=0 ORDER BY sort_order")
+	@Select("SELECT * FROM mdm_menu WHERE menu_level<=0 AND parent_id IS NULL ORDER BY sort_order")
 	@Results(id="menuMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),

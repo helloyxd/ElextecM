@@ -1,14 +1,3 @@
-delete from MDM_DATAPERMISSION_DEFINED
-drop table mdm_product
-drop table mdm_productinfo
-
-INSERT ALL INTO mdm_datapermission(id,definedId,roleId,permissionValue,createTime,creater,status)
-VALUES(sys_guid(), ?, ?, ?, sysdate, ?, 0) 
-INTO mdm_datapermission(id,definedId,roleId,permissionValue,createTime,creater,status) 
-VALUES(sys_guid(), ?, ?, ?, sysdate, ?, 0) 
-SELECT 1 FROM DUAL
-
-
 create table MDM_User
 (
    id                   varchar2(32) primary key,
@@ -243,5 +232,15 @@ create table MDM_BasicData
    create_time			TIMESTAMP	
 );
 
-
-
+create table MDM_QueryField_Defined
+(
+   id        			varchar2(32) primary key,
+   table_id  			varchar2(32) not null,
+   field				varchar2(32) not null,
+   field_type			varchar2(32),
+   sort_order			number(1),
+   column_span			number(2),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+)
