@@ -35,25 +35,6 @@ public interface MenuMapper {
 	List<Menu> findAll();
 	
 	@Select("SELECT * FROM mdm_menu WHERE menu_level<=0 ORDER BY sort_order")
-	@Results(id="menuMapAll",
-	value={
-		@Result(id = true, property = "id", column = "id"),
-		@Result(property = "menuName",  column = "menu_name"),
-        @Result(property = "menuUrl", column = "menu_url"),
-        @Result(property = "method", column = "method"),
-        @Result(property = "parentId", column = "parent_id"),
-		@Result(property = "level", column = "menu_level"),
-        @Result(property = "sortOrder", column = "sort_order"),
-        @Result(property = "remark", column = "remark"),
-        @Result(property = "status", column = "status"),
-		@Result(property = "createTime", column = "create_time"),
-		@Result(property = "creater", column = "creater"),
-        @Result(property = "menus", column = "id",
-            	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenusByParentId"))
-    })
-	List<Menu> findAllMenusTree();
-	
-	@Select("SELECT * FROM mdm_menu WHERE menu_level=#{level} ORDER BY sort_order")
 	@Results(id="menuMap",
 	value={
 		@Result(id = true, property = "id", column = "id"),
@@ -70,14 +51,37 @@ public interface MenuMapper {
         @Result(property = "menus", column = "id",
             	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenuByParentId"))
     })
-	List<Menu> findByLevel(String level);
+	List<Menu> findAllMenusTree();
+	
+	@Select("SELECT * FROM mdm_menu WHERE menu_level=#{level} ORDER BY sort_order")
+	@Results(id="menuMapAll",
+	value={
+		@Result(id = true, property = "id", column = "id"),
+		@Result(property = "menuName",  column = "menu_name"),
+        @Result(property = "menuUrl", column = "menu_url"),
+        @Result(property = "method", column = "method"),
+        @Result(property = "parentId", column = "parent_id"),
+		@Result(property = "level", column = "menu_level"),
+        @Result(property = "sortOrder", column = "sort_order"),
+        @Result(property = "remark", column = "remark"),
+        @Result(property = "status", column = "status"),
+		@Result(property = "createTime", column = "create_time"),
+		@Result(property = "creater", column = "creater"),
+        @Result(property = "menus", column = "id",
+            	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenusByParentId"))
+    })
+	List<Menu> findAllByLevel(String level);
+	
+	@Select("SELECT * FROM mdm_menu WHERE id=#{id} ")
+	@ResultMap("menuMapAll")
+	Menu findById(String id);
 	
 	@Select("SELECT * FROM mdm_menu WHERE menu_name=#{menuName} ")
-	@ResultMap("menuMap")
+	@ResultMap("menuMapAll")
 	List<Menu> findByName(String menuName);
 	
 	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
-			+ "VALUES(#{id},#{menuName},#{menuUrl},#{method},#{parentId},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark,jdbcType=VARCHAR},#{creater},sysdate)")
+			+ "VALUES(#{id},#{menuName},#{menuUrl},#{method},#{parentId,jdbcType=VARCHAR},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark,jdbcType=VARCHAR},#{creater},sysdate)")
 	@SelectKey(before = true, keyProperty = "id",
 		resultType = String.class, statementType = StatementType.STATEMENT,
 		statement="SELECT sys_guid() FROM dual")
@@ -86,8 +90,8 @@ public interface MenuMapper {
 	@Delete("DELETE FROM mdm_menu WHERE id=#{menuId}")
 	void delById(String menuId);
 	
-	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},method=#{method},menu_level=#{level},"
-			+ "sort_order=#{sortOrder},parent_id=#{parentId},remark=#{remark} WHERE id=#{id}")
+	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},method=#{method},"
+			+ "sort_order=#{sortOrder},parent_id=#{parentId,jdbcType=VARCHAR},remark=#{remark} WHERE id=#{id}")
 	void update(Menu menu);
 	
 	/**
@@ -95,7 +99,7 @@ public interface MenuMapper {
 	 * @param parentId
 	 * @return
 	 */
-	@Select("SELECT * FROM mdm_menu WHERE menu_level<1000 parent_id=#{parentId}")
+	@Select("SELECT * FROM mdm_menu WHERE parent_id=#{parentId}")
 	@ResultMap("menuMapAll")
 	Menu findMenusByParentId(String parentId);
 	

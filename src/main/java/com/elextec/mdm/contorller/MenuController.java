@@ -18,7 +18,7 @@ import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.IMenuService;
 
 @RestController
-@RequestMapping("menu")
+@RequestMapping("/mdm/menu")
 public class MenuController {
 
 	@Autowired
@@ -57,7 +57,6 @@ public class MenuController {
 	
 	@PostMapping
 	public Object add(@RequestBody Menu menu) {
-		menu.setCreater("sys");
 		VoResponse voResponse = menuService.addMenu(menu);
 		return voResponse;
 	}
@@ -67,4 +66,6 @@ public class MenuController {
 		VoResponse voResponse = menuService.updateMenu(menu);
 		return voResponse;
 	}
+	
+	
 }
