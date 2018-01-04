@@ -19,7 +19,7 @@ import com.elextec.mdm.service.IMdmModelService;
  *
  */
 @RestController
-@RequestMapping("model")
+@RequestMapping("/mdm/model")
 public class ModelController {
 
 	@Autowired

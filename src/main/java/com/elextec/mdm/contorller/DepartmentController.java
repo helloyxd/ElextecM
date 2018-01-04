@@ -15,7 +15,7 @@ import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.service.IDepartmentService;
 
 @RestController
-@RequestMapping("department")
+@RequestMapping("/mdm/department")
 public class DepartmentController {
 
 	@Autowired

@@ -27,7 +27,7 @@ import com.elextec.mdm.entity.User;
 import com.elextec.mdm.service.IUserService;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/mdm/user")
 public class UserController{
 
 	@Autowired

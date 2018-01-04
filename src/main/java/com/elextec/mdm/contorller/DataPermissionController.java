@@ -19,7 +19,7 @@ import com.elextec.mdm.service.IDataPermissionService;
  *
  */
 @RestController
-@RequestMapping("dataPermission")
+@RequestMapping("/mdm/dataPermission")
 public class DataPermissionController {
 
 	@Autowired

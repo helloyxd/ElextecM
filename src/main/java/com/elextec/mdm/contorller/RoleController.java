@@ -16,7 +16,7 @@ import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.service.IRoleService;
 
 @RestController
-@RequestMapping("role")
+@RequestMapping("/mdm/role")
 public class RoleController {
 
 	@Autowired

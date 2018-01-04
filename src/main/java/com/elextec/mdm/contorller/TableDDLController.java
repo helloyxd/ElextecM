@@ -26,7 +26,7 @@ import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
 
 @RestController
-@RequestMapping("table")
+@RequestMapping("/mdm/table")
 public class TableDDLController {
 
 	@Autowired
