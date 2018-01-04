@@ -1,6 +1,5 @@
 package com.elextec.mdm.contorller;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
-import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.Menu;
-import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.IMenuService;
 

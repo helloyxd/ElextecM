@@ -10,10 +10,7 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.elextec.mdm.ws.IMdmService;
 import com.elextec.mdm.ws.MdmService;

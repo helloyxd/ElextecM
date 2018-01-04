@@ -95,7 +95,7 @@ public interface MenuMapper {
 	 * @param parentId
 	 * @return
 	 */
-	@Select("SELECT * FROM mdm_menu WHERE parent_id=#{parentId}")
+	@Select("SELECT * FROM mdm_menu WHERE menu_level<1000 parent_id=#{parentId}")
 	@ResultMap("menuMapAll")
 	Menu findMenusByParentId(String parentId);
 	

@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.vo.VoMenu;
 
 public interface IMenuService {
 
 	List<Menu> getAllMenus();
 	
-	List<Menu> getAllMenusTree();
+	List<VoMenu> getAllMenusTree();
 	
 	List<Menu> getMenus(String level);
 

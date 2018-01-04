@@ -44,6 +44,7 @@ public class User extends BasicEntity implements Serializable{
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+	@JsonIgnore
 	public List<Role> getRoles() {
 		return roles;
 	}
@@ -57,6 +58,7 @@ public class User extends BasicEntity implements Serializable{
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
 	}
+	@JsonIgnore
 	public List<Menu> getMenus() {
 		return menus;
 	}
