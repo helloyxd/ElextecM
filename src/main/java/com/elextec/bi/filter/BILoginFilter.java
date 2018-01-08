@@ -37,6 +37,7 @@ public class BiLoginFilter implements Filter{
 		String[] notFilterDirs = {"bi/user/signIn","/bi/ws"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
+
 			if (url.indexOf(notFilterDirValue) != -1) {
 				chain.doFilter(request, response);
 				return;

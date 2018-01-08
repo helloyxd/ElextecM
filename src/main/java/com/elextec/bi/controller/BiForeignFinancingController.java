@@ -5,10 +5,6 @@ import com.elextec.bi.common.entity.VoResponse;
 import com.elextec.bi.common.entity.VoResult;
 import com.elextec.bi.entity.BiForeignFinancing;
 import com.elextec.bi.service.impl.BiReportForeignFinancingService;
-import com.jybi.report.model.ForeignFinancing;
-import com.jybi.report.model.ReportReturnT;
-import com.jybi.report.model.ReturnT;
-import com.jybi.report.services.JybiReportForeignFinancingSerivce;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +64,7 @@ public class BiForeignFinancingController {
     @ResponseBody
     public Object queryAll(){
         ReportVoResponse voRes = new ReportVoResponse();
+        return null;
 
 
 
