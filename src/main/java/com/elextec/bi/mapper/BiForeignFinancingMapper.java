@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BiForeignFinancingMapper {
 
-	@Select("select j.*,o.\"org_name\" AS ORG_NAME FROM JYBI_RPT_FOREIGN_FINANCING j LEFT JOIN (select \"org_id\",\"org_name\" FROM JYBI_RPT_ORG_STAGES GROUP BY \"org_id\",\"org_name\") o ON j.ORG_ID = o.\"org_id\" ORDER BY j.ORG_ID,j.\"TYPE\",j.REGION_COM_NAME")
+	@Select("select j.*,o.\"org_name\" AS ORG_NAME FROM BI_FOREIGN_FINANCING j LEFT JOIN (select \"org_id\",\"org_name\" FROM BI_ORG_STAGES GROUP BY \"org_id\",\"org_name\") o ON j.ORG_ID = o.\"org_id\" ORDER BY j.ORG_ID,j.\"TYPE\",j.REGION_COM_NAME")
 	@Results(id="biForeignFinancingOnly",
 	value={
 		@Result(id = true, property = "id", column = "id"),
