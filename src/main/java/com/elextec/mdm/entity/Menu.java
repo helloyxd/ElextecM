@@ -16,6 +16,7 @@ public class Menu extends BasicEntity{
 	private Integer level;
 	private Integer sortOrder;
 	private String remark;
+	@JsonProperty("children") 
 	private List<Menu> menus;
 	
 	

@@ -74,7 +74,6 @@ public interface UserMapper {
 
     /**
      * 新增用户的角色信息
-     * 
      * @param user
      */
     @InsertProvider(type = MapperProvider.class, method = "addUserRoles")
@@ -82,7 +81,6 @@ public interface UserMapper {
 
     /**
      * 根据用户ID，删除用户的角色信息
-     * 
      * @param userId
      */
     @Delete("DELETE FROM mdm_user_role WHERE user_id=#{userId}")

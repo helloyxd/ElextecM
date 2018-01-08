@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.common.entity.VoResponse;
@@ -134,11 +135,18 @@ public class UserService extends BaseService implements IUserService{
 		return voRes;
 	}
 	
-	@Override
-	public VoResponse updateUserRole(User user){
-		VoResponse voRes = new VoResponse();
+	@Transactional
+	public void updateUserRoles(User user){
 		userMapper.delUserRoles(user.getId());
 		userMapper.addUserRoles(user);
+	}
+	
+	@Override
+	public VoResponse updateUserRole(List<User> users){
+		VoResponse voRes = new VoResponse();
+		for(User user : users){
+			updateUserRoles(user);
+		}
 		return voRes;
 	}
 	

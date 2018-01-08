@@ -64,8 +64,12 @@ public class UserController{
 			user.setUserPassword("");
 			session.setAttribute("mdm_user", user);
 			Cookie[] cookies = request.getCookies();
+			System.out.println(cookies.length);
 			if(isMarked!= null && isMarked){
-				Cookie cook = new Cookie("sessionId", sessionId);
+				Cookie cook = null;
+				cook = new Cookie("logineduser", user.getUserName()+"&&"+user.getUserPassword());
+				cook.setMaxAge(60 * 60 * 24 * 7);
+				cook.setHttpOnly(true);
 				response.addCookie(cook);
 			}
 			List<Role> roles = user.getRoles();
@@ -146,6 +150,12 @@ public class UserController{
 		VoResponse voRes = new VoResponse();
 		User user = userService.getById(userId);
 		voRes.setData(user);
+		return voRes;
+	}
+	
+	@PostMapping("addUserRoles")
+	public Object addUserRoles(@RequestBody List<User> users){
+		VoResponse voRes = userService.updateUserRole(users);
 		return voRes;
 	}
 }
