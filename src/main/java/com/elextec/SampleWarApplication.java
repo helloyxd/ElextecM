@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.elextec.mdm;
+package com.elextec;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
