@@ -116,9 +116,18 @@ public class BiUserController {
 		VoResponse voRes = new VoResponse();
 		BiUser user = new BiUser();
 		user.setUserName(userName);
-//		voRes.setData(userService.getPage(user, page, pageSize));
+		voRes.setData(biUserService.getPage(user, page, pageSize));
 		return voRes;
 	}
+
+//	@PostMapping("/addUserRole")
+//	public Object addUserRole(HttpServletRequest request, HttpServletResponse response){
+//		VoResponse voRes = new VoResponse();
+//		HttpSession session = request.getSession();
+//		BiUser user = (BiUser) session.getAttribute("bi_user");
+//		session.removeAttribute("mdm_user");
+//		return voRes;
+//	}
 	
 	@DeleteMapping
 	public Object del(@RequestParam("id") String userId) {

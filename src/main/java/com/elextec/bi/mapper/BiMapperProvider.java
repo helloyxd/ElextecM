@@ -1,6 +1,7 @@
 package com.elextec.bi.mapper;
 
 import com.elextec.bi.common.entity.PageQuery;
+import com.elextec.bi.entity.BiForeignFinancing;
 import com.elextec.bi.entity.BiRole;
 import com.elextec.bi.entity.BiUser;
 import com.elextec.mdm.entity.DataPermissionDefined;
@@ -84,6 +85,50 @@ public class BiMapperProvider {
 		System.out.println(sb);
 		return sb.toString();
 	}
+
+	public String findForeignFinancingByPage(Map<String,Object> map){
+		StringBuilder sb = new StringBuilder();
+		String objName = (String) map.get("objName");
+		PageQuery pageQuery = (PageQuery) map.get("page");
+		sb.append("SELECT * FROM (\n" +
+				"        SELECT u.*,ROWNUM RN\n" +
+				"        FROM (select j.*,o.\"org_name\" AS ORG_NAME\n" +
+				"        FROM BI_FOREIGN_FINANCING j\n" +
+				"        LEFT JOIN (select \"org_id\",\"org_name\" FROM BI_ORG_STAGES\n" +
+				"        GROUP BY \"org_id\",\"org_name\") o ON j.ORG_ID = o.\"org_id\") u WHERE ROWNUM <= ");
+		sb.append(pageQuery.getPageRowSize()*pageQuery.getCurrentPage());
+		sb.append(" ORDER BY u.create_time DESC)");
+		sb.append(" where RN >= ");
+		sb.append((pageQuery.getCurrentPage()-1)*pageQuery.getPageRowSize()+1);
+		if(objName != null){
+			sb.append(" AND (org_name like '%");
+			sb.append(objName);
+			sb.append("%' OR region_com_name like '%");
+			sb.append(objName);
+			sb.append("%')");
+		}
+		sb.append(" ORDER BY create_time DESC");
+		System.out.println(sb);
+		return sb.toString();
+	}
+
+	public String findForeignFinancingCount(Map<String, Object> map){
+		StringBuilder sb = new StringBuilder();
+		String objName = (String) map.get("objName");
+
+		sb.append("SELECT count(1)\n" +
+				"        FROM BI_FOREIGN_FINANCING u\n" +
+				"        LEFT JOIN (select \"org_id\",\"org_name\" FROM JYBI_RPT_ORG_STAGES GROUP BY \"org_id\",\"org_name\") o ON u.ORG_ID = o.\"org_id\"");
+		if(objName != null){
+			sb.append(" where (o.\"org_name\" like '%");
+			sb.append(objName);
+			sb.append("%' OR u.region_com_name like '%");
+			sb.append(objName);
+			sb.append("%')");
+		}
+		System.out.println(sb);
+		return sb.toString();
+	}
 	
 	public String findUserCount(Map<String, BiUser> map){
 		StringBuilder sb = new StringBuilder();
@@ -127,13 +172,22 @@ public class BiMapperProvider {
 	
 	public static void main(String[] args) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		BiUser user = new BiUser();
-		user.setUserName("%admin%");
+//		BiUser user = new BiUser();
+//		user.setUserName("%admin%");
 		PageQuery pageQuery = new PageQuery();
-		pageQuery.setOrder("user_name");
-		map.put("user", user);
-		map.put("page", pageQuery);
-		new BiMapperProvider().findUserByPage(map);
+
+//		pageQuery.setOrder("user_name");
+//		map.put("user", user);
+//		map.put("page", pageQuery);
+//		new BiMapperProvider().findUserByPage(map);
+
+		pageQuery.setCurrentPage(1);
+		pageQuery.setPageRowSize(10);
+		map.put("objName","123");
+//		map.put("page",pageQuery);
+		new BiMapperProvider().findForeignFinancingCount(map);
+
+
 		
 	}
 	

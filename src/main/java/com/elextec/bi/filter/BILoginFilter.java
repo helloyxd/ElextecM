@@ -34,7 +34,7 @@ public class BiLoginFilter implements Filter{
 		String url = req.getRequestURI();
 		String method = req.getMethod();
 		logger.debug(method + "-" + url);
-		String[] notFilterDirs = {"bi/user/signIn","/mdm/ws"};
+		String[] notFilterDirs = {"bi/user/signIn","/bi/ws"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
 			if (url.indexOf(notFilterDirValue) != -1) {
@@ -43,7 +43,7 @@ public class BiLoginFilter implements Filter{
 			}
 		}
 		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("mdm_user");
+		User user = (User) session.getAttribute("bi_user");
 		if (user == null){
 			res.setStatus(401);
 			return;
