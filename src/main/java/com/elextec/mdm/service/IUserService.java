@@ -20,7 +20,7 @@ public interface IUserService {
 	
 	public VoResponse update(User user);
 	
-	public VoResponse updateUserRole(User user);
+	public VoResponse updateUserRole(List<User> users);
 	
 	public User getById(String userId);
 	
