@@ -1,11 +1,13 @@
 package com.elextec.bi.entity;
 
 import com.elextec.bi.common.entity.BasicEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class BiMenu extends BasicEntity{
 
+	@JsonProperty("label")
 	private String menuName;
 	private String menuUrl;
 	private String method;

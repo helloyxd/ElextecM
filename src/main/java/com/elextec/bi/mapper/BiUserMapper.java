@@ -20,9 +20,8 @@ public interface BiUserMapper {
 	    @Result(property = "creater", column = "creater"),
 //	    @Result(property = "department", column = "department_id"),
 //	    	one = @One(select = "com.elextec.bi.mapper.DepartmentMapper.findDepartmentById") ),
-//	    @Result(property = "roles", column = "id")
-//                ,
-//	    	many = @Many(select = "com.elextec.bi.mapper.RoleMapper.findRolesByUserId") )
+	    @Result(property = "roles", column = "id",
+	    	many = @Many(select = "com.elextec.bi.mapper.BiRoleMapper.findRolesByUserId") )
     	})
     List<BiUser> findUserByName(String userName);
 

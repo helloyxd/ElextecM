@@ -6,6 +6,7 @@ import com.elextec.bi.entity.BiMenu;
 import com.elextec.bi.entity.BiRole;
 import com.elextec.bi.entity.BiUser;
 import com.elextec.bi.service.IBiUserService;
+import com.elextec.bi.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class BiUserController {
 	@PostMapping("/signIn")
 	public Object signIn(@RequestBody BiUser user, @RequestParam(required=false) Boolean isMarked,
 			HttpServletRequest request, HttpServletResponse response){
-		VoResponse voRes = biUserService.signIn(user.getUserName(), user.getUserPassword());
+		VoResponse voRes = biUserService.signIn(user.getUserName(), MD5Util.encode(user.getUserPassword()));
 		if(voRes.getSuccess()){
 			user = (BiUser) voRes.getData();
 			HttpSession session = request.getSession();
@@ -86,7 +87,7 @@ public class BiUserController {
 				}
 			}
 			user.setMenus(menus);
-			session.setAttribute("mdm_right", menus);
+			session.setAttribute("bi_right", menus);
 			voRes.setData(user);
 		}
 		return voRes;
