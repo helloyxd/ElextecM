@@ -53,7 +53,7 @@ public class UserController{
 	}
 	
 	@PostMapping("/signIn")
-	public Object signIn(@RequestBody User user, @RequestParam(required=false) Boolean isMarked,
+	public Object signIn(@RequestBody User user, @RequestParam(required=false, defaultValue="false") Boolean isMarked,
 			HttpServletRequest request, HttpServletResponse response){
 		VoResponse voRes = userService.signIn(user.getUserName(), user.getUserPassword());
 		if(voRes.getSuccess()){
@@ -64,12 +64,26 @@ public class UserController{
 			user.setUserPassword("");
 			session.setAttribute("mdm_user", user);
 			Cookie[] cookies = request.getCookies();
-			System.out.println(cookies.length);
-			if(isMarked!= null && isMarked){
-				Cookie cook = null;
-				cook = new Cookie("logineduser", user.getUserName()+"&&"+user.getUserPassword());
-				cook.setMaxAge(60 * 60 * 24 * 7);
-				cook.setHttpOnly(true);
+			if(isMarked){
+				boolean flag = false;
+				String value = user.getUserName()+"&&"+user.getUserPassword();
+				for(Cookie cook : cookies){
+					if(cook.getName().equals("logineduser")){
+						cook.setValue(value);
+						response.addCookie(cook);
+						flag = true;
+						continue;
+					}
+				}
+				if(!flag){
+					Cookie cook = new Cookie("logineduser", value);
+					cook.setMaxAge(60 * 60 * 24 * 7);
+					cook.setHttpOnly(true);
+					response.addCookie(cook);
+				}
+			}else{
+				Cookie cook = new Cookie("logineduser", null);
+				cook.setMaxAge(0);
 				response.addCookie(cook);
 			}
 			List<Role> roles = user.getRoles();

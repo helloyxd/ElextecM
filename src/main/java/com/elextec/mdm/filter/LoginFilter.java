@@ -41,7 +41,7 @@ public class LoginFilter implements Filter{
 		String url = req.getRequestURI();
 		String method = req.getMethod();
 		logger.debug(method + "-" + url);
-		String[] notFilterDirs = {"/user/signIn","/mdm/ws"};
+		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
 			if (url.indexOf(notFilterDirValue) != -1) {
@@ -54,24 +54,26 @@ public class LoginFilter implements Filter{
 		if (user == null){
 			res.setStatus(401);
 			return;
-		}
-		List<Menu> menus = user.getMenus();
-		
-		boolean flag = false;
-		for(Menu menu : menus){
-			if(method.toLowerCase().equals(menu.getMethod())){
-				if(url.equals(menu.getMenuUrl())){
-					flag = true;
-					break;
+		}else if(user.getUserName().equals("admin0")){
+			
+		}else{
+			List<Menu> menus = user.getMenus();
+			
+			boolean flag = false;
+			for(Menu menu : menus){
+				if(method.toLowerCase().equals(menu.getMethod())){
+					if(url.equals(menu.getMenuUrl())){
+						flag = true;
+						break;
+					}
 				}
 			}
-		}
-		if(!flag){
-			res.setStatus(402);
-			return;
+			if(!flag){
+				res.setStatus(402);
+				return;
+			}
 		}
 		chain.doFilter(request, response);
-		
 	}
 
 	@Override
