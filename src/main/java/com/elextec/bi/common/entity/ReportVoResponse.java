@@ -2,12 +2,15 @@ package com.elextec.bi.common.entity;
 
 import com.elextec.bi.common.entity.constant.ResponseCodeEnum;
 
+import java.util.List;
+import java.util.Map;
+
 public class ReportVoResponse {
 	private Integer code;
 	private Boolean success;
 	private String message;
 	private String title;
-	private String colConf;
+	private List<Map<String,Object>> colConf;
 	private Object data;
 
 	public ReportVoResponse(){
@@ -23,11 +26,11 @@ public class ReportVoResponse {
 		this.title = title;
 	}
 
-	public String getColConf() {
+	public List<Map<String, Object>> getColConf() {
 		return colConf;
 	}
 
-	public void setColConf(String colConf) {
+	public void setColConf(List<Map<String, Object>> colConf) {
 		this.colConf = colConf;
 	}
 

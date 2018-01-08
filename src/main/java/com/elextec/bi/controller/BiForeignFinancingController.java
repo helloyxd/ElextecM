@@ -1,9 +1,13 @@
 package com.elextec.bi.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.elextec.bi.common.entity.ReportVoResponse;
 import com.elextec.bi.common.entity.VoResponse;
 import com.elextec.bi.common.entity.VoResult;
 import com.elextec.bi.entity.BiForeignFinancing;
+import com.elextec.bi.entity.BiReportColConf;
+import com.elextec.bi.service.impl.BiReportColConfService;
 import com.elextec.bi.service.impl.BiReportForeignFinancingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,22 +20,24 @@ import java.util.Map;
  * 对外融资报表
  * Created by js_gg on 2017/12/19.
  */
-@Controller
+@RestController
 @RequestMapping(value ="/bi/foreign")
 public class BiForeignFinancingController {
 
     @Autowired
     public BiReportForeignFinancingService biReportForeignFinancingService;
 
+    @Autowired
+    public BiReportColConfService biReportColConfService;
+
     /**
      * 新增对外融资数据接口
-     * */
-    @RequestMapping(value ="/addInfo",method = RequestMethod.POST)
-    @ResponseBody
-    public Object add(@RequestBody BiForeignFinancing foreignFinancing){
+     */
+    @RequestMapping(value = "/addInfo", method = RequestMethod.POST)
+    public Object add(@RequestBody BiForeignFinancing foreignFinancing) {
         VoResponse voRes = new VoResponse();
         VoResult vor = biReportForeignFinancingService.save(foreignFinancing);
-        if(!vor.getResult()){
+        if (!vor.getResult()) {
             voRes.setFail(voRes);
         }
         voRes.setMessage(vor.getMsg());
@@ -40,14 +46,13 @@ public class BiForeignFinancingController {
 
     /**
      * 获取对外融资数据分页
-     * */
-    @RequestMapping(value ="/pageList",method = RequestMethod.POST)
-    @ResponseBody
+     */
+    @RequestMapping(value = "/pageList", method = RequestMethod.POST)
     public Object pageList(@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
-                                                @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
-                                                @RequestParam(value = "objName", required = false) String objName){
+                           @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+                           @RequestParam(value = "objName", required = false) String objName) {
         VoResponse voRes = new VoResponse();
-        voRes.setData(biReportForeignFinancingService.getPage(pageNo, pageSize,objName));
+        voRes.setData(biReportForeignFinancingService.getPage(pageNo, pageSize, objName));
         return voRes;
     }
 
@@ -59,20 +64,25 @@ public class BiForeignFinancingController {
 
     /**
      * 获取全部对外融资数据
-     * */
+     */
     @RequestMapping(value ="/queryAll",method = RequestMethod.GET)
-    @ResponseBody
-    public Object queryAll(){
+    public Object queryAll() {
         ReportVoResponse voRes = new ReportVoResponse();
-        return null;
+        BiReportColConf colConf = biReportColConfService.queryByReportName("foreignFinancing");
+        if(colConf != null){
+            voRes.setTitle(colConf.getTitle());
+            List<Map<String, Object>> mapList = JSON.parseObject(colConf.getColConf(), new TypeReference<List<Map<String, Object>>>() {
+            });
+            voRes.setColConf(mapList);
+            voRes.setData(biReportForeignFinancingService.queryAll());
+        }else{
+            voRes.setFail(voRes);
+            voRes.setMessage("colConf is null");
+        }
+        return voRes;
 
 
-
-
-
-
-
-          //版本1.2
+    //版本1.2
 //        List<Map<String,Object>> returnTemp = new ArrayList<Map<String,Object>>();
 //        Integer index = 1;
 //
@@ -151,7 +161,7 @@ public class BiForeignFinancingController {
 //        }
 //        return new ReturnT<List<Map<String,Object>>>(returnTemp);
 
-          //版本1.1
+    //版本1.1
 //        Map<String,Map<String,List<ForeignFinancing>>> returnTemp = new HashMap<String,Map<String,List<ForeignFinancing>>>();
 //        for(int i=0;i<list.size();i++){
 //            Map<String,List<ForeignFinancing>> temp = (Map<String,List<ForeignFinancing>>)returnTemp.get(list.get(i).getOrgName());
@@ -175,13 +185,12 @@ public class BiForeignFinancingController {
 //            }
 //        }
 //        return new ReturnT<Map<String,Map<String,List<ForeignFinancing>>>>(returnTemp);
-    }
+     }
 
     /**
      * 删除对外融资数据接口
      * */
     @RequestMapping(value ="/delInfo",method = RequestMethod.POST)
-    @ResponseBody
     public Object del(String id){
         return biReportForeignFinancingService.delete(id);
     }
@@ -190,7 +199,6 @@ public class BiForeignFinancingController {
      * 删除对外融资数据接口
      * */
     @RequestMapping(value ="/updateInfo",method = RequestMethod.POST)
-    @ResponseBody
     public Object update(@RequestBody BiForeignFinancing foreignFinancing){
         return biReportForeignFinancingService.updateInfo(foreignFinancing);
     }
