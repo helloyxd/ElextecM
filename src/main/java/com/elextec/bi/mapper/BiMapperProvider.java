@@ -5,6 +5,8 @@ import com.elextec.bi.entity.BiForeignFinancing;
 import com.elextec.bi.entity.BiRole;
 import com.elextec.bi.entity.BiUser;
 import com.elextec.mdm.entity.DataPermissionDefined;
+import com.elextec.mdm.utils.StringUtil;
+import com.mysql.jdbc.StringUtils;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ public class BiMapperProvider {
         	sb.append(mf.format(new Object[]{i}));
         }
         sb.append("SELECT 1 FROM DUAL");
-        System.out.println(sb);
+//        System.out.println(sb);
 		return sb.toString();
 	}
 	
@@ -37,7 +39,7 @@ public class BiMapperProvider {
         	sb.append(mf.format(new Object[]{i}));
         }
         sb.append("SELECT 1 FROM DUAL");
-        System.out.println(sb);
+//        System.out.println(sb);
 		return sb.toString();
 	}
 	
@@ -51,7 +53,7 @@ public class BiMapperProvider {
         	sb.append(mf.format(new Object[]{i}));
         }
         sb.append("SELECT 1 FROM DUAL");
-        System.out.println(sb);
+//        System.out.println(sb);
 		return sb.toString();
 	}
 	
@@ -66,7 +68,7 @@ public class BiMapperProvider {
         	sb.append(mf.format(new Object[]{i}));
         }
         sb.append("SELECT 1 FROM DUAL");
-        System.out.println(sb);
+//        System.out.println(sb);
 		return sb.toString();
 	}
 	
@@ -82,7 +84,7 @@ public class BiMapperProvider {
 		/*if(pageQuery.getOrder() != null)
 			sb.append(" ORDER BY ").append(pageQuery.getOrder());
 		sb.append(" LIMIT ").append(pageQuery.getBeginIndex()).append(",").append(pageQuery.getPageRowSize());*/
-		System.out.println(sb);
+//		System.out.println(sb);
 		return sb.toString();
 	}
 
@@ -100,7 +102,7 @@ public class BiMapperProvider {
 		sb.append(" ORDER BY u.create_time DESC)");
 		sb.append(" where RN >= ");
 		sb.append((pageQuery.getCurrentPage()-1)*pageQuery.getPageRowSize()+1);
-		if(objName != null){
+		if(objName != null && !StringUtils.isNullOrEmpty(objName)){
 			sb.append(" AND (org_name like '%");
 			sb.append(objName);
 			sb.append("%' OR region_com_name like '%");
@@ -108,7 +110,7 @@ public class BiMapperProvider {
 			sb.append("%')");
 		}
 		sb.append(" ORDER BY create_time DESC");
-		System.out.println(sb);
+//		System.out.println(sb);
 		return sb.toString();
 	}
 
@@ -118,15 +120,15 @@ public class BiMapperProvider {
 
 		sb.append("SELECT count(1)\n" +
 				"        FROM BI_FOREIGN_FINANCING u\n" +
-				"        LEFT JOIN (select \"org_id\",\"org_name\" FROM JYBI_RPT_ORG_STAGES GROUP BY \"org_id\",\"org_name\") o ON u.ORG_ID = o.\"org_id\"");
-		if(objName != null){
+				"        LEFT JOIN (select \"org_id\",\"org_name\" FROM BI_ORG_STAGES GROUP BY \"org_id\",\"org_name\") o ON u.ORG_ID = o.\"org_id\"");
+		if(objName != null && !StringUtils.isNullOrEmpty(objName)){
 			sb.append(" where (o.\"org_name\" like '%");
 			sb.append(objName);
 			sb.append("%' OR u.region_com_name like '%");
 			sb.append(objName);
 			sb.append("%')");
 		}
-		System.out.println(sb);
+//		System.out.println(sb);
 		return sb.toString();
 	}
 	
@@ -135,7 +137,7 @@ public class BiMapperProvider {
 		BiUser user = map.get("user");
 		sb.append("SELECT COUNT(*) FROM bi_user WHERE 1=1");
 		sb.append(getUserCondition(user));
-		System.out.println(sb);
+//		System.out.println(sb);
 		return sb.toString();
 	}
 	

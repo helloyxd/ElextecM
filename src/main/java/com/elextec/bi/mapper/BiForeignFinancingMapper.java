@@ -73,8 +73,7 @@ public interface BiForeignFinancingMapper {
 			"        #{remark,jdbcType=VARCHAR},\n" +
 			"        sysdate\n" +
 			"        )")
-	@Options(useGeneratedKeys = true, keyProperty = "ID")
-//	@ResultMap("biForeignFinancingOnly")
+//	@Options(useGeneratedKeys = true, keyProperty = "ID")
 	void insert(BiForeignFinancing foreignFinancing);
 
 	@Update("UPDATE BI_FOREIGN_FINANCING SET ORG_ID= #{orgId},\n" +

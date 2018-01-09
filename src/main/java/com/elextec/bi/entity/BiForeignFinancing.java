@@ -2,6 +2,7 @@ package com.elextec.bi.entity;
 
 
 import com.elextec.bi.utils.TimeUtil;
+import com.elextec.mdm.common.entity.BasicEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,8 +11,8 @@ import java.util.Date;
  * 对外融资情况表实体类
  * Created by js_gg on 2017/12/19.
  */
-public class BiForeignFinancing {
-    private String id;
+public class BiForeignFinancing extends BasicEntity {
+//    private String id;
     private String orgId;
     private String orgName;
     private String type;
@@ -27,15 +28,15 @@ public class BiForeignFinancing {
     private String creditTerm;
     private String pressTerm;
     private String remark;
-    private Date createTime;
+//    private Date createTime;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+//    public String getId() {
+//        return id;
+//    }
+//
+//    public void setId(String id) {
+//        this.id = id;
+//    }
 
     public String getOrgId() {
         return orgId;
@@ -157,11 +158,11 @@ public class BiForeignFinancing {
         this.remark = remark;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+//    public Date getCreateTime() {
+//        return createTime;
+//    }
+//
+//    public void setCreateTime(Date createTime) {
+//        this.createTime = createTime;
+//    }
 }

@@ -45,8 +45,8 @@ public interface BiUserMapper {
     @Insert("INSERT INTO bi_user(id,user_name,user_password,full_name,department_id,status,creater,create_time)"
 	    + " VALUES(sys_guid(), #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, "
 	    + "#{department.id,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    @ResultMap("biUserMap")
+//    @Options(useGeneratedKeys = true, keyProperty = "id")
+//    @ResultMap("biUserMap")
     void insert(BiUser user);
 
     @Update("UPDATE bi_user SET full_name=#{fullName},user_password=#{userPassword},"

@@ -35,12 +35,7 @@ public class BiForeignFinancingController {
      */
     @RequestMapping(value = "/addInfo", method = RequestMethod.POST)
     public Object add(@RequestBody BiForeignFinancing foreignFinancing) {
-        VoResponse voRes = new VoResponse();
-        VoResult vor = biReportForeignFinancingService.save(foreignFinancing);
-        if (!vor.getResult()) {
-            voRes.setFail(voRes);
-        }
-        voRes.setMessage(vor.getMsg());
+        VoResponse voRes = biReportForeignFinancingService.save(foreignFinancing);
         return voRes;
     }
 

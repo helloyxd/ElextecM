@@ -12,10 +12,10 @@ import java.util.Map;
 /**
  * Created by js_gg on 2017/12/19.
  */
-@Mapper
+
 public interface IBiReportForeignFinancingService {
 
-    public VoResult save(BiForeignFinancing temp);
+    public VoResponse save(BiForeignFinancing temp);
 
     public List<BiForeignFinancing> queryAll();
 

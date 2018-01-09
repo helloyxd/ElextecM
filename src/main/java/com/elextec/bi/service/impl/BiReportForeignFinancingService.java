@@ -24,8 +24,8 @@ public class BiReportForeignFinancingService extends BiBaseService implements IB
 	private BiForeignFinancingMapper biForeignFinancingMapper;
 	
 	@Override
-	public VoResult save(BiForeignFinancing foreignFinancing){
-		VoResult vor = new VoResult();
+	public VoResponse save(BiForeignFinancing foreignFinancing){
+		VoResponse vor = new VoResponse();
 		biForeignFinancingMapper.insert(foreignFinancing);
 		return vor;
 	}

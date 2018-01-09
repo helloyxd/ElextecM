@@ -20,7 +20,8 @@ public class BiUser extends BasicEntity implements Serializable{
 	private List<BiRole> roles;
 	private String sessionId;
 	private List<BiMenu> menus;
-	
+
+
 	public String getUserName() {
 		return userName;
 	}
