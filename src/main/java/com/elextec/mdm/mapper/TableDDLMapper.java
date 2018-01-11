@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultType;
-import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -46,6 +44,12 @@ public interface TableDDLMapper {
     @ResultType(List.class)
 	List<Map<String, String>> getTableColumnsDefine(@Param("tableName") String tableName);
 	
+	/**
+	 * queryParam = "1=1"
+	 * @param tableName
+	 * @param queryParam
+	 * @return
+	 */
 	@Select("SELECT * FROM ${tableName} WHERE ${queryParam}")
 	@ResultType(List.class)
 	List<Object> findTable(@Param("tableName") String tableName, @Param("queryParam") String queryParam);

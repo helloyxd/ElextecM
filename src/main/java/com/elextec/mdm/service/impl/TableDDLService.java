@@ -19,14 +19,11 @@ import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.DataPermission;
 import com.elextec.mdm.entity.DataPermissionDefined;
 import com.elextec.mdm.entity.MdmModel;
-import com.elextec.mdm.entity.Menu;
-import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.mapper.DataPermissionDefinedMapper;
 import com.elextec.mdm.mapper.DataPermissionMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
-import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
 import com.elextec.mdm.mapper.TableRelationMapper;
@@ -50,9 +47,6 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	private TableRelationMapper tableRelationMapper;
 	
 	@Autowired
-	private MenuMapper menuMapper;
-	
-	@Autowired
 	private DataPermissionDefinedMapper dataPermissionDefinedMapper;
 	
 	@Autowired
@@ -70,7 +64,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		}
 		if(tableDDLMapper.queryTableName(table.getTableName().toUpperCase()) > 0){
 			voRes.setFail(voRes);
-			voRes.setMessage("tableName " + table.getTableName() + " is alreadly exist");
+			voRes.setMessage("表名 " + table.getTableName() + "已经存在");
 			return voRes;
 		}
 		table.setModelId(mdmModel.getId());
@@ -178,6 +172,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		System.out.println(sb.toString());
 		tableDDLMapper.dropTable(sb.toString());
 		tableDefinitionMapper.del(id);
+		voRes.setData(table);
 		return voRes;
 	}
 	
@@ -252,7 +247,18 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			listColumnsDefinition.add(entity);
 		}
 		table.setColumnDefinitions(listColumnsDefinition);
-		voRes.setData(table);
+		//dataPermission
+		List<DataPermissionDefined> listDataDefined = dataPermissionDefinedMapper.findByTableId(table.getId());
+		List<DataPermission> listData = null;
+		Map<String, Object> mapData = new HashMap<String, Object>();
+		for(DataPermissionDefined dataDefined : listDataDefined){
+			listData = dataPermissionMapper.findDatasByUserIdAndDataDefined(getUserId(), dataDefined.getId());
+			mapData.put(dataDefined.getPermissionField(), listData);
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("table", table);
+		map.put("data", mapData);
+		voRes.setData(map);
 		return voRes;
 	}
 	

@@ -11,6 +11,7 @@ public class TableDefinition extends BasicEntity{
 	private String modelId;//模块ID
 	private Boolean isMenu;
 	private List<ColumnDefinition> columnDefinitions;//字段属性
+	private MdmModel model;
 	
 	public String getTableName() {
 		return tableName;
@@ -41,6 +42,12 @@ public class TableDefinition extends BasicEntity{
 	}
 	public void setIsMenu(Boolean isMenu) {
 		this.isMenu = isMenu;
+	}
+	public MdmModel getModel() {
+		return model;
+	}
+	public void setModel(MdmModel model) {
+		this.model = model;
 	}
 	
 }

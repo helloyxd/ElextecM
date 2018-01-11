@@ -5,6 +5,7 @@ import java.util.List;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.vo.VoMenu;
 
 public interface IMenuService {
@@ -22,4 +23,6 @@ public interface IMenuService {
 	VoResponse updateMenu(Menu menu);
 
 	boolean createMDMenu(MdmModel model, String tableName, String tableLabel);
+	
+	boolean dropMDMenu(TableDefinition table);
 }

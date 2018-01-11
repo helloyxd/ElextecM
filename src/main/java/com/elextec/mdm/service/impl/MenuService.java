@@ -10,6 +10,7 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IMenuService;
@@ -195,8 +196,36 @@ public class MenuService extends BaseService implements IMenuService{
 				menuMapper.insert(menu);
 			}
 			createMDFunctionMenu(menu);
+			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean dropMDMenu(TableDefinition table){
+		String name = table.getModel().getMdmModel();
+		List<Menu> listMenu = menuMapper.findByName("主数据管理");
+		Menu mdmenu = null;
+		for(Menu menu : listMenu){
+			for(Menu e : menu.getMenus()){
+				if(e.getMenuName().equals(name)){
+					mdmenu = e;
+					break;
+				}
+			}
+		}
+		if(mdmenu != null){
+			del(mdmenu);
+			return true;
+		}
+		return false;
+	}
+	
+	private void del(Menu e){
+		menuMapper.delById(e.getId());
+		for(Menu submenu : e.getMenus()){
+			del(submenu);
+		}
 	}
 	
 	private void createMDFunctionMenu(Menu menu){

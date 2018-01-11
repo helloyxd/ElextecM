@@ -55,7 +55,7 @@ public class TableDDLController {
 		VoResponse voRes = new VoResponse();
 		if(table.getTableName() == null || table.getTableName().equals("")){
 			voRes.setNull(voRes);
-			voRes.setMessage("tableName is null");
+			voRes.setMessage("表名不能为空");
 			return voRes;
 		}else if(!StringUtil.validateTableName(table.getTableName())){
 			voRes.setFail(voRes);
@@ -70,7 +70,7 @@ public class TableDDLController {
 		for(ColumnDefinition obj : list){
 			if(obj.getName() == null || obj.getName().equals("")){
 				voRes.setNull(voRes);
-				voRes.setMessage("columnName is null");
+				voRes.setMessage("列名不能为空");
 				return voRes;
 			}else if(!StringUtil.validateTableName(obj.getName())){
 				voRes.setFail(voRes);
@@ -81,13 +81,15 @@ public class TableDDLController {
 				voRes.setMessage("列名"+obj.getName()+"为数据库关键字");
 				return voRes;
 			}
+			//判断dataTypeMap
 			for(String key : obj.getDataTypeMap().keySet()){
 				if(TableDDLMap.oracleDataTypeMap.get(key) == null){
 					voRes.setNull(voRes);
-					voRes.setMessage(obj.getName() + " dataType is null");
+					voRes.setMessage(obj.getName() + " 数据类型异常");
 					return voRes;
 				}
 			}
+			//判断constraints
 		}
 		voRes = tableDDLService.createTable(table);
 		if(voRes.getSuccess()){
@@ -103,6 +105,11 @@ public class TableDDLController {
 	@DeleteMapping
 	public Object del(@RequestParam("id") String id){
 		VoResponse voRes = tableDDLService.dropTable(id);
+		if(voRes.getSuccess()){
+			if(!menuService.dropMDMenu((TableDefinition) voRes.getData())){
+				voRes.setMessage(voRes.getMessage() + "<br>删除菜单失败");
+			}
+		}
 		return voRes;
 	}
 	
