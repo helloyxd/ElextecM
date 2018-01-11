@@ -46,20 +46,9 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 			voRes.setMessage("模块名称已经存在");
 			return voRes;
 		}
-		model.setStatus(StatusEnum.StatusEnable);
 		model.setCreater(getUserName());
 		mdmModelMapper.insert(model);
-		List<Menu> menus = menuMapper.findByName("主数据管理");
-		Menu menu = new Menu();
-		menu.setMenuName(model.getMdmModel());
-		menu.setMenuUrl("");
-		menu.setMethod("");
-		menu.setParentId(menus.get(0).getId());
-		menu.setLevel(100);
-		menu.setSortOrder(1);
-		menu.setCreater("sys");
-		menu.setStatus(StatusEnum.StatusEnable);
-		menuMapper.insert(menu);
+		
 		return voRes;
 	}
 	

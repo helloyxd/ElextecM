@@ -138,46 +138,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		try{
 			tableDDLMapper.createTable(sbComment.toString());
 			table.setCreater(getUserName());
-			if(table.getIsMenu() != null && table.getIsMenu()){
-				List<Menu> listMenu = menuMapper.findByName(mdmModel.getMdmModel());
-				String parentId = null;
-				if(listMenu != null && listMenu.size() > 0){
-					parentId = listMenu.get(0).getId();
-				}
-				Menu mainMenu = new Menu();
-				mainMenu.setCreater(getUserName());
-				mainMenu.setLevel(100);
-				mainMenu.setMenuName(table.getTableLabel());
-				mainMenu.setMenuUrl("");
-				mainMenu.setMethod("");
-				mainMenu.setParentId(parentId);
-				mainMenu.setStatus(StatusEnum.StatusEnable);
-				menuMapper.insert(mainMenu);
-				parentId = mainMenu.getId();
-				//创建menu
-				Menu menu = new Menu();
-				menu.setCreater(getUserName());
-				menu.setLevel(1000);
-				menu.setMenuName("新增");
-				menu.setMenuUrl("table/defined");
-				menu.setMethod("post");
-				menu.setSortOrder(1);
-				menu.setStatus(StatusEnum.StatusEnable);
-				menu.setParentId(parentId);
-				menuMapper.insert(menu);
-				menu.setMenuName("删除");
-				menu.setMethod("delete");
-				menuMapper.insert(menu);
-				menu.setMenuName("修改");
-				menu.setMethod("put");
-				menuMapper.insert(menu);
-				menu.setMenuName("查询");
-				menu.setMethod("get");
-				menuMapper.insert(menu);
-			}else{
+			if(table.getIsMenu() == null){
 				table.setIsMenu(false);
 			}
-			table.setStatus(StatusEnum.StatusEnable);
 			tableDefinitionMapper.insert(table);
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -190,6 +153,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			tableDDLMapper.dropTable(sbDrop.toString());
 			return voRes;
 		}
+		voRes.setData(mdmModel);
 		return voRes;
 	}
 	

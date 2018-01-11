@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
@@ -129,5 +130,8 @@ public interface MenuMapper {
 	@ResultMap("menuMapOnly")
     List<Menu> findMenusByRoleId(String roleId);
 	
+	@Select("SELECT count(*) FROM mdm_menu")
+	@ResultType(Integer.class)
+	int queryCount();
 	
 }

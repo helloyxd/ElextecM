@@ -13,7 +13,7 @@ public class QueryFieldDefined extends BasicEntity{
 
 	private String tableId;
 	private String field;
-	private String fieldType;
+	private String fieldType;//TableDDLMap.columnTypeMap
 	private String sortOrder;
 	private String columnSpan;
 	

@@ -9,6 +9,8 @@ public class TableDDLMap {
 	public final static Map<String, String> oracleDataTypeMap = new HashMap<String, String>();
 	//oracle 列约束
 	public final static Map<String, String> oracleColumnConstraintMap = new HashMap<String, String>();
+	//界面显示，列数据类型
+	public final static Map<Integer, String> columnTypeMap = new HashMap<Integer, String>();
 	
 	static{
 		oracleDataTypeMap.put("CHAR", "CHAR");//固定长度字符串
@@ -31,5 +33,11 @@ public class TableDDLMap {
 		oracleColumnConstraintMap.put("P", "PRIMARY KEY");//主键
 		oracleColumnConstraintMap.put("F", "FOREIGN KEY");//外键
 		//oracleColumnConstraintMap.put(6, "CHECK");
+		
+		columnTypeMap.put(1, "input");
+		columnTypeMap.put(2, "textarea");
+		columnTypeMap.put(3, "checkbox");
+		columnTypeMap.put(4, "radio");
+		columnTypeMap.put(5, "date");
 	}
 }

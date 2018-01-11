@@ -2,15 +2,13 @@ package com.elextec.mdm.common.entity;
 
 import java.sql.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.elextec.mdm.common.entity.constant.StatusEnum;
 
 public class BasicEntity {
 	private String id;
-	@JsonIgnore
 	private Date createTime;
-	@JsonIgnore
 	private String creater;
-	private Integer status;
+	private Integer status = StatusEnum.StatusEnable;
 	
 	public Date getCreateTime() {
 		return createTime;

@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.TableDDLMap;
 import com.elextec.mdm.entity.ColumnDefinition;
+import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
+import com.elextec.mdm.service.IMenuService;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
 
@@ -31,6 +33,10 @@ public class TableDDLController {
 
 	@Autowired
 	private ITableDDLService tableDDLService;
+	
+	@Autowired
+	private IMenuService menuService;
+	
 	
 	@GetMapping("getAll")
 	public Object getAll(){
@@ -84,6 +90,13 @@ public class TableDDLController {
 			}
 		}
 		voRes = tableDDLService.createTable(table);
+		if(voRes.getSuccess()){
+			if(table.getIsMenu()){
+				if(!menuService.createMDMenu((MdmModel) voRes.getData(), table.getTableName(), table.getTableLabel())){
+					voRes.setMessage(voRes.getMessage() + "<br>创建菜单失败");
+				}
+			}
+		}
 		return voRes;
 	}
 	

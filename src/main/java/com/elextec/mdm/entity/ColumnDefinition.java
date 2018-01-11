@@ -5,10 +5,10 @@ import java.util.Map;
 
 public class ColumnDefinition {
 
-	private String name;
-	private String columnComment;
-	private Map<String, String> dataTypeMap;
-	private List<String> constraints;
+	private String name;//数据库字段名称
+	private String columnComment;//字段中文名称
+	private Map<String, String> dataTypeMap;//字段数据类型
+	private List<String> constraints;//字段约束条件
 	
 	public String getName() {
 		return name;
