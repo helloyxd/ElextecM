@@ -19,8 +19,10 @@ public interface IBiUserService {
 	public VoResponse del(String userId);
 	
 	public VoResponse update(BiUser user);
+
+	public VoResponse addUserRoles(String userId,String[] roles);
 	
-	public VoResponse updateUserRole(BiUser user);
+	public VoResponse updateUserRole(String userId,String[] roles);
 	
 	public BiUser getById(String userId);
 	

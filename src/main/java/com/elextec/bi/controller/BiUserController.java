@@ -1,5 +1,7 @@
 package com.elextec.bi.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.elextec.bi.common.entity.VoResponse;
 import com.elextec.bi.common.entity.VoResult;
 import com.elextec.bi.entity.BiMenu;
@@ -14,9 +16,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("bi/user")
@@ -53,7 +53,6 @@ public class BiUserController {
 			HttpSession session = request.getSession();
 			String sessionId = session.getId();
 			user.setSessionId(sessionId);
-			session.setAttribute("bi_user", user);
 			Cookie[] cookies = request.getCookies();
 			if(isMarked!= null && isMarked){
 				Cookie cook = new Cookie("sessionId", sessionId);
@@ -62,8 +61,24 @@ public class BiUserController {
 			List<BiRole> roles = user.getRoles();
 			List<BiMenu> menus = new ArrayList<>();
 			Iterator<BiRole> it = roles.iterator();
+			Map<String,List<Map<String,Object>>> dataMap = new HashMap<String,List<Map<String,Object>>>();
 			while(it.hasNext()){
 				BiRole role = it.next();
+				List<Map<String, Object>> mapList = JSON.parseObject(role.getRoleDataPermissions(), new TypeReference<List<Map<String, Object>>>() {
+				});
+				for(Map<String,Object> map:mapList){
+					List<Map<String,Object>> dataList = dataMap.get(map.get("datapermissionId").toString());
+					Object temp = map.get("val");
+					List<Map<String,Object>> t1 = (List<Map<String,Object>>)temp;
+					if(dataList != null){
+						for(Map<String,Object> mapTest:t1){
+							dataList.add(mapTest);
+						}
+						dataMap.put(map.get("datapermissionId").toString(),dataList);
+					}else{
+						dataMap.put(map.get("datapermissionId").toString(),t1);
+					}
+				}
 				if(menus.size() == 0){
 					menus.addAll(role.getMenus());
 					continue;
@@ -87,7 +102,8 @@ public class BiUserController {
 				}
 			}
 			user.setMenus(menus);
-			session.setAttribute("bi_right", menus);
+			session.setAttribute("bi_user", user);
+//			session.setAttribute("bi_right", menus);
 			voRes.setData(user);
 		}
 		return voRes;
@@ -120,14 +136,29 @@ public class BiUserController {
 		return voRes;
 	}
 
-//	@PostMapping("/addUserRole")
-//	public Object addUserRole(HttpServletRequest request, HttpServletResponse response){
-//		VoResponse voRes = new VoResponse();
+	@PostMapping("/addUserRole")
+	public Object addUserRole(HttpServletRequest request, HttpServletResponse response){
+        String userId = request.getParameter("userId");
+        String rolesId = request.getParameter("rolesId");
+        String[] roles = rolesId.split(",");
+		VoResponse voRes = biUserService.addUserRoles(userId,roles);
 //		HttpSession session = request.getSession();
 //		BiUser user = (BiUser) session.getAttribute("bi_user");
-//		session.removeAttribute("mdm_user");
-//		return voRes;
-//	}
+//		session.removeAttribute("bi_user");
+		return voRes;
+	}
+
+	@PostMapping("/updateUserRole")
+	public Object updateUserRole(HttpServletRequest request, HttpServletResponse response){
+		String userId = request.getParameter("userId");
+		String rolesId = request.getParameter("rolesId");
+		String[] roles = rolesId.split(",");
+		VoResponse voRes = biUserService.updateUserRole(userId,roles);
+//		HttpSession session = request.getSession();
+//		BiUser user = (BiUser) session.getAttribute("bi_user");
+//		session.removeAttribute("bi_user");
+		return voRes;
+	}
 	
 	@DeleteMapping
 	public Object del(@RequestParam("id") String userId) {

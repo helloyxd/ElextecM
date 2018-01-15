@@ -11,32 +11,32 @@ import java.util.Date;
  * 对外融资情况表实体类
  * Created by js_gg on 2017/12/19.
  */
-public class BiForeignFinancing extends BasicEntity {
-//    private String id;
+public class BiForeignFinancing {
+    private String id;
     private String orgId;
     private String orgName;
     private String type;
     private String regionComName;
     private String bankComName;
     private BigDecimal loanAmount;
-    private Date loanDate;
-    private Date appointmentRepaymentDate;
+    private String loanDate;
+    private String appointmentRepaymentDate;
     private BigDecimal yearComprehensiveCost;
     private String costPayType;
-    private Date interestPayTime;
+    private String interestPayTime;
     private String pressInfo;
     private String creditTerm;
     private String pressTerm;
     private String remark;
-//    private Date createTime;
+    private Date createTime;
 
-//    public String getId() {
-//        return id;
-//    }
-//
-//    public void setId(String id) {
-//        this.id = id;
-//    }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrgId() {
         return orgId;
@@ -86,20 +86,20 @@ public class BiForeignFinancing extends BasicEntity {
         this.loanAmount = loanAmount;
     }
 
-    public Date getLoanDate() {
+    public String getLoanDate() {
         return loanDate;
     }
 
-    public void setLoanDate(String loanDate) {
-        this.loanDate = TimeUtil.parseDate(loanDate,TimeUtil.DEFAULT_PATTERN);
+    public void setLoanDate(Date loanDate) {
+        this.loanDate = TimeUtil.formatDateByFormat(loanDate,TimeUtil.DEFAULT_PATTERN);
     }
 
-    public Date getAppointmentRepaymentDate() {
+    public String getAppointmentRepaymentDate() {
         return appointmentRepaymentDate;
     }
 
-    public void setAppointmentRepaymentDate(String appointmentRepaymentDate) {
-        this.appointmentRepaymentDate = TimeUtil.parseDate(appointmentRepaymentDate,TimeUtil.DEFAULT_PATTERN);
+    public void setAppointmentRepaymentDate(Date appointmentRepaymentDate) {
+        this.appointmentRepaymentDate = TimeUtil.formatDateByFormat(appointmentRepaymentDate,TimeUtil.DEFAULT_PATTERN);
     }
 
     public BigDecimal getYearComprehensiveCost() {
@@ -118,12 +118,12 @@ public class BiForeignFinancing extends BasicEntity {
         this.costPayType = costPayType;
     }
 
-    public Date getInterestPayTime() {
+    public String getInterestPayTime() {
         return interestPayTime;
     }
 
-    public void setInterestPayTime(String interestPayTime) {
-        this.interestPayTime = TimeUtil.parseDate(interestPayTime,TimeUtil.DEFAULT_PATTERN);;
+    public void setInterestPayTime(Date interestPayTime) {
+        this.interestPayTime = TimeUtil.formatDateByFormat(interestPayTime,TimeUtil.DEFAULT_PATTERN);
     }
 
     public String getPressInfo() {
@@ -158,11 +158,11 @@ public class BiForeignFinancing extends BasicEntity {
         this.remark = remark;
     }
 
-//    public Date getCreateTime() {
-//        return createTime;
-//    }
-//
-//    public void setCreateTime(Date createTime) {
-//        this.createTime = createTime;
-//    }
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 }

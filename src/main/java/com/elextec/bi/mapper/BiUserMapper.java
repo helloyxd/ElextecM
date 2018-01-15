@@ -18,8 +18,6 @@ public interface BiUserMapper {
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"), 
 	    @Result(property = "creater", column = "creater"),
-//	    @Result(property = "department", column = "department_id"),
-//	    	one = @One(select = "com.elextec.bi.mapper.DepartmentMapper.findDepartmentById") ),
 	    @Result(property = "roles", column = "id",
 	    	many = @Many(select = "com.elextec.bi.mapper.BiRoleMapper.findRolesByUserId") )
     	})
@@ -61,11 +59,10 @@ public interface BiUserMapper {
 
     /**
      * 新增用户的角色信息
-     * 
-     * @param user
+     *
      */
     @InsertProvider(type = BiMapperProvider.class, method = "addUserRoles")
-    void addUserRoles(@Param("user") BiUser user);
+    void addUserRoles(@Param("userId")String userId,@Param("roles")String[] roles);
 
     /**
      * 根据用户ID，删除用户的角色信息

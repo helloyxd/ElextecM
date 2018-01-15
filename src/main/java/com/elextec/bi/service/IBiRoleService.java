@@ -20,5 +20,5 @@ public interface IBiRoleService {
 	
 	VoResponse updateRoleMenu(BiRole role);
 	
-//	VoResponse addRoleDataPermission(DataPermission dataPermission);
+//	VoResponse updateRoleDataPermission(BiRole role);
 }

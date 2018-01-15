@@ -140,10 +140,17 @@ public class BiUserService extends BiBaseService implements IBiUserService{
 	}
 	
 	@Override
-	public VoResponse updateUserRole(BiUser user){
+	public VoResponse updateUserRole(String userId,String[] roles){
 		VoResponse voRes = new VoResponse();
-		biUserMapper.delUserRoles(user.getId());
-		biUserMapper.addUserRoles(user);
+		biUserMapper.delUserRoles(userId);
+		biUserMapper.addUserRoles(userId,roles);
+		return voRes;
+	}
+
+	@Override
+	public VoResponse addUserRoles(String userId,String[] roles){
+		VoResponse voRes = new VoResponse();
+		biUserMapper.addUserRoles(userId,roles);
 		return voRes;
 	}
 	

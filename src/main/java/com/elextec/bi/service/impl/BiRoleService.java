@@ -90,11 +90,11 @@ public class BiRoleService extends BiBaseService implements IBiRoleService {
 			biRoleMapper.addRoleMenus(role);
 			msg += "角色上菜单更新成功;";
 		}
-		if(role.getDataPermissions() != null){
-			biRoleMapper.delRoleDataPermission(role.getId());
-			biRoleMapper.addRoleDataPermission(role);
-			msg += "角色上数据权限更新成功;";
-		}
+//		if(role.getDataPermissions() != null){
+//			biRoleMapper.delRoleDataPermission(role.getId());
+//			biRoleMapper.addRoleDataPermission(role);
+//			msg += "角色上数据权限更新成功;";
+//		}
 		voRes.setMessage(msg);
 		return voRes;
 	}
@@ -124,9 +124,9 @@ public class BiRoleService extends BiBaseService implements IBiRoleService {
 	}
 
 //	@Override
-//	public VoResponse addRoleDataPermission(DataPermission dataPermission) {
+//	public VoResponse updateRoleDataPermission(BiRole role) {
 //		VoResponse voRes = new VoResponse();
-//		dataPermissionMapper.insert(dataPermission);
+//		biRoleMapper.updateRoleDataPermission(role);
 //		return voRes;
 //	}
 }

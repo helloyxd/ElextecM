@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class BiUser extends BasicEntity implements Serializable{
 
@@ -20,7 +21,16 @@ public class BiUser extends BasicEntity implements Serializable{
 	private List<BiRole> roles;
 	private String sessionId;
 	private List<BiMenu> menus;
+	//用户对应的数据权限
+	private Map<String,List<Map<String,Object>>> dataPermissions;
 
+	public Map<String, List<Map<String, Object>>> getDataPermissions() {
+		return dataPermissions;
+	}
+
+	public void setDataPermissions(Map<String, List<Map<String, Object>>> dataPermissions) {
+		this.dataPermissions = dataPermissions;
+	}
 
 	public String getUserName() {
 		return userName;

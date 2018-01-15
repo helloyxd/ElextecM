@@ -10,8 +10,10 @@ public class BiRole extends BasicEntity{
 	private String roleName;
 	private String roleDesc;
 	private List<BiMenu> menus;
-	private List<DataPermission> dataPermissions;
+//	private List<DataPermission> dataPermissions;
+	private String roleDataPermissions;
 	private int roleType;//角色类型，0菜单权限，1按钮权限
+
 	
 	public String getRoleName() {
 		return roleName;
@@ -37,11 +39,12 @@ public class BiRole extends BasicEntity{
 	public void setRoleType(int roleType) {
 		this.roleType = roleType;
 	}
-	public List<DataPermission> getDataPermissions() {
-	    return dataPermissions;
+
+	public String getRoleDataPermissions() {
+		return roleDataPermissions;
 	}
-	public void setDataPermissions(List<DataPermission> dataPermissions) {
-	    this.dataPermissions = dataPermissions;
+
+	public void setRoleDataPermissions(String roleDataPermissions) {
+		this.roleDataPermissions = roleDataPermissions;
 	}
-	
 }
