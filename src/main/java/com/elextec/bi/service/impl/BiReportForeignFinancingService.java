@@ -39,6 +39,7 @@ public class BiReportForeignFinancingService extends BiBaseService implements IB
 
 	@Override
 	public Map<String, Object> getPage(int pageNo, int pageSize, String objName){
+		BiUser user = (BiUser) getSession().getAttribute("bi_user");
 		Map<String, Object> map = new HashMap<String, Object>();
 		int count = biForeignFinancingMapper.pageListCount(objName);
 		PageQuery pageQuery = new PageQuery();
