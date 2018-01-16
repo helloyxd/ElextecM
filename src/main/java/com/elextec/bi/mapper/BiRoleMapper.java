@@ -14,6 +14,7 @@ public interface BiRoleMapper {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "roleName", column = "role_name"), 
 	    @Result(property = "roleDesc", column = "role_desc"),
+        @Result(property = "roleDataPermissions", column = "ROLE_DATAPERMISSION"),
 	    @Result(property = "status", column = "status"), 
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater"),
@@ -29,6 +30,7 @@ public interface BiRoleMapper {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "roleName", column = "role_name"), 
 	    @Result(property = "roleDesc", column = "role_desc"),
+        @Result(property = "roleDataPermissions", column = "ROLE_DATAPERMISSION"),
 	    @Result(property = "status", column = "status"), 
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater") })
@@ -38,19 +40,19 @@ public interface BiRoleMapper {
     @ResultMap("biRoleMap")
     BiRole findRoleById(String roleId);
 
-    @Insert("INSERT INTO bi_role(id,role_name,role_desc,status,creater,create_time)"
-	    + " VALUES(sys_guid(), #{roleName}, #{roleDesc}, #{status}, #{creater}, sysdate)")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("INSERT INTO bi_role(id,role_name,role_desc,ROLE_DATAPERMISSION,status,creater,create_time)"
+	    + " VALUES(sys_guid(), #{roleName}, #{roleDesc,jdbcType=VARCHAR},ROLE_DATAPERMISSION=#{roleDataPermissions,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
+//    @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(BiRole role);
 
-    @Update("UPDATE bi_role SET role_name=#{roleName},role_desc=#{roleDesc} WHERE id =#{id}")
+    @Update("UPDATE bi_role SET role_name=#{roleName},role_desc=#{roleDesc,jdbcType=VARCHAR},ROLE_DATAPERMISSION=#{roleDataPermissions,jdbcType=VARCHAR} WHERE id =#{id}")
     void update(BiRole role);
 
     @Delete("DELETE FROM bi_role WHERE id =#{id}")
     void delete(String id);
 
-    @Update("${sql}")
-    void createTable(@Param("sql") String sql);
+//    @Update("${sql}")
+//    void createTable(@Param("sql") String sql);
 
     @Select("SELECT * FROM bi_role WHERE id IN (SELECT role_id FROM bi_user_role WHERE user_id = #{userId})")
     @ResultMap("biRoleMap")
@@ -58,7 +60,7 @@ public interface BiRoleMapper {
 
     /**
      * 新增角色的菜单权限信息
-     * @param user
+     * @param role
      */
     @InsertProvider(type = MapperProvider.class, method = "addRoleMenus")
     void addRoleMenus(@Param("role") BiRole role);
@@ -70,17 +72,17 @@ public interface BiRoleMapper {
     @Delete("DELETE FROM bi_role_menu WHERE role_id=#{roleId}")
     void delRoleMenus(String roleId);
     
-    /**
-     * 根据角色ID，删除角色的数据权限信息
-     * @param roleId
-     */
-    @Delete("DELETE FROM bi_role_data WHERE role_id=#{roleId}")
-    void delRoleDataPermission(String roleId);
-    
-    /**
-     * 新增角色的数据权限信息
-     * @param user
-     */
-    @InsertProvider(type = BiMapperProvider.class, method = "addRoleDataPermission")
-    void addRoleDataPermission(@Param("role") BiRole role);
+//    /**
+//     * 根据角色ID，删除角色的数据权限信息
+//     * @param roleId
+//     */
+//    @Delete("DELETE FROM bi_role_data WHERE role_id=#{roleId}")
+//    void delRoleDataPermission(String roleId);
+//
+//    /**
+//     * 新增角色的数据权限信息
+//     * @param role
+//     */
+//    @Update("UPDATE bi_role SET ROLE_DATAPERMISSION=#{roleDataPermissions} WHERE id =#{id}")
+//    void updateRoleDataPermission(BiRole role);
 }

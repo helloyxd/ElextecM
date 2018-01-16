@@ -2,6 +2,7 @@ package com.elextec.bi.controller;
 
 import com.elextec.bi.common.entity.VoResponse;
 import com.elextec.bi.entity.BiRole;
+import com.elextec.bi.entity.BiRoleDataPermission;
 import com.elextec.bi.service.IBiRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,12 +51,12 @@ public class BiRoleController {
 		VoResponse voResponse = biRoleService.updateRoleMenu(role);
 		return voResponse;
 	}
-	
-//	@PostMapping("addDataPermission")
-//	public Object addRoleDataPermission(@RequestBody DataPermission dataPermission){
-//		VoResponse voResponse = roleService.addRoleDataPermission(dataPermission);
+
+//	//修改角色数据权限
+//	@PostMapping("updateDataPermission")
+//	public Object updateRoleDataPermission(@RequestBody BiRole role){
+//		VoResponse voResponse = biRoleService.updateRoleDataPermission(role);
 //		return voResponse;
 //	}
-	
-	
+
 }

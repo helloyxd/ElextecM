@@ -1,5 +1,7 @@
 package com.elextec.bi.mapper;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.elextec.bi.common.entity.PageQuery;
 import com.elextec.bi.entity.BiForeignFinancing;
 import com.elextec.bi.entity.BiRole;
@@ -9,19 +11,21 @@ import com.elextec.mdm.utils.StringUtil;
 import com.mysql.jdbc.StringUtils;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BiMapperProvider {
 
-	public String addUserRoles(Map<String, BiUser> map){
-		BiUser user = map.get("user");
+	public String addUserRoles(Map<String, Object> map){
+//		BiUser user = map.get("user");
+		String[] roles = (String[])map.get("roles");
 		StringBuilder sb = new StringBuilder();
         sb.append("INSERT ALL ");
         MessageFormat mf = new MessageFormat("INTO bi_user_role(id,user_id,role_id) "
-        		+ "VALUES(sys_guid(), #'{'user.id}, #'{'user.roles[{0}].id}) ");
-        for(int i = 0; i < user.getRoles().size(); i++) {
+        		+ "VALUES(sys_guid(), #'{'userId}, #'{'roles[{0}]}) ");
+        for(int i = 0; i < roles.length; i++) {
         	sb.append(mf.format(new Object[]{i}));
         }
         sb.append("SELECT 1 FROM DUAL");
@@ -42,20 +46,34 @@ public class BiMapperProvider {
 //        System.out.println(sb);
 		return sb.toString();
 	}
-	
-	public String addRoleDataPermission(Map<String, BiRole> map){
-		BiRole role = map.get("role");
+
+	public String addReportDataPermission(Map<String, Object> map){
+		String[] dataPermissions = (String[])map.get("dataPermissions");
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT ALL ");
-        MessageFormat mf = new MessageFormat("INTO bi_role_data(id,role_id,data_id,role_type) "
-        		+ "VALUES(sys_guid(), #'{'role.id}, #'{'role.dataPermissions[{0}].id}, 0) ");
-        for(int i = 0; i < role.getDataPermissions().size(); i++) {
-        	sb.append(mf.format(new Object[]{i}));
-        }
-        sb.append("SELECT 1 FROM DUAL");
+		MessageFormat mf = new MessageFormat("INTO BI_REPORT_DATAPERMISSION(id,REPORT_ID,DATAPERMISSION_ID) "
+				+ "VALUES(sys_guid(), #'{'reportId}, #'{'dataPermissions[{0}]}) ");
+		for(int i = 0; i < dataPermissions.length; i++) {
+			sb.append(mf.format(new Object[]{i}));
+		}
+		sb.append("SELECT 1 FROM DUAL");
 //        System.out.println(sb);
 		return sb.toString();
 	}
+	
+//	public String addRoleDataPermission(Map<String, BiRole> map){
+//		BiRole role = map.get("role");
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("INSERT ALL ");
+//        MessageFormat mf = new MessageFormat("INTO bi_role_data(id,role_id,data_id,role_type) "
+//        		+ "VALUES(sys_guid(), #'{'role.id}, #'{'role.dataPermissions[{0}].id}, 0) ");
+//        for(int i = 0; i < role.getDataPermissions().size(); i++) {
+//        	sb.append(mf.format(new Object[]{i}));
+//        }
+//        sb.append("SELECT 1 FROM DUAL");
+////        System.out.println(sb);
+//		return sb.toString();
+//	}
 	
 	public String addDataPermissions(Map<String, DataPermissionDefined> map){
 		DataPermissionDefined entity = map.get("dataPermissionDefined");
@@ -173,24 +191,39 @@ public class BiMapperProvider {
 	}
 	
 	public static void main(String[] args) {
-		Map<String, Object> map = new HashMap<String, Object>();
-//		BiUser user = new BiUser();
-//		user.setUserName("%admin%");
-		PageQuery pageQuery = new PageQuery();
-
-//		pageQuery.setOrder("user_name");
-//		map.put("user", user);
-//		map.put("page", pageQuery);
-//		new BiMapperProvider().findUserByPage(map);
-
-		pageQuery.setCurrentPage(1);
-		pageQuery.setPageRowSize(10);
-		map.put("objName","123");
-//		map.put("page",pageQuery);
-		new BiMapperProvider().findForeignFinancingCount(map);
+		String test = "[{\n" +
+				"\t\"dataPermissionId\": \"1\",\n" +
+				"\t\"column\": \"orgName,comName,stageName\",\n" +
+				"\t\"orgName\": \"申城集团，杭城集团\",\n" +
+				"\t\"comName\": \"XXX,XXX,XXX\",\n" +
+				"\t\"stageName\": \"XXX,XXX,XXX\"\n" +
+				"}, {\n" +
+				"\t\"dataPermissionId\": \"1\",\n" +
+				"\t\"column\": \"orgName,comName,stageName\",\n" +
+				"\t\"orgName\": \"申城集团，杭城集团\",\n" +
+				"\t\"comName\": \"XXX,XXX,XXX\",\n" +
+				"\t\"stageName\": \"XXX,XXX,XXX\"\n" +
+				"}]";
 
 
-		
+		List<Map<String, Object>> mapList = JSON.parseObject(test, new TypeReference<List<Map<String, Object>>>() {
+		});
+
+		Map<String,Object> sqlMap = new HashMap<String,Object>();
+		for(int i=0;i<mapList.size();i++){
+			if(sqlMap.get(mapList.get(i).get("dataPermissionId")) != null){
+				continue;
+			}else{
+				List<Map<String, Object>> temp = new ArrayList<Map<String, Object>>();
+				for(int j=0;j<mapList.size();j++){
+					if(mapList.get(i).get("dataPermissionId").equals(mapList.get(j).get("dataPermissionId"))){
+						temp.add(mapList.get(j));
+					}
+				}
+				sqlMap.put(mapList.get(i).get("dataPermissionId").toString(),temp);
+			}
+		}
+        System.out.println(0);
 	}
 	
 }

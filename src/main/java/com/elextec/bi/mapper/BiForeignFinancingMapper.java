@@ -10,7 +10,26 @@ import java.util.List;
 
 public interface BiForeignFinancingMapper {
 
-	@Select("select j.*,o.\"org_name\" AS ORG_NAME FROM BI_FOREIGN_FINANCING j LEFT JOIN (select \"org_id\",\"org_name\" FROM BI_ORG_STAGES GROUP BY \"org_id\",\"org_name\") o ON j.ORG_ID = o.\"org_id\" ORDER BY j.ORG_ID,j.\"TYPE\",j.REGION_COM_NAME")
+	@Select("select j.\"ID\",\n" +
+			"       j.ORG_ID,\n" +
+			"       (case when j.\"TYPE\" = '0' then '金融机构' " +
+			"             when j.\"TYPE\" = '1' then '非金融机构' " +
+			"             when j.\"TYPE\" = '2' then '外部借款' " +
+			"             when j.\"TYPE\" = '3' then '员工' " +
+			"        end) TYPE,\n" +
+			"       j.REGION_COM_NAME,\n" +
+			"       j.BANK_COM_NAME,\n" +
+			"       j.LOAN_AMOUNT,\n" +
+			"       j.LOAN_DATE,\n" +
+			"       j.APPOINTMENT_REPAYMENT_DATE,\n" +
+			"       j.YEAR_COMPREHENSIVE_COST,\n" +
+			"       j.COST_PAY_TYPE,\n" +
+			"       j.INTEREST_PAY_TIME,\n" +
+			"       j.PRESS_INFO,\n" +
+			"       j.CREDIT_TERM,\n" +
+			"       j.PRESS_TERM,\n" +
+			"       j.\"REMARK\",\n" +
+			"       j.CREATE_TIME,o.\"org_name\" AS ORG_NAME FROM BI_FOREIGN_FINANCING j LEFT JOIN (select \"org_id\",\"org_name\" FROM BI_ORG_STAGES GROUP BY \"org_id\",\"org_name\") o ON j.ORG_ID = o.\"org_id\" ORDER BY j.ORG_ID,j.\"TYPE\",j.REGION_COM_NAME")
 	@Results(id="biForeignFinancingOnly",
 	value={
 		@Result(id = true, property = "id", column = "id"),
