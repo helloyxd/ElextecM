@@ -244,3 +244,15 @@ create table MDM_QueryField_Defined
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
 )
+
+create table MDM_DataStructure_Mapping
+(
+   id        			varchar2(32) primary key,
+   table_id  			varchar2(32) not null,
+   interface_id			varchar2(32) not null,
+   field1				varchar2(32),
+   field2				varchar2(32),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+)
