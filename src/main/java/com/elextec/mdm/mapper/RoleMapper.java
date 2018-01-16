@@ -34,7 +34,7 @@ public interface RoleMapper {
     List<Role> findRoleByName(String roleName);
 
     @Select("SELECT * FROM mdm_role")
-    @Results(id = "roleMapOnly", value = { 
+    @Results(id = "roleMapOnly", value = {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "roleName", column = "role_name"), 
 	    @Result(property = "roleDesc", column = "role_desc"),

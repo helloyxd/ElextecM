@@ -16,6 +16,7 @@ public class QueryFieldDefined extends BasicEntity{
 	private String fieldType;//TableDDLMap.columnTypeMap
 	private String sortOrder;
 	private String columnSpan;
+	private TableDefinition tableDefined;
 	
 	public String getTableId() {
 		return tableId;
@@ -46,6 +47,12 @@ public class QueryFieldDefined extends BasicEntity{
 	}
 	public void setColumnSpan(String columnSpan) {
 		this.columnSpan = columnSpan;
+	}
+	public TableDefinition getTableDefined() {
+		return tableDefined;
+	}
+	public void setTableDefined(TableDefinition tableDefined) {
+		this.tableDefined = tableDefined;
 	}
 	
 	

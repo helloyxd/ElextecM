@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
+import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.User;
 
 public interface IUserService {
@@ -23,5 +24,7 @@ public interface IUserService {
 	public VoResponse updateUserRole(List<User> users);
 	
 	public User getById(String userId);
+	
+	public List<Menu> getUserMenuById(String userId);
 	
 }

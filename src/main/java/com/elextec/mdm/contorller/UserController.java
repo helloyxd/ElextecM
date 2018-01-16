@@ -25,6 +25,7 @@ import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.service.IUserService;
+import com.elextec.mdm.vo.VoMenu;
 
 @RestController
 @RequestMapping("/mdm/user")
@@ -88,6 +89,7 @@ public class UserController{
 			}
 			List<Role> roles = user.getRoles();
 			List<Menu> menus = new ArrayList<>();
+			user.setMenus(userService.getUserMenuById(user.getId()));
 			Iterator<Role> it = roles.iterator();
 			while(it.hasNext()){
 				Role role = it.next();
@@ -113,7 +115,6 @@ public class UserController{
 					}
 				}
 			}
-			user.setMenus(menus);
 			session.setAttribute("mdm_right", menus);
 			voRes.setData(user);
 		}

@@ -54,6 +54,15 @@ public class MenuService extends BaseService implements IMenuService{
 	}
 	
 	@Override
+	public List<VoMenu> getMenusTreeByRole() {
+		String userId = getUserId();
+		
+		List<Menu> listMenu = menuMapper.findAllMenusTree();
+		List<VoMenu> list = setMenu(listMenu);
+		return list;
+	}
+	
+	@Override
 	public List<Menu> getMenus(String level) {
 		List<Menu> list = menuMapper.findAllByLevel(level);
 		return list;

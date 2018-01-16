@@ -1,6 +1,8 @@
 package com.elextec.mdm.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
 import com.elextec.mdm.common.entity.constant.UserStatusEnum;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.mapper.UserMapper;
 import com.elextec.mdm.service.BaseService;
@@ -156,13 +159,45 @@ public class UserService extends BaseService implements IUserService{
 		return user;
 	}
 	
+	@Override
 	public List<Menu> getUserMenuById(String userId){
-		
-		
-		return null;
+		User user = getById(userId);
+		List<Role> roles = user.getRoles();
+		List<Menu> myMenus = new ArrayList<Menu>();
+		for(Role role : roles){
+			List<Menu> menus = role.getMenus();
+			myMenus = transMenus(myMenus, menus);
+		}
+		return myMenus;
 	}
 	
-
+	private List<Menu> transMenus(List<Menu> myMenus, List<Menu> menus){
+		for(Menu menu : menus){
+			boolean flag = false;
+			Menu e = null;
+			Iterator<Menu> it = myMenus.iterator();
+			while(it.hasNext()){
+				Menu mymenu = it.next();
+				if(mymenu.getId().equals(menu.getId())){
+					flag = true;
+					e = mymenu;
+				}
+			}
+			if(!flag){
+				menu.setMenus(null);
+				e = menu;
+				flag = false;
+			}
+			if(menu.getMenus() != null && menu.getMenus().size() > 0){
+				List<Menu> subMenus = new ArrayList<Menu>();
+				subMenus = transMenus(subMenus, menu.getMenus());
+				e.setMenus(subMenus);
+			}
+			myMenus.add(e);
+		}
+		return myMenus;
+	}
+	
 	public VoResponse method(String id){
 		VoResponse voRes = new VoResponse();
 		

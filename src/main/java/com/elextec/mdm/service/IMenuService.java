@@ -14,6 +14,8 @@ public interface IMenuService {
 	
 	List<VoMenu> getAllMenusTree();
 	
+	List<VoMenu> getMenusTreeByRole();
+	
 	List<Menu> getMenus(String level);
 
 	VoResponse delMenu(String id);

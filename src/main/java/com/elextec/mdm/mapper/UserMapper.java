@@ -21,9 +21,9 @@ import com.elextec.mdm.entity.User;
 
 public interface UserMapper {
 
-    @Select("SELECT * FROM mdm_user WHERE user_name = #{userName}")
-    @Results(id = "userMap", 
-    	value = { 
+	@Select("SELECT * FROM mdm_user WHERE id = #{userId}")
+	@Results(id = "userMap", 
+	value = { 
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "userName", column = "user_name"),
 	    @Result(property = "userPassword", column = "user_password"),
@@ -35,10 +35,10 @@ public interface UserMapper {
 	    	one = @One(select = "com.elextec.mdm.mapper.DepartmentMapper.findDepartmentById") ),
 	    @Result(property = "roles", column = "id",
 	    	many = @Many(select = "com.elextec.mdm.mapper.RoleMapper.findRolesByUserId") ) 
-    	})
-    List<User> findUserByName(String userName);
-
-    @Select("SELECT * FROM mdm_user")
+	})
+    User findUserById(String userId);
+	
+	@Select("SELECT * FROM mdm_user")
     @Results(id = "userMapOnly", 
     	value = { 
 	    @Result(id = true, property = "id", column = "id"),
@@ -50,10 +50,10 @@ public interface UserMapper {
 	    @Result(property = "creater", column = "creater") 
 	})
     List<User> findAll();
-
-    @Select("SELECT * FROM mdm_user WHERE id = #{userId}")
+	
+    @Select("SELECT * FROM mdm_user WHERE user_name = #{userName}")
     @ResultMap("userMap")
-    User findUserById(String userId);
+    List<User> findUserByName(String userName);
 
     @Insert("INSERT INTO mdm_user(id,user_name,user_password,full_name,department_id,status,creater,create_time)"
 	    + " VALUES(sys_guid(), #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, "
