@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Menu extends BasicEntity{
 
-	@JsonProperty("label")  
+	@JsonProperty("label")
 	private String menuName;
 	private String menuUrl;
 	private String method;

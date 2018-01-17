@@ -84,7 +84,7 @@ public interface MenuMapper {
 	List<Menu> findByName(String menuName);
 	
 	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
-			+ "VALUES(#{id},#{menuName},#{menuUrl},#{method},#{parentId,jdbcType=VARCHAR},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark,jdbcType=VARCHAR},#{creater},sysdate)")
+			+ "VALUES(#{id},#{menuName},#{menuUrl},#{method,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{level},#{sortOrder,jdbcType=INTEGER},#{status},#{remark,jdbcType=VARCHAR},#{creater},sysdate)")
 	@SelectKey(before = true, keyProperty = "id",
 		resultType = String.class, statementType = StatementType.STATEMENT,
 		statement="SELECT sys_guid() FROM dual")
