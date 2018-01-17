@@ -61,21 +61,27 @@ public class BiUserController {
 			List<BiRole> roles = user.getRoles();
 			List<BiMenu> menus = new ArrayList<>();
 			Iterator<BiRole> it = roles.iterator();
+			//封装数据角色的数据权限
 			Map<String,List<Map<String,Object>>> dataMap = new HashMap<String,List<Map<String,Object>>>();
 			while(it.hasNext()){
 				BiRole role = it.next();
+				//将角色里的数据权限JSON拆为一个LIST对象
 				List<Map<String, Object>> mapList = JSON.parseObject(role.getRoleDataPermissions(), new TypeReference<List<Map<String, Object>>>() {
 				});
 				for(Map<String,Object> map:mapList){
+					//查找是否已经存在对应数据权限ID的LIST
 					List<Map<String,Object>> dataList = dataMap.get(map.get("datapermissionId").toString());
 					Object temp = map.get("val");
 					List<Map<String,Object>> t1 = (List<Map<String,Object>>)temp;
 					if(dataList != null){
+						//如果存在，将新的LIST加入进去
 						for(Map<String,Object> mapTest:t1){
 							dataList.add(mapTest);
 						}
-						dataMap.put(map.get("datapermissionId").toString(),dataList);
+						//将新的LIST去重复后覆盖掉原MAP中的LIST
+						dataMap.put(map.get("datapermissionId").toString(),distinct(dataList));
 					}else{
+						//如果不存在，直接将LIST放过dataMap中，以数据权限的ID为KEY
 						dataMap.put(map.get("datapermissionId").toString(),t1);
 					}
 				}
@@ -102,8 +108,9 @@ public class BiUserController {
 				}
 			}
 			user.setMenus(menus);
-			session.setAttribute("bi_user", user);
 //			session.setAttribute("bi_right", menus);
+			session.setAttribute("bi_user", user);
+			user.setDataPermissions(dataMap);
 			voRes.setData(user);
 		}
 		return voRes;
@@ -178,5 +185,19 @@ public class BiUserController {
 		BiUser user = biUserService.getById(userId);
 		voRes.setData(user);
 		return voRes;
+	}
+
+	/**
+	 * 将数据权限的LIST去重
+	 * */
+	private List<Map<String,Object>> distinct(List<Map<String,Object>> map){
+		Set set = new  HashSet();
+		List<Map<String,Object>> newList = new  ArrayList<Map<String,Object>>();
+		for (Map<String,Object> cd:map) {
+			if(set.add(cd.toString())){
+				newList.add(cd);
+			}
+		}
+		return newList;
 	}
 }
