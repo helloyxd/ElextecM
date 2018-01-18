@@ -1,8 +1,21 @@
 package com.elextec.mdm.service;
 
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.endpoint.ClientImpl;
+import org.apache.cxf.endpoint.Endpoint;
+import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
+import org.apache.cxf.service.model.BindingInfo;
+import org.apache.cxf.service.model.BindingMessageInfo;
+import org.apache.cxf.service.model.BindingOperationInfo;
+import org.apache.cxf.service.model.MessagePartInfo;
+import org.apache.cxf.service.model.ServiceInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,4 +239,71 @@ public class UserMapperTest {
 		List<User> list = userMapper.findUserByPage(user, pageQuery);
     	System.out.println(mapper.writeValueAsString(list));
     }
+    
+  
+        private static final QName SERVICE_NAME = new QName("http://webservice.mdm.elextec.com/", "createMpc");
+        /**
+         * 
+         * @throws Exception
+         */
+        public static void main(String[] args) throws Exception {
+            // 远程webService的URL
+            String hostUrl = "http://localhost:8080/mdm/services/user?wsdl";
+            try {
+                // 创建动态客户端
+                JaxWsDynamicClientFactory factory = JaxWsDynamicClientFactory.newInstance();
+                // 创建客户端连接
+                Client client = factory.createClient(hostUrl, SERVICE_NAME);
+                ClientImpl clientImpl = (ClientImpl) client;
+                Endpoint endpoint = clientImpl.getEndpoint();
+                // Make use of CXF service model to introspect the existing WSDL
+                ServiceInfo serviceInfo = endpoint.getService().getServiceInfos().get(0);
+                // 创建QName来指定NameSpace和要调用的service
+                QName bindingName = new QName("http://webservice.mdm.elextec.com/", "createMpc");
+                BindingInfo binding = serviceInfo.getBinding(bindingName);
+                // 创建QName来指定NameSpace和要调用的方法
+               // QName bindingName = new QName("http://webservice.mdm.elextec.com/", "createMpc");
+                 
+                BindingOperationInfo boi = binding.getOperation(bindingName);
+                BindingMessageInfo inputMessageInfo = boi.getInput();
+                List<MessagePartInfo> parts = inputMessageInfo.getMessageParts();
+                // 取得对象实例
+                MessagePartInfo partInfo = parts.get(0);
+                Class<?> partClass = partInfo.getTypeClass();
+                Object inputObject = partClass.newInstance();
+     
+                // 取得字段的set方法并赋值
+                PropertyDescriptor partPropertyDescriptor = new PropertyDescriptor("userName", partClass);
+                Method userNoSetter = partPropertyDescriptor.getWriteMethod();
+                userNoSetter.invoke(inputObject, "yu");
+     
+                // 取得字段的set方法并赋值
+                //PropertyDescriptor partPropertyDescriptor2 = new PropertyDescriptor(字段名, partClass);
+                //Method productCodeSetter = partPropertyDescriptor2.getWriteMethod();
+               // productCodeSetter.invoke(inputObject, 属性值);
+     
+                // 调用客户端invoke()方法，把inputObject传递给要调用的方法并取得结果对象
+                Object[] result = client.invoke(bindingName, inputObject);
+                // 取得的结果是一个对象
+                Class<?> resultClass = result[0].getClass();
+                // 取得返回结果的get方法并得到它的值
+                PropertyDescriptor resultDescriptor = new PropertyDescriptor("userName", resultClass);
+                Object resultGetter = resultDescriptor.getReadMethod().invoke(result[0]);
+                System.out.println("result：" + resultGetter);
+                // 取得返回结果的get方法并得到它的值
+              //  PropertyDescriptor tokenDescriptor = new PropertyDescriptor("userName", resultClass);
+                // 取得的是一个对象实例
+               // Object getObj= tokenDescriptor.getReadMethod().invoke(result[0]);
+               // if(tokenGetter != null) {
+                  //  Class<?> resultTokenClass = tokenDescriptor.getReadMethod().invoke(result[0]).getClass();
+                    // 得到对象实例下的***属性值
+                   // PropertyDescriptor expiredTimeDescriptor = new PropertyDescriptor(字段名, resultTokenClass);
+                   // Object getter = expiredTimeDescriptor.getReadMethod().invoke(getObj);
+                    //System.out.println("字段名：" + getter );
+                //}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
 }
