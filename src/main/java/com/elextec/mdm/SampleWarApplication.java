@@ -16,11 +16,15 @@
 
 package com.elextec.mdm;
 
+import javax.xml.ws.Endpoint;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
+
+import com.elextec.mdm.webservice.impl.SampleService;
 
 /**
  * Sample WAR application
@@ -33,6 +37,7 @@ public class SampleWarApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		//System.out.println(SampleWarApplication.class.getResource("/").toString());   
 		SpringApplication.run(SampleWarApplication.class, args);
+		//Endpoint.publish("http://localhost:8080/mpc", new SampleService());  
 	}
 
 	

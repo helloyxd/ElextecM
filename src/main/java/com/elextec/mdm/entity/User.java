@@ -3,8 +3,16 @@ package com.elextec.mdm.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.elextec.mdm.common.entity.BasicEntity;
 
+@XmlRootElement(name="User")
+@XmlAccessorType(XmlAccessType.FIELD) 
 public class User extends BasicEntity implements Serializable{
 
 	/**
@@ -15,6 +23,11 @@ public class User extends BasicEntity implements Serializable{
 	private String userPassword;
 	private String fullName;
 	private Department department;
+	
+	private UserAddtion userAddtion;
+	
+	@XmlElementWrapper(name = "roles")  
+	@XmlElement(name = "role")  
 	private List<Role> roles;
 	
 	public String getUserName() {
@@ -47,5 +60,12 @@ public class User extends BasicEntity implements Serializable{
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+	public UserAddtion getUserAddtion() {
+		return userAddtion;
+	}
+	public void setUserAddtion(UserAddtion userAddtion) {
+		this.userAddtion = userAddtion;
+	}
+	
 	
 }
