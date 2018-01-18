@@ -1,6 +1,6 @@
 package com.elextec.mdm.common.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.elextec.mdm.common.entity.constant.StatusEnum;
 

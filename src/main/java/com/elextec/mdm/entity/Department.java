@@ -10,6 +10,7 @@ public class Department extends BasicEntity{
 	private String departName;
 	private String parentId;
 	private List<Department> departments;
+	private User user;
 	
 	public String getDepartCode() {
 		return departCode;
@@ -34,6 +35,12 @@ public class Department extends BasicEntity{
 	}
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	

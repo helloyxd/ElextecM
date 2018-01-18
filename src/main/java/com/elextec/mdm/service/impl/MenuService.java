@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.VoResponse;
-import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.TableDefinition;

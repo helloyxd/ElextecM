@@ -27,20 +27,6 @@ public class MenuController {
 	@Autowired
 	private IMdmModelService mdmModelService;
 	
-	@GetMapping("/getAll")
-	public Object getAllMenus() {
-		VoResponse voResponse = new VoResponse();
-		voResponse.setData(menuService.getAllMenus());
-		return voResponse;
-	}
-	
-	@GetMapping("/getTree")
-	public Object getAllMenusTree() {
-		VoResponse voResponse = new VoResponse();
-		voResponse.setData(menuService.getAllMenusTree());
-		return voResponse;
-	}
-	
 	@GetMapping
 	public Object getMenus(@RequestParam("level") String level) {
 		VoResponse voResponse = new VoResponse();

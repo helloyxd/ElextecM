@@ -25,7 +25,6 @@ import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 import com.elextec.mdm.service.IUserService;
-import com.elextec.mdm.vo.VoMenu;
 
 @RestController
 @RequestMapping("/mdm/user")
@@ -126,7 +125,10 @@ public class UserController{
 		VoResponse voRes = new VoResponse();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("mdm_user");
-		session.removeAttribute("mdm_user");
+		if(user != null){
+			session.removeAttribute("mdm_user");
+			session.removeAttribute("mdm_right");
+		}
 		return voRes;
 	}
 	
@@ -165,6 +167,13 @@ public class UserController{
 		VoResponse voRes = new VoResponse();
 		User user = userService.getById(userId);
 		voRes.setData(user);
+		return voRes;
+	}
+	
+	@GetMapping("getUserMenus")
+	public Object getCurrentUserMenus(){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(userService.getCurrentUserMenus());
 		return voRes;
 	}
 	

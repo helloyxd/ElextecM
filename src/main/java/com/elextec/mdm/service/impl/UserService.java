@@ -160,6 +160,12 @@ public class UserService extends BaseService implements IUserService{
 	}
 	
 	@Override
+	public List<Menu> getCurrentUserMenus(){
+		List<Menu> list =  getUserMenuById(getUserId());
+		return list;
+	}
+	
+	
 	public List<Menu> getUserMenuById(String userId){
 		User user = getById(userId);
 		List<Role> roles = user.getRoles();

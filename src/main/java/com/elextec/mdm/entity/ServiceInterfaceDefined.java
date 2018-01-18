@@ -9,12 +9,11 @@ import com.elextec.mdm.common.entity.BasicEntity;
 public class ServiceInterfaceDefined extends BasicEntity{
 
 	private String type;//接口类型,0 webservice,1 存储过程
-	private String wsdlLocation;//WSDL地址
-	private String dburl;//如果接口是存储过程，需要填入数据库连接字符串
+	private String siurl;//WSDL地址，如果接口是存储过程，需要填入数据库连接字符串
 	private String username;
 	private String password;
-	private String modelId;
-	private String bsId;
+	private String modelId;//所属MDM模块
+	private String bsId;//所属业务系统
 	private String operationType;//操作类型，0拉取，1提送
 	private String operation;//webservice的接口方法或者存储过程方法
 	private String wsbinding;//webservice binding
@@ -26,18 +25,6 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-	public String getWsdlLocation() {
-		return wsdlLocation;
-	}
-	public void setWsdlLocation(String wsdlLocation) {
-		this.wsdlLocation = wsdlLocation;
-	}
-	public String getDburl() {
-		return dburl;
-	}
-	public void setDburl(String dburl) {
-		this.dburl = dburl;
 	}
 	public String getUsername() {
 		return username;
@@ -92,6 +79,12 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	}
 	public void setOperationNamespace(String operationNamespace) {
 		this.operationNamespace = operationNamespace;
+	}
+	public String getSiurl() {
+		return siurl;
+	}
+	public void setSiurl(String siurl) {
+		this.siurl = siurl;
 	}
 	
 	

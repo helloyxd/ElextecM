@@ -6,7 +6,7 @@ import com.elextec.mdm.common.entity.BasicEntity;
  * @author zhangkj
  *
  */
-public class BasicData  extends BasicEntity{
+public class BasicData extends BasicEntity{
 
 	private String basicType;
 	private String basicValue;

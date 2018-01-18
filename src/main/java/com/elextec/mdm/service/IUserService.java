@@ -25,6 +25,8 @@ public interface IUserService {
 	
 	public User getById(String userId);
 	
+	public List<Menu> getCurrentUserMenus();
+	
 	public List<Menu> getUserMenuById(String userId);
 	
 }

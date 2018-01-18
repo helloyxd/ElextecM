@@ -20,7 +20,7 @@ import com.elextec.mdm.ws.MdmService;
  * @author zhangkj
  *
  */
-//@Configuration
+@Configuration
 public class WebConfig {
 	
 	@Bean
@@ -33,7 +33,7 @@ public class WebConfig {
     public FilterRegistrationBean<Filter> someFilterRegistration() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<Filter>();
         registration.setFilter(getLoginFilter());
-        registration.addUrlPatterns("/mdm/*");
+        registration.addUrlPatterns("/mdm1/*");
         //registration.addInitParameter("paramName", "paramValue");
         registration.setName("sessionFilter");
         return registration;

@@ -98,8 +98,7 @@ public class WSTest {
 		Client client = dcf.createClient("http://localhost:8080/mdm/ws/user?wsdl");
 		Object[] objects=client.invoke("getById","798D5F70C6434815A1A3194C48695EC4");
 		
-		ObjectMapper mapper = new ObjectMapper();
-		System.out.println(mapper.writeValueAsString(objects));
+		System.out.println(objects);
 	}
 	
 	void executeWS3() throws Exception{
@@ -123,6 +122,6 @@ public class WSTest {
 
 	public static void main(String args[]) throws Exception{
 		WSTest test = new WSTest();
-		test.executeWS3();
+		test.executeWS2();
 	}
 }

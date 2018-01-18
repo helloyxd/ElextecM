@@ -11,7 +11,7 @@ public class ServiceInterfaceParam extends BasicEntity{
 	private String serviceDefinedId;
 	private String ioType;//输入输出类别，0输入，1输出
 	private String dataType;//参数数据类型，int,string等基本型以及complex复杂型
-	private String tableName;
+	private String tableName;//复杂类型表名
 	
 	public String getServiceDefinedId() {
 		return serviceDefinedId;
