@@ -9,6 +9,7 @@ public class Role extends BasicEntity{
 	private String roleName;
 	private String roleDesc;
 	private List<Menu> menus;
+	private List<DataPermission> dataPermissions;
 	private int roleType;//角色类型，0菜单权限，1按钮权限
 	
 	public String getRoleName() {
@@ -34,6 +35,12 @@ public class Role extends BasicEntity{
 	}
 	public void setRoleType(int roleType) {
 		this.roleType = roleType;
+	}
+	public List<DataPermission> getDataPermissions() {
+	    return dataPermissions;
+	}
+	public void setDataPermissions(List<DataPermission> dataPermissions) {
+	    this.dataPermissions = dataPermissions;
 	}
 	
 }

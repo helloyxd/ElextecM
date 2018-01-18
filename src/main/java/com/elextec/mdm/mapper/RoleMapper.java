@@ -18,53 +18,78 @@ import com.elextec.mdm.entity.Role;
 
 public interface RoleMapper {
 
-	@Select("SELECT * FROM role WHERE role_name = #{roleName}")
-	@Results(id="roleMap",
-	value={
-		@Result(id = true, property = "id", column = "id"),
-		@Result(property = "roleName",  column = "role_name"),
-        @Result(property = "roleDesc", column = "role_desc"),
-        @Result(property = "status", column = "status"),
-		@Result(property = "createTime", column = "create_time"),
-        @Result(property = "creater", column = "creater"),
-        @Result(property = "menus", column = "id",
-    	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenusByRoleId")
-    		)
+    @Select("SELECT * FROM mdm_role WHERE role_name = #{roleName}")
+    @Results(id = "roleMap", value = { 
+	    @Result(id = true, property = "id", column = "id"),
+	    @Result(property = "roleName", column = "role_name"), 
+	    @Result(property = "roleDesc", column = "role_desc"),
+	    @Result(property = "status", column = "status"), 
+	    @Result(property = "createTime", column = "create_time"),
+	    @Result(property = "creater", column = "creater"),
+	    @Result(property = "menus", column = "id",
+	    	many = @Many(select = "com.elextec.mdm.mapper.MenuMapper.findMenusByRoleId") ),
+	    @Result(property = "dataPermissions", column = "id",
+	    	many = @Many(select = "com.elextec.mdm.mapper.DataPermissionMapper.findDatasByRoleId") ),
     })
-    List<Role> findRoleByName(String userName);
-	
-	@Select("SELECT * FROM role")
-	@ResultMap("roleMap")
-    List<Role> findAll();
-	
-	@Select("SELECT * FROM role WHERE id = #{roleId}")
-	@ResultMap("roleMap")
-	Role findRoleById(int roleId);
+    List<Role> findRoleByName(String roleName);
 
-    @Insert("INSERT INTO role(role_name,role_desc,status,creater)"
-    		+ " VALUES(#{roleName}, #{roleDesc}, #{status}, #{creater})")
+    @Select("SELECT * FROM mdm_role")
+    @Results(id = "roleMapOnly", value = {
+	    @Result(id = true, property = "id", column = "id"),
+	    @Result(property = "roleName", column = "role_name"), 
+	    @Result(property = "roleDesc", column = "role_desc"),
+	    @Result(property = "status", column = "status"), 
+	    @Result(property = "createTime", column = "create_time"),
+	    @Result(property = "creater", column = "creater") })
+    List<Role> findAll();
+
+    @Select("SELECT * FROM mdm_role WHERE id = #{roleId}")
+    @ResultMap("roleMap")
+    Role findRoleById(String roleId);
+
+    @Insert("INSERT INTO mdm_role(id,role_name,role_desc,status,creater,create_time)"
+	    + " VALUES(sys_guid(), #{roleName}, #{roleDesc}, #{status}, #{creater}, sysdate)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Role role);
 
-    @Update("UPDATE role SET role_name=#{roleName},user_desc=#{roleDesc} WHERE id =#{id}")
+    @Update("UPDATE mdm_role SET role_name=#{roleName},role_desc=#{roleDesc} WHERE id =#{id}")
     void update(Role role);
 
-    @Delete("DELETE FROM role WHERE id =#{id}")
-    void delete(Long id);
-    
+    @Delete("DELETE FROM mdm_role WHERE id =#{id}")
+    void delete(String id);
+
     @Update("${sql}")
     void createTable(@Param("sql") String sql);
-    
-    @Select("SELECT * FROM role WHERE id IN (SELECT role_id FROM user_role WHERE USER_ID = #{userId})")
+
+    @Select("SELECT * FROM mdm_role WHERE id IN (SELECT role_id FROM mdm_user_role WHERE user_id = #{userId})")
     @ResultMap("roleMap")
-    List<Role> findRolesByUserId(Integer userId);
-    
+    List<Role> findRolesByUserId(String userId);
+
     /**
      * 新增角色的菜单权限信息
      * @param user
      */
-    @InsertProvider(type = MapperProvider.class,method = "addRoleMenus")
-	void addRoleMenus(@Param("role")Role role);
+    @InsertProvider(type = MapperProvider.class, method = "addRoleMenus")
+    void addRoleMenus(@Param("role") Role role);
+
+    /**
+     * 根据角色ID，删除角色的菜单信息
+     * @param roleId
+     */
+    @Delete("DELETE FROM mdm_role_menu WHERE role_id=#{roleId}")
+    void delRoleMenus(String roleId);
     
+    /**
+     * 根据角色ID，删除角色的数据权限信息
+     * @param roleId
+     */
+    @Delete("DELETE FROM mdm_role_data WHERE role_id=#{roleId}")
+    void delRoleDataPermission(String roleId);
     
+    /**
+     * 新增角色的数据权限信息
+     * @param user
+     */
+    @InsertProvider(type = MapperProvider.class, method = "addRoleDataPermission")
+    void addRoleDataPermission(@Param("role") Role role);
 }

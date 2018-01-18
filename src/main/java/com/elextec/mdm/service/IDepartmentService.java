@@ -9,7 +9,7 @@ public interface IDepartmentService{
 
 	public List<Department> getAllDepartments();
 	
-	public VoResponse delDepartment(int id);
+	public VoResponse delDepartment(String id);
 	
 	public VoResponse addDepartment(Department department);
 	

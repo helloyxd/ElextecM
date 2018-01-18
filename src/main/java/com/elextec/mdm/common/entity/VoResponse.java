@@ -1,10 +1,12 @@
 package com.elextec.mdm.common.entity;
 
+import com.elextec.mdm.common.entity.constant.ResponseCodeEnum;
+
 public class VoResponse {
 	private Integer code;
+	private Boolean success;
 	private String message;
 	private Object data;
-	private Boolean success;
 	
 	public VoResponse(){
 		this.setCode(ResponseCodeEnum.CodeSuccess);
@@ -39,7 +41,11 @@ public class VoResponse {
 	}
 	
 	public void setNull(VoResponse voRes){
-		voRes.setCode(ResponseCodeEnum.CodeInputDataException);
+		voRes.setCode(ResponseCodeEnum.CodeNullException);
+		voRes.setSuccess(false);
+	}
+	public void setFail(VoResponse voRes){
+		voRes.setCode(ResponseCodeEnum.CodeFail);
 		voRes.setSuccess(false);
 	}
 }

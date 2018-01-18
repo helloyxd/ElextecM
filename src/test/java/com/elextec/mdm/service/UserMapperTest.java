@@ -23,9 +23,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.elextec.mdm.common.entity.PageQuery;
-import com.elextec.mdm.common.entity.StatusEnum;
-import com.elextec.mdm.common.entity.UserStatusEnum;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.common.entity.constant.StatusEnum;
+import com.elextec.mdm.common.entity.constant.UserStatusEnum;
 import com.elextec.mdm.entity.Department;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
@@ -55,7 +55,7 @@ public class UserMapperTest {
 	
     @Test
     public void getUserByName() throws Exception {
-    	List<User> list = userMapper.findUserByName("admin3");
+    	List<User> list = userMapper.findUserByName("admin0");
     	//System.out.println("===========" + list.size());
     	ObjectMapper mapper = new ObjectMapper();
     	//mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -71,32 +71,51 @@ public class UserMapperTest {
     
     @Test
     public void getUserById() throws Exception {
-    	User user = userMapper.findUserById(1);
+    	User user = userMapper.findUserById("798D5F70C6434815A1A3194C48695EC4");
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(user));
     }
     
     @Test
     public void addUser() throws Exception {
-    	for(int i=0;i<100;i++){
+    	/*for(int i=0;i<100;i++){
     		User user = new User();
         	user.setUserName("admin" + i);
         	user.setUserPassword("123");
-        	user.setFullName("auto add");
+        	//user.setFullName("auto add");
         	user.setStatus(UserStatusEnum.UserStatusNormal);
         	user.setCreater("SYS");
         	userMapper.insert(user);
-    	}
+    	}*/
+    	
+    	User user = new User();
+    	user.setUserName("XXX");
+    	user.setUserPassword("123");
+    	//user.setFullName("auto add");
+    	Department department = new Department();
+    	department.setId("1111");
+    	//user.setDepartment(department);
+    	user.setStatus(UserStatusEnum.UserStatusNormal);
+    	user.setCreater("SYS");
+    	userMapper.insert(user);
     }
     
     @Test
     public void updateUserinfo() throws Exception {
-    	User user = userMapper.findUserById(1);
+    	User user = userMapper.findUserById("798D5F70C6434815A1A3194C48695EC4");
     	user.setUserPassword("zkj123");
     	user.setFullName("zhangkaijun");
     	user.setStatus(UserStatusEnum.UserStatusLock);
     	userMapper.update(user);
-    	user = userMapper.findUserById(1);
+    	user = userMapper.findUserById("798D5F70C6434815A1A3194C48695EC4");
+    	ObjectMapper mapper = new ObjectMapper();
+    	System.out.println(mapper.writeValueAsString(user));
+    }
+    
+    @Test
+    public void delUser()throws Exception {
+    	userMapper.delete("4C6400628A60464EB227F8A46C2C1FF8");
+    	User user = userMapper.findUserById("4C6400628A60464EB227F8A46C2C1FF8");
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(user));
     }
@@ -104,11 +123,14 @@ public class UserMapperTest {
     @Test
     public void addUserRole() throws Exception {
     	User user = new User();
-    	//user.setId(1);
+    	user.setId("哈哈user2");
     	List<Role> roles = new ArrayList<Role>();
     	Role role = new Role();
-    	//role.setId(1);
+    	role.setId("哈哈role1");
     	roles.add(role);
+    	Role role2 = new Role();
+    	role2.setId("哈哈role2");
+    	roles.add(role2);
     	user.setRoles(roles);
     	userMapper.addUserRoles(user);
     }
@@ -123,8 +145,10 @@ public class UserMapperTest {
     @Test
     public void addRole() throws Exception {
     	Role role = new Role();
-    	role.setRoleName("admin1");
-    	role.setRoleDesc("admin1");
+    	role.setRoleName("admin2");
+    	role.setRoleDesc("admin2");
+    	role.setStatus(0);
+    	role.setCreater("sys");
     	roleMapper.insert(role);
     	
     }
@@ -142,7 +166,7 @@ public class UserMapperTest {
     	department.setDepartCode("30001");
     	department.setDepartName("IC-4");
     	department.setStatus(StatusEnum.StatusEnable);
-    	department.setParentId(7);
+    	department.setParentId("");
     	/*List<Department> nextDepartments = new ArrayList<Department>();
     	Department nextDepartment = new Department();
     	nextDepartment.setId(2);
@@ -174,7 +198,7 @@ public class UserMapperTest {
     	menu.setLevel(1);
     	menu.setMenuUrl("menu");
     	menu.setRemark("desc");
-    	menu.setParentId(4);
+    	menu.setParentId("");
     	menu.setSortOrder(1);
     	menu.setStatus(UserStatusEnum.UserStatusNormal);
     	menu.setCreater("zkj");
@@ -183,7 +207,7 @@ public class UserMapperTest {
     
     @Test
     public void delMenu() throws Exception {
-    	menuMapper.delById(1);
+    	menuMapper.delById("1");
     }
     
     @Test
@@ -217,7 +241,7 @@ public class UserMapperTest {
     
     @Test
     public void getRoleById() throws Exception {
-    	Role role = roleMapper.findRoleById(1);
+    	Role role = roleMapper.findRoleById("");
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(role));
     }

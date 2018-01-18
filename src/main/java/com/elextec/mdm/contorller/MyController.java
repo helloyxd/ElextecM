@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("mdm")
 public class MyController {
 
-	@GetMapping("/")
+	@GetMapping
 	public Object hello() {
 		String msg = "Hello,MDM system";
 		return msg;

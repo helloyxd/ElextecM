@@ -2,11 +2,13 @@ package com.elextec.mdm.common.entity;
 
 import java.util.Date;
 
+import com.elextec.mdm.common.entity.constant.StatusEnum;
+
 public class BasicEntity {
 	private String id;
 	private Date createTime;
 	private String creater;
-	private Integer status;
+	private Integer status = StatusEnum.StatusEnable;
 	
 	public Date getCreateTime() {
 		return createTime;

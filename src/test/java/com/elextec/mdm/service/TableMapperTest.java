@@ -67,9 +67,11 @@ public class TableMapperTest {
 	private ITableDLLService tableDLLService;
 
 	@Test
+	private ITableDDLService tableDDLService;
+	
+	//@Test
 	public void createTable() throws Exception {
 		String sql = "";
-		tableDLLMapper.createTable(sql);
 	}
 
 	private static Map<String, Map<String, String>> dataMap = new HashMap<String, Map<String, String>>();
@@ -77,17 +79,21 @@ public class TableMapperTest {
 	@Test
 	public void createTableService() throws Exception {
 		TableDefinition table = new TableDefinition();
-		table.setModelId(1);
-		table.setTableName("MDMTest");
+		table.setModelId("B1536179075A492B96192DE9EDA69CEA");
+		table.setTableName("MDMTest9");
+		table.setTableLabel("测试");
+		table.setCreater("sys");
+		table.setStatus(0);
 		List<ColumnDefinition> list = new ArrayList<ColumnDefinition>();
 		ColumnDefinition obj = new ColumnDefinition();
 		obj.setName("id");
 		Map<Integer, String> dataTypeMap = new HashMap<Integer, String>();
 		dataTypeMap.put(9, "");
+		Map<String,String> dataTypeMap = new HashMap<String,String>();
+		dataTypeMap.put("VARCHAR2", "32");
 		obj.setDataTypeMap(dataTypeMap);
-		List<Integer> constraints = new ArrayList<Integer>();
-		constraints.add(1);
-		constraints.add(4);
+		List<String> constraints = new ArrayList<String>();
+		constraints.add("P");
 		obj.setConstraints(constraints);
 		list.add(obj);
 		table.setColumnDefinitions(list);
@@ -318,5 +324,4 @@ public class TableMapperTest {
 		}
 
 	}
-
 }

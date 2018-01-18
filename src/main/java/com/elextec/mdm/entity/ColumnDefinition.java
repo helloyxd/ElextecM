@@ -5,9 +5,10 @@ import java.util.Map;
 
 public class ColumnDefinition {
 
-	private String name;
-	private Map<Integer, String> dataTypeMap;
-	private List<Integer> constraints;
+	private String name;//数据库字段名称
+	private String columnComment;//字段中文名称
+	private Map<String, String> dataTypeMap;//字段数据类型
+	private List<String> constraints;//字段约束条件
 	
 	public String getName() {
 		return name;
@@ -15,16 +16,22 @@ public class ColumnDefinition {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Map<Integer, String> getDataTypeMap() {
+	public String getColumnComment() {
+		return columnComment;
+	}
+	public void setColumnComment(String columnComment) {
+		this.columnComment = columnComment;
+	}
+	public Map<String, String> getDataTypeMap() {
 		return dataTypeMap;
 	}
-	public void setDataTypeMap(Map<Integer, String> dataTypeMap) {
+	public void setDataTypeMap(Map<String, String> dataTypeMap) {
 		this.dataTypeMap = dataTypeMap;
 	}
-	public List<Integer> getConstraints() {
+	public List<String> getConstraints() {
 		return constraints;
 	}
-	public void setConstraints(List<Integer> constraints) {
+	public void setConstraints(List<String> constraints) {
 		this.constraints = constraints;
 	}
 	

@@ -3,15 +3,20 @@ package com.elextec.mdm.entity;
 import java.util.List;
 
 import com.elextec.mdm.common.entity.BasicEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Menu extends BasicEntity{
 
+	@JsonProperty("label")
 	private String menuName;
 	private String menuUrl;
-	private Integer parentId;
+	private String method;
+	private String icon;
+	private String parentId;
 	private Integer level;
 	private Integer sortOrder;
 	private String remark;
+	@JsonProperty("children") 
 	private List<Menu> menus;
 	
 	
@@ -26,12 +31,6 @@ public class Menu extends BasicEntity{
 	}
 	public void setMenuUrl(String menuUrl) {
 		this.menuUrl = menuUrl;
-	}
-	public Integer getParentId() {
-		return parentId;
-	}
-	public void setParentId(Integer parentId) {
-		this.parentId = parentId;
 	}
 	public Integer getLevel() {
 		return level;
@@ -56,5 +55,23 @@ public class Menu extends BasicEntity{
 	}
 	public void setMenus(List<Menu> menus) {
 		this.menus = menus;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+	public String getMethod() {
+		return method;
+	}
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 }

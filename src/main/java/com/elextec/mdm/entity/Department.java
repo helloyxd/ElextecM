@@ -8,7 +8,7 @@ public class Department extends BasicEntity{
 
 	private String departCode;
 	private String departName;
-	private Integer parentId;
+	private String parentId;
 	private List<Department> departments;
 	private User user;
 	
@@ -30,10 +30,10 @@ public class Department extends BasicEntity{
 	public void setDepartments(List<Department> departments) {
 		this.departments = departments;
 	}
-	public Integer getParentId() {
+	public String getParentId() {
 		return parentId;
 	}
-	public void setParentId(Integer parentId) {
+	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
 	public User getUser() {
@@ -42,5 +42,6 @@ public class Department extends BasicEntity{
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
 	
 }

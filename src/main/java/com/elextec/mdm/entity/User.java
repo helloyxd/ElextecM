@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.elextec.mdm.common.entity.BasicEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @XmlRootElement(name="User")
 @XmlAccessorType(XmlAccessType.FIELD) 
@@ -29,6 +30,8 @@ public class User extends BasicEntity implements Serializable{
 	@XmlElementWrapper(name = "roles")  
 	@XmlElement(name = "role")  
 	private List<Role> roles;
+	private String sessionId;
+	private List<Menu> menus;
 	
 	public String getUserName() {
 		return userName;
@@ -67,5 +70,17 @@ public class User extends BasicEntity implements Serializable{
 		this.userAddtion = userAddtion;
 	}
 	
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	public List<Menu> getMenus() {
+		return menus;
+	}
+	public void setMenus(List<Menu> menus) {
+		this.menus = menus;
+	}
 	
 }
