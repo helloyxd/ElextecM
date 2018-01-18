@@ -34,8 +34,8 @@ import org.springframework.web.servlet.DispatcherServlet;
 @RestController
 @SpringBootApplication
 @EnableTransactionManagement
-@MapperScan("com.elextec.*")
-@ComponentScan({"com.elextec.*"})
+@MapperScan("com.elextec.mdm.*")
+@ComponentScan({"com.elextec.mdm.*"})
 public class SampleWarApplication extends SpringBootServletInitializer {
 //public class SampleWarApplication  {
 
