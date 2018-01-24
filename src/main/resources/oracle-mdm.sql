@@ -1,3 +1,50 @@
+create or replace directory UTL_DIR as 'C:\dba';
+grant write on directory UTL_DIR to public;
+grant read on directory UTL_DIR to public;
+
+CREATE OR REPLACE PROCEDURE P_EXPORTDLL(P_TABLE_NAME VARCHAR2, P_FILENAME   VARCHAR2) IS
+BEGIN
+  DECLARE
+    L_FILE     UTL_FILE.FILE_TYPE;
+    L_BUFFER   VARCHAR2(1000);
+    L_AMOUNT   BINARY_INTEGER := 100;
+    L_POS      INTEGER := 1;
+    L_CLOB     CLOB;
+    L_CLOB_LEN INTEGER;
+  BEGIN
+    SELECT DBMS_METADATA.GET_DDL('TABLE', P_TABLE_NAME) || ';'
+      INTO L_CLOB
+      FROM DUAL;
+    L_CLOB_LEN := DBMS_LOB.GETLENGTH(L_CLOB);
+    L_FILE     := UTL_FILE.FOPEN('UTL_DIR', P_FILENAME || '.sql', 'a', 1000);
+
+    WHILE L_POS < L_CLOB_LEN LOOP
+      DBMS_LOB.READ(L_CLOB, L_AMOUNT, L_POS, L_BUFFER);
+      UTL_FILE.PUT(L_FILE, L_BUFFER);
+      L_POS := L_POS + L_AMOUNT;
+    END LOOP;
+    UTL_FILE.FCLOSE(L_FILE);
+  END;
+END P_EXPORTDLL;
+
+
+CREATE OR REPLACE PROCEDURE p_whole AS
+BEGIN
+  FOR x IN (SELECT table_name FROM user_tables) LOOP
+       p_exportDLL(x.table_name,'paul');
+  END LOOP;
+END  p_whole;
+
+execute MDM_TEST.P_WHOLE;
+
+select t.TABLE_NAME 表名,b.comments 表备注 ,t.COLUMN_ID 序号 ,t.COLUMN_NAME 字段名 ,t.DATA_TYPE 类型 ,
+t. DATA_LENGTH 长度 ,t.NULLABLE 是否为空,a.comments 字段备注  
+ from user_tab_columns t   
+ left join USER_COL_COMMENTS a on a.table_name=t.TABLE_NAME and a.column_name=t.COLUMN_NAME  
+ left join USER_tab_COMMENTS b on b.table_name=t.TABLE_NAME 
+ order by t.TABLE_NAME,t.COLUMN_ID
+
+
 CREATE TABLE mdm_product(
 	id VARCHAR2(32) PRIMARY KEY,
 	product_name VARCHAR2(32) NOT NULL,

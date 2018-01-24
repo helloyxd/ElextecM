@@ -186,7 +186,7 @@ public class UserMapperTest {
     
     @Test
     public void findDepartmentById() throws JsonProcessingException{
-    	Department department = departmentMapper.findDepartmentById(2);
+    	Department department = departmentMapper.findDepartmentById("");
     	ObjectMapper mapper = new ObjectMapper();
     	System.out.println(mapper.writeValueAsString(department));
     }
