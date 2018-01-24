@@ -16,6 +16,7 @@ import org.springframework.core.annotation.Order;
 import com.elextec.mdm.ws.IMdmService;
 import com.elextec.mdm.ws.MdmService;
 
+
 /**
  * @author zhangkj
  *
@@ -33,18 +34,17 @@ public class WebConfig {
     public FilterRegistrationBean<Filter> someFilterRegistration() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<Filter>();
         registration.setFilter(getLoginFilter());
-        registration.addUrlPatterns("/mdm1/*");
+        registration.addUrlPatterns("/mdm/*");
         //registration.addInitParameter("paramName", "paramValue");
         registration.setName("sessionFilter");
         return registration;
     }
 	
-	
+	//默认dispatcherServlet
 	/*@Bean
 	public ServletRegistrationBean<CXFServlet> dispatcherServlet() {
 		return new ServletRegistrationBean<CXFServlet>(new CXFServlet(), "/mdm/ws/*");
 	}*/
-	//默认dispatcherServlet
 	
 	@Bean
 	public ServletRegistrationBean<CXFServlet> wsServlet() {

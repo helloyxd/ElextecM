@@ -42,7 +42,7 @@ public class DepartmentController {
 	
 	@PutMapping
 	public Object update(@RequestBody Department department) {
-		VoResponse voResponse = new VoResponse();
+		VoResponse voResponse = departmentService.updateDepartment(department);
 		return voResponse;
 	}
 	

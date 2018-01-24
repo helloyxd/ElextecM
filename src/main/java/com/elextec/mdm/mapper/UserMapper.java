@@ -13,8 +13,10 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.User;
@@ -57,9 +59,10 @@ public interface UserMapper {
 
     @Insert("INSERT INTO mdm_user(id,user_name,user_password,full_name,department_id,status,creater,create_time)"
 	    + " VALUES(sys_guid(), #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, "
-	    + "#{department.id,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    @ResultMap("userMap")
+	    + "#{dpartmentId,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
+    @SelectKey(before = true, keyProperty = "id",
+		resultType = String.class, statementType = StatementType.STATEMENT,
+		statement="SELECT sys_guid() FROM dual")
     void insert(User user);
 
     @Update("UPDATE mdm_user SET full_name=#{fullName},user_password=#{userPassword},"

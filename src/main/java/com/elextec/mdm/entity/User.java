@@ -24,9 +24,8 @@ public class User extends BasicEntity implements Serializable{
 	private String userPassword;
 	private String fullName;
 	private Department department;
-	
+	private String dpartmentId;
 	private UserAddtion userAddtion;
-	
 	@XmlElementWrapper(name = "roles")  
 	@XmlElement(name = "role")  
 	private List<Role> roles;
@@ -81,6 +80,12 @@ public class User extends BasicEntity implements Serializable{
 	}
 	public void setMenus(List<Menu> menus) {
 		this.menus = menus;
+	}
+	public String getDpartmentId() {
+		return dpartmentId;
+	}
+	public void setDpartmentId(String dpartmentId) {
+		this.dpartmentId = dpartmentId;
 	}
 	
 }

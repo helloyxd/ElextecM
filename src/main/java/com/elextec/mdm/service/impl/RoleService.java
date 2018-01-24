@@ -13,10 +13,11 @@ import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.mapper.DataPermissionMapper;
 import com.elextec.mdm.mapper.RoleMapper;
+import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IRoleService;
 
 @Service
-public class RoleService implements IRoleService {
+public class RoleService extends BaseService implements IRoleService {
 
 	@Autowired
 	private RoleMapper roleMapper;
@@ -52,6 +53,7 @@ public class RoleService implements IRoleService {
 			voRes.setMessage("roleName is exist");
 			return voRes;
 		}
+		role.setCreater(getUserName());
 		roleMapper.insert(role);
 		return voRes;
 	}

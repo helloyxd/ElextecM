@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.elextec.mdm.entity.Department;
 
@@ -21,6 +22,9 @@ public interface DepartmentMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
 	@ResultMap("departmentMap")
     void insert(Department department);
+	
+	@Update("UPDATE mdm_department SET depart_code=#{departCode},depart_name=#{departName},parent_id=#{parentId,jdbcType=VARCHAR} WHERE id=#{id}")
+	void update(Department department);
 	
 	@Select("SELECT * FROM mdm_department ORDER BY depart_code")
 	@Results(id="departmentMap",
@@ -61,7 +65,7 @@ public interface DepartmentMapper {
         @Result(property = "creater", column = "creater"),
         @Result(property = "parentId", column = "parent_id"),
     })
-	Department findDepartmentById(int departmentId);
+	Department findDepartmentById(String departmentId);
 	
 	/**
 	 * 根据departmentId查找部门信息及下级部门信息

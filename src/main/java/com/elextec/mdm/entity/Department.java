@@ -3,12 +3,15 @@ package com.elextec.mdm.entity;
 import java.util.List;
 
 import com.elextec.mdm.common.entity.BasicEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Department extends BasicEntity{
 
 	private String departCode;
+	@JsonProperty("label")
 	private String departName;
 	private String parentId;
+	@JsonProperty("children")
 	private List<Department> departments;
 	private User user;
 	

@@ -96,7 +96,7 @@ public class MapperProvider {
 	
 	public String getUserCondition(User user){
 		StringBuilder sb = new StringBuilder();
-		if(user.getUserName() != null)
+		if(user.getUserName() != null && !user.getUserName().equals(""))
 			sb.append(" AND user_name LIKE '").append(user.getUserName()).append("'");
 		if(user.getFullName() != null)
 			sb.append(" AND full_name LIKE '").append(user.getUserName()).append("'");

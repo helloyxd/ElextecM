@@ -71,7 +71,12 @@ public class DepartmentService extends BaseService implements IDepartmentService
 	@Override
 	public VoResponse updateDepartment(Department department) {
 		VoResponse vo = new VoResponse();
-		return null;
+		Department old = departmentMapper.findAllDepartmentsById(department.getId());
+		if(old != null){
+			old.setDepartName(department.getDepartName());
+			departmentMapper.update(old);
+		}
+		return vo;
 	}
 
 }

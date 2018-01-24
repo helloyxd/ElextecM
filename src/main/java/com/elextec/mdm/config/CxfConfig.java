@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import com.elextec.mdm.webservice.impl.SampleService;
 
 
-@Configuration
+//@Configuration
 public class CxfConfig {
 	
 	//@Autowired

@@ -38,10 +38,10 @@ public class UserController{
 		VoResponse voRes = new VoResponse();
 		if(("").equals(user.getUserName())){
 			voRes.setNull(voRes);
-			voRes.setMessage("userName is null");
+			voRes.setMessage("用户名不能为空");
 		}else if(("").equals(user.getUserPassword())){
 			voRes.setNull(voRes);
-			voRes.setMessage("password is null");
+			voRes.setMessage("密码不能为空");
 		}else{
 			VoResult vor = userService.add(user);
 			if(!vor.getResult()){
