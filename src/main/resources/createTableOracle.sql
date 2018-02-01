@@ -19,10 +19,10 @@ comment on column MDM_User.status is '用户状态,0正常，1锁定，2禁用�
 comment on column MDM_User.creater is '创建者';
 comment on column MDM_User.create_time is '创建时间';
 
-select * from mdm_user where id='798D5F70C6434815A1A3194C48695EC4';
-select * from user_tab_columns where Table_Name='MDM_USER';
-select * from user_tab_comments where Table_Name='MDM_USER';
-select * from user_col_comments where Table_Name='MDM_USER'; 
+--select * from mdm_user where id='798D5F70C6434815A1A3194C48695EC4';
+--select * from user_tab_columns where Table_Name='MDM_USER';
+--select * from user_tab_comments where Table_Name='MDM_USER';
+--select * from user_col_comments where Table_Name='MDM_USER'; 
 
 
 create table MDM_Department
@@ -127,8 +127,6 @@ create table MDM_DataPermission
    create_time			TIMESTAMP
 );
 
-select * from MDM_DataPermission
-
 alter table
    MDM_DataPermission
 modify
@@ -138,7 +136,7 @@ modify
    
 alter table
    MDM_DataPermission
-drop (role_id)
+drop (role_id);
  
 
 create table MDM_DataPermission_Defined
@@ -243,7 +241,7 @@ create table MDM_QueryField_Defined
    status               number(1) default 0,
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
-)
+);
 
 create table MDM_DataStructure_Mapping
 (
@@ -255,4 +253,4 @@ create table MDM_DataStructure_Mapping
    status               number(1) default 0,
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
-)
+);
