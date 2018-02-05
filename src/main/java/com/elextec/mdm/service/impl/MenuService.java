@@ -91,6 +91,7 @@ public class MenuService extends BaseService implements IMenuService{
 			Menu perMenu = menuMapper.findById(menu.getParentId());
 			if(perMenu == null){
 				voRes.setNull(voRes);
+				voRes.setMessage("上级菜单获取异常");
 				return voRes;
 			}
 			if(menu.getLevel() == null || menu.getLevel() != 1000){
@@ -101,12 +102,22 @@ public class MenuService extends BaseService implements IMenuService{
 				menu.setParentId(initMenu());
 				menu.setLevel(1);
 			}else{
-				menu.setLevel(0);
+				menu.setParentId(getParentId());
+				menu.setLevel(1);
 			}
 		}
 		menu.setCreater(getUserName());
 		menuMapper.insert(menu);
 		return voRes;
+	}
+	
+	private String getParentId(){
+		String parentId = null;
+		List<Menu> list = menuMapper.findByName("佳源集团主数据管理系统");
+		if(list!=null && list.size()>0){
+			parentId =  list.get(0).getId();
+		}
+		return parentId;
 	}
 	
 	private String initMenu(){
