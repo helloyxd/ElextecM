@@ -1,3 +1,21 @@
+DROP TABLE MDM_BASICDATA;
+DROP TABLE MDM_BS;
+DROP TABLE MDM_BS_MODEL;
+DROP TABLE MDM_DATAPERMISSION;
+DROP TABLE MDM_DATAPERMISSION_DEFINED;
+DROP TABLE MDM_DATASTRUCTURE_MAPPING;
+DROP TABLE MDM_DATA_MAPPER;
+DROP TABLE MDM_DEPARTMENT;
+DROP TABLE MDM_MENU;
+DROP TABLE MDM_MODEL;
+DROP TABLE MDM_QUERYFIELD_DEFINED;
+DROP TABLE MDM_ROLE;
+DROP TABLE MDM_ROLE_DATA;
+DROP TABLE MDM_ROLE_MENU;
+DROP TABLE MDM_TABLEDEFINITION;
+DROP TABLE MDM_TABLERELATION;
+DROP TABLE MDM_USER_ROLE;
+
 create table MDM_User
 (
    id                   varchar2(32) primary key,
@@ -9,6 +27,9 @@ create table MDM_User
    creater              varchar2(64) not null,
    create_time          TIMESTAMP
 );
+insert into MDM_User(id,user_name,user_password,full_name,status,creater,create_time) 
+values(sys_guid(),'test','test','my test',0,'sys',sysdate);
+
 comment on table MDM_User is '系统用户表';
 comment on column MDM_User.id is '主键';
 comment on column MDM_User.user_name is '用户名';
@@ -19,6 +40,8 @@ comment on column MDM_User.status is '用户状态,0正常，1锁定，2禁用�
 comment on column MDM_User.creater is '创建者';
 comment on column MDM_User.create_time is '创建时间';
 
+
+--select table_name from user_tables where table_name like 'MDM%';
 --select * from mdm_user where id='798D5F70C6434815A1A3194C48695EC4';
 --select * from user_tab_columns where Table_Name='MDM_USER';
 --select * from user_tab_comments where Table_Name='MDM_USER';
@@ -52,6 +75,9 @@ create table MDM_Role
    creater              varchar2(64) not null,
    create_time          TIMESTAMP
 );
+select * from MDM_Role
+INSERT INTO mdm_role(id,role_name,role_desc,status,creater,create_time)
+values(sys_guid(),'admin','admin',0,'sys',sysdate);
 
 create table MDM_Role_Menu
 (

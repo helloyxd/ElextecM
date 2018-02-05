@@ -29,14 +29,14 @@ public class MenuService extends BaseService implements IMenuService{
 	
 	@Override
 	public List<VoMenu> getAllMenusTree() {
-		List<Menu> listMenu = menuMapper.findAllMenusTree();
-		List<VoMenu> list = setMenu(listMenu);
-		return list;
+		List<Menu> list = menuMapper.findAllMenusTree();
+		List<VoMenu> listMenu = setMenu(list);
+		return listMenu;
 	}
 	
-	private List<VoMenu> setMenu(List<Menu> listMenu){
-		List<VoMenu> list = new ArrayList<VoMenu>();
-		for(Menu menu : listMenu){
+	private List<VoMenu> setMenu(List<Menu> list){
+		List<VoMenu> listMenu = new ArrayList<VoMenu>();
+		for(Menu menu : list){
 			VoMenu e = new VoMenu();
 			e.setPath(menu.getMenuUrl());
 			e.setComponent(menu.getMenuUrl()==null?"":menu.getMenuUrl().replace("/", ""));
@@ -47,9 +47,9 @@ public class MenuService extends BaseService implements IMenuService{
 				//e.setRedirect(menu.getMenuUrl()==null?"":menu.getMenuUrl() + menu.getMenus().get(0).getMenuUrl());
 			}
 			e.setName(menu.getMenuName());
-			list.add(e);
+			listMenu.add(e);
 		}
-		return list;
+		return listMenu;
 	}
 	
 	@Override
@@ -148,10 +148,10 @@ public class MenuService extends BaseService implements IMenuService{
 			voRes.setNull(voRes);
 			return voRes;
 		}
-		if(oldMenu.getMenuName().equals("主数据管理") && oldMenu.getLevel() == 1){
+		/*if(oldMenu.getMenuName().equals("主数据管理") && oldMenu.getLevel() == 1){
 			voRes.setFail(voRes);
 			return voRes;
-		}
+		}*/
 		menuMapper.update(menu);
 		return voRes;
 	}
