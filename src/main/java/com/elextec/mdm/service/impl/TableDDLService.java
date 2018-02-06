@@ -172,6 +172,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		System.out.println(sb.toString());
 		tableDDLMapper.dropTable(sb.toString());
 		tableDefinitionMapper.del(id);
+		table.setModel(mdmModelMapper.findById(table.getModelId()));
 		voRes.setData(table);
 		return voRes;
 	}

@@ -199,6 +199,7 @@ public class MenuService extends BaseService implements IMenuService{
 					menu.setMenuUrl("/mdm/table/defined/"+tableName);
 					menu.setSortOrder(0);
 					menu.setMethod("get");
+					menu.setLevel(3);
 					menu.setCreater(getUserName());
 					menuMapper.insert(menu);
 				}else{
@@ -211,6 +212,7 @@ public class MenuService extends BaseService implements IMenuService{
 				menu.setMenuUrl("/mdm/table/defined/");
 				menu.setSortOrder(0);
 				menu.setMethod("get");
+				menu.setLevel(2);
 				menu.setCreater(getUserName());
 				menuMapper.insert(menu);
 			}
@@ -253,7 +255,7 @@ public class MenuService extends BaseService implements IMenuService{
 			Menu e = new Menu();
 			String[] s = ss[i].split(",");
 			e.setMenuName(s[0]);
-			e.setParentId(menu.getParentId());
+			e.setParentId(menu.getId());
 			e.setCreater(getUserName());
 			e.setLevel(1000);
 			e.setMenuUrl(menu.getMenuUrl());

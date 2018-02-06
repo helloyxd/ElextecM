@@ -29,7 +29,7 @@ public interface DataStructureMapping {
 		    + "department_id=#{department.id,jdbcType=VARCHAR},status=#{status} WHERE id =#{id}")
 	void update(DataStructureMap entity);
 	
-	@Select("SELECT * FROM mdm_queryfield_defined")
+	@Select("SELECT * FROM mdm_datastructure_mapping")
     @Results(id = "queryFieldMap",
     	value = {
 	    @Result(id = true, property = "id", column = "id"),

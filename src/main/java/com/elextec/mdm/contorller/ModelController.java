@@ -47,6 +47,11 @@ public class ModelController {
 		return voRes;
 	}
 	
-	
+	@GetMapping("getAllBs")
+	public Object getAllBs(){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(mdmModelService.getAllBs());
+		return voRes;
+	}
 	
 }

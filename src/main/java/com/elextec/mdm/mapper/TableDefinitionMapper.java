@@ -35,8 +35,8 @@ public interface TableDefinitionMapper {
 	    @Result(property = "tableLabel", column = "table_label"),
 	    @Result(property = "modelId", column = "model_id"),
 	    @Result(property = "isMenu", column = "isMenu"),
-	    @Result(property = "model", column = "modelId",
-			one = @One(select = "com.elextec.mdm.mapper.MdmModelMapper.findById") ),
+	    /*@Result(property = "model", column = "model_id",
+			one = @One(select = "com.elextec.mdm.mapper.MdmModelMapper.findById") ),*/
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater") 

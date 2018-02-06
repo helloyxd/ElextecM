@@ -23,5 +23,5 @@ public interface IMdmModelService {
 	
 	List<MdmModel> getAll();
 	
-	
+	List<MdmBs> getAllBs();
 }

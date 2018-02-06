@@ -73,6 +73,7 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 	@Override
 	public VoResponse addBs(MdmBs bs){
 		VoResponse voRes = new VoResponse();
+		bs.setCreater(getUserName());
 		mdmBsMapper.insert(bs);
 		return voRes;
 	}
@@ -80,6 +81,12 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 	@Override
 	public List<MdmModel> getAll() {
 		List<MdmModel> list = mdmModelMapper.findAll();
+		return list;
+	}
+
+	@Override
+	public List<MdmBs> getAllBs() {
+		List<MdmBs> list = mdmBsMapper.findAll();
 		return list;
 	}
 
