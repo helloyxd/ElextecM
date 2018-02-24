@@ -200,19 +200,6 @@ create table MDM_BS_Model
    bs_id                varchar2(32) not null
 );
 
-create table MDM_Data_Mapper
-(
-   id                   varchar2(32) primary key,
-   mdm_data_id          varchar2(32) not null,
-   bs_data_id           varchar2(32) not null,
-   model_id             varchar2(32) not null,
-   bs_id                varchar2(32) not null,
-   creater				varchar2(64) not null,
-   create_time			TIMESTAMP,
-   modifier             varchar2(64) not null,
-   modifier_time        TIMESTAMP
-);
-
 create table MDM_TableDefinition
 (
    id                   varchar2(32) primary key,
@@ -276,6 +263,87 @@ create table MDM_DataStructure_Mapping
    interface_id			varchar2(32) not null,
    field1				varchar2(32),
    field2				varchar2(32),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
+
+create table MDM_Data_Mapper
+(
+   id                   varchar2(32) primary key,
+   mdm_data_id          varchar2(32) not null,
+   bs_data_id           varchar2(32) not null,
+   model_id             varchar2(32) not null,
+   bs_id                varchar2(32) not null,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP,
+   modifier             varchar2(64) not null,
+   modifier_time        TIMESTAMP
+);
+
+create table MDM_Table_Mapper
+(
+   id        			varchar2(32) primary key,
+   mdm_table_id  		varchar2(32),
+   mdm_field_id			varchar2(32),
+   bs_table_id			varchar2(32),
+   bs_field_id			varchar2(32),
+   bs_io_type			varchar2(2),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
+
+create table MDM_ServiceInterface_Defined
+(
+   id        			varchar2(32) primary key,
+   type  				varchar2(8),
+   wsdl_location		varchar2(128),
+   dburl				varchar2(128),
+   user_name			varchar2(32),
+   password				varchar2(32),
+   model_id				varchar2(32),
+   operation_type		varchar2(8),
+   operation			varchar2(32),
+   wsbinding			varchar2(32),
+   bing_namespace		varchar2(128),
+   operation_namespace	varchar2(128),   
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
+
+create table ServiceInterface_Param
+(
+   id        				varchar2(32) primary key,
+   service_defined_id  		varchar2(32),
+   io_type					varchar2(8),
+   data_type				varchar2(16),
+   table_id					varchar2(32),
+   table_name				varchar2(32),
+   status               	number(1) default 0,
+   creater					varchar2(64) not null,
+   create_time				TIMESTAMP
+);
+
+create table ServiceParam_FieldDefined
+(
+   id        			varchar2(32) primary key,
+   table_id  			varchar2(32),
+   field_name			varchar2(32),
+   field_type			varchar2(32),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
+
+create table ServiceParam_TableDefined
+(
+   id        			varchar2(32) primary key,
+   param_id  			varchar2(32),
+   table_name			varchar2(32),
+   parent_id			varchar2(32),
+   relation_type		varchar2(8),
    status               number(1) default 0,
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
