@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Update;
 
 import com.elextec.mdm.entity.MdmDataMap;
 
-public interface MdmDataMapper {
+public interface MdmDataMapMapper {
 
 	@Insert("INSERT INTO mdm_data_mapper(id,mdm_data_id,bs_data_id,model_id,bs_id,modifier,modifier_time,status,creater,create_time)"
 		    + " VALUES(sys_guid(),#{mdmDataId},#{bsDataId},#{modelId},#{bsId},#{modifier},#{modifierTime},#{status},#{creater},sysdate)")
