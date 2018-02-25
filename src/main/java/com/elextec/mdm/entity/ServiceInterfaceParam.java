@@ -11,6 +11,7 @@ public class ServiceInterfaceParam extends BasicEntity{
 	private String serviceDefinedId;
 	private String ioType;//输入输出类别，0输入，1输出
 	private String dataType;//参数数据类型，int,string等基本型以及complex复杂型
+	private String tableId;
 	private String tableName;//复杂类型表名
 	
 	public String getServiceDefinedId() {
@@ -36,6 +37,12 @@ public class ServiceInterfaceParam extends BasicEntity{
 	}
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
+	}
+	public String getTableId() {
+		return tableId;
+	}
+	public void setTableId(String tableId) {
+		this.tableId = tableId;
 	}
 	
 }
