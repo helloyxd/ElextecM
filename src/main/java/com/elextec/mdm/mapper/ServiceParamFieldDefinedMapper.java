@@ -3,6 +3,7 @@ package com.elextec.mdm.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +23,8 @@ public interface ServiceParamFieldDefinedMapper {
 		    @Result(property = "creater", column = "creater")
 	})
 	List<ServiceParamFieldDefined> findAll();
+	
+	@Select("SELECT * FROM mdm_serviceParam_FieldDefined WHERE table_id = #{tableId}")
+	@ResultMap("serviceParamFieldDefined")
+	List<ServiceParamFieldDefined> findByTableId(String tableId);
 }

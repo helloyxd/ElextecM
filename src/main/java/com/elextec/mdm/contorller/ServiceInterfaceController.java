@@ -3,6 +3,7 @@ package com.elextec.mdm.contorller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
@@ -33,6 +34,13 @@ public class ServiceInterfaceController {
 		voRes.setData(serviceInterfaceDefinedService.getAll());
 		return voRes;
 	}
+	
+	@GetMapping("getSIbyId")
+	public Object getServiceInterfaceDefinedbyId(@RequestParam("id") String siId) {
+		VoResponse voRes = new VoResponse();
+		voRes.setData(serviceInterfaceDefinedService.getById(siId));
+		return voRes;
+	}
 
 	@GetMapping("getSIParam")
 	public Object getServiceInterfaceParam() {
@@ -42,9 +50,9 @@ public class ServiceInterfaceController {
 	}
 	
 	@GetMapping("getSPFieldDefined")
-	public Object getServiceParamFieldDefined() {
+	public Object getServiceParamFieldDefined(@RequestParam("id") String siId) {
 		VoResponse voRes = new VoResponse();
-		voRes.setData(serviceParamFieldDefinedService.getAll());
+		voRes.setData(serviceParamFieldDefinedService.getById(siId));
 		return voRes;
 	}
 	

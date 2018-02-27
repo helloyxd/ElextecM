@@ -14,4 +14,6 @@ public interface IServiceInterfaceDefinedService {
 	void update(ServiceInterfaceDefined entity);
 	
 	List<ServiceInterfaceDefined> getAll();
+	
+	ServiceInterfaceDefined getById(String id);
 }

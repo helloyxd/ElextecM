@@ -39,4 +39,10 @@ public class ServiceParamFieldDefinedService implements IServiceParamFieldDefine
 		return list;
 	}
 
+	@Override
+	public List<ServiceParamFieldDefined> getById(String id) {
+		List<ServiceParamFieldDefined> list = serviceParamFieldDefinedMapper.findByTableId(id);
+		return list;
+	}
+
 }

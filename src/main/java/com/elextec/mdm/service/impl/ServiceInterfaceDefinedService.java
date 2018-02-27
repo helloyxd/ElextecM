@@ -39,4 +39,12 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 		return list;
 	}
 
+	@Override
+	public ServiceInterfaceDefined getById(String id) {
+		ServiceInterfaceDefined serviceInterfaceDefined = serviceInterfaceDefinedMapper.findById(id);
+		return serviceInterfaceDefined;
+	}
+	
+	
+
 }

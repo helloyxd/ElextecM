@@ -1,5 +1,7 @@
 package com.elextec.mdm.entity;
 
+import java.util.List;
+
 import com.elextec.mdm.common.entity.BasicEntity;
 
 /**
@@ -19,6 +21,8 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	private String wsbinding;//webservice binding
 	private String bingNamespace;//webservice binding namespance
 	private String operationNamespace;//webservice operation namespance
+	private List<ServiceInterfaceParam> siParams;
+	
 	public String getType() {
 		return type;
 	}
@@ -84,6 +88,12 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	}
 	public void setOperationNamespace(String operationNamespace) {
 		this.operationNamespace = operationNamespace;
+	}
+	public List<ServiceInterfaceParam> getSiParams() {
+		return siParams;
+	}
+	public void setSiParams(List<ServiceInterfaceParam> siParams) {
+		this.siParams = siParams;
 	}
 	
 	

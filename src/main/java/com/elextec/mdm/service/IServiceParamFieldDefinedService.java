@@ -13,4 +13,6 @@ public interface IServiceParamFieldDefinedService {
 	void update(ServiceParamFieldDefined entity);
 	
 	List<ServiceParamFieldDefined> getAll();
+	
+	List<ServiceParamFieldDefined> getById(String id);
 }
