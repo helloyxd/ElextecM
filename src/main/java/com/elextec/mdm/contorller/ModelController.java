@@ -54,4 +54,9 @@ public class ModelController {
 		return voRes;
 	}
 	
+	@DeleteMapping
+	public Object delBs(@RequestParam("id") String id){
+		return mdmModelService.delBs(id);
+	}
+	
 }

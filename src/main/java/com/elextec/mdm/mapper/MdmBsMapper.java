@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -36,4 +37,8 @@ public interface MdmBsMapper {
 	    @Result(property = "creater", column = "creater") 
 	})
 	List<MdmBs> findAll();
+	
+	@Select("SELECT * FROM mdm_bs WHERE bs_name = #{name}")
+	@ResultMap("bsMap")
+	List<MdmBs> findByName(String name);
 }

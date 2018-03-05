@@ -29,5 +29,4 @@ public class DataMapController {
 		String msg = "Hello,MDM system";
 		return msg;
 	}
-
 }

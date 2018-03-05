@@ -325,6 +325,7 @@ create table ServiceInterface_Param
    creater					varchar2(64) not null,
    create_time				TIMESTAMP
 );
+ALTER TABLE ServiceInterface_Param RENAME TO MDM_ServiceInterface_Param;
 
 create table ServiceParam_FieldDefined
 (
@@ -336,6 +337,7 @@ create table ServiceParam_FieldDefined
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
 );
+ALTER TABLE ServiceParam_FieldDefined RENAME TO MDM_ServiceParam_FieldDefined;
 
 create table ServiceParam_TableDefined
 (
@@ -348,3 +350,4 @@ create table ServiceParam_TableDefined
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
 );
+ALTER TABLE ServiceParam_TableDefined RENAME TO MDM_ServiceParam_TableDefined;

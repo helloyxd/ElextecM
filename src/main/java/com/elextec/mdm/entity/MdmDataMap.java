@@ -9,6 +9,7 @@ public class MdmDataMap extends BasicEntity {
 	private String mdmDataId;
 	private String bsDataId;
 	private String modelId;
+	private MdmModel model;
 	private String bsId;
 	private String modifier;
 	private Date modifierTime;
@@ -48,6 +49,12 @@ public class MdmDataMap extends BasicEntity {
 	}
 	public void setModifierTime(Date modifierTime) {
 		this.modifierTime = modifierTime;
+	}
+	public MdmModel getModel() {
+		return model;
+	}
+	public void setModel(MdmModel model) {
+		this.model = model;
 	}
 	
 }

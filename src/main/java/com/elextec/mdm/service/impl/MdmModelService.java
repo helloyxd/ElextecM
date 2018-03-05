@@ -73,8 +73,14 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 	@Override
 	public VoResponse addBs(MdmBs bs){
 		VoResponse voRes = new VoResponse();
-		bs.setCreater(getUserName());
-		mdmBsMapper.insert(bs);
+		List<MdmBs> list = mdmBsMapper.findByName(bs.getBsName());
+		if(list.size() == 0){
+			bs.setCreater(getUserName());
+			mdmBsMapper.insert(bs);
+		}else{
+			voRes.setFail(voRes);
+			voRes.setMessage("业务系统名字已经存在");
+		}
 		return voRes;
 	}
 
@@ -88,6 +94,13 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 	public List<MdmBs> getAllBs() {
 		List<MdmBs> list = mdmBsMapper.findAll();
 		return list;
+	}
+
+	@Override
+	public VoResponse delBs(String bsId) {
+		VoResponse voRes = new VoResponse();
+		mdmBsMapper.del(bsId);
+		return voRes;
 	}
 
 }
