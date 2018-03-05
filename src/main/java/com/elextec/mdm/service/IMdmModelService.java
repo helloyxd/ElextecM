@@ -27,5 +27,7 @@ public interface IMdmModelService {
 	
 	List<MdmBs> getAllBs();
 	
+	MdmModel getById(String id);
 	
+	MdmBs getBsById(String id);
 }

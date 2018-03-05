@@ -7,18 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.elextec.mdm.common.entity.VoResponse;
-import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
-import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.mapper.MdmBsMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
-import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IMdmModelService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author zhangkj
@@ -33,22 +28,23 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 	@Autowired
 	private MdmModelMapper mdmModelMapper;
 	
-	@Autowired
-	private MenuMapper menuMapper;
-
 	@Override
 	@Transactional
 	public VoResponse addModel(MdmModel model) {
 		VoResponse voRes = new VoResponse();
-		List<MdmModel> list = mdmModelMapper.findByName(model.getMdmModel());
-		if(list != null && list.size() > 0){
-			voRes.setFail(voRes);
-			voRes.setMessage("模块名称已经存在");
-			return voRes;
+		if(model.getId() == null){
+			List<MdmModel> list = mdmModelMapper.findByName(model.getMdmModel());
+			if(list != null && list.size() > 0){
+				voRes.setFail(voRes);
+				voRes.setMessage("模块名称已经存在");
+				return voRes;
+			}
+			model.setCreater(getUserName());
+			mdmModelMapper.insert(model);
+		}else{
+			MdmModel oldmodel = mdmModelMapper.findById(model.getId());
+			
 		}
-		model.setCreater(getUserName());
-		mdmModelMapper.insert(model);
-		
 		return voRes;
 	}
 	
@@ -101,6 +97,18 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 		VoResponse voRes = new VoResponse();
 		mdmBsMapper.del(bsId);
 		return voRes;
+	}
+
+	@Override
+	public MdmModel getById(String id) {
+		MdmModel model = mdmModelMapper.findById(id);
+		return model;
+	}
+
+	@Override
+	public MdmBs getBsById(String id) {
+		MdmBs bs = mdmBsMapper.findById(id);
+		return bs;
 	}
 
 }

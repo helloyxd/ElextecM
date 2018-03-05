@@ -54,9 +54,22 @@ public class ModelController {
 		return voRes;
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("delBs")
 	public Object delBs(@RequestParam("id") String id){
 		return mdmModelService.delBs(id);
 	}
 	
+	@GetMapping
+	public Object getById(@RequestParam("id") String id){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(mdmModelService.getById(id));
+		return voRes;
+	}
+	
+	@GetMapping("getBs")
+	public Object getByBsId(@RequestParam("id") String id){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(mdmModelService.getBsById(id));
+		return voRes;
+	}
 }

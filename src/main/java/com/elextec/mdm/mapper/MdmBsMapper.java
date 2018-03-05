@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.elextec.mdm.mapper;
 
 import java.util.List;
@@ -41,4 +38,8 @@ public interface MdmBsMapper {
 	@Select("SELECT * FROM mdm_bs WHERE bs_name = #{name}")
 	@ResultMap("bsMap")
 	List<MdmBs> findByName(String name);
+	
+	@Select("SELECT * FROM mdm_bs WHERE id = #{id}")
+	@ResultMap("bsMap")
+	MdmBs findById(String id);
 }
