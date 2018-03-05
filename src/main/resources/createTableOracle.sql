@@ -351,3 +351,51 @@ create table ServiceParam_TableDefined
    create_time			TIMESTAMP
 );
 ALTER TABLE ServiceParam_TableDefined RENAME TO MDM_ServiceParam_TableDefined;
+
+create table TaskList
+(
+   id        			varchar2(32) primary key,
+   flow_id  			varchar2(32),
+   flow_type			varchar2(32),
+   data_id				varchar2(32),
+   bs_id				varchar2(32),
+   model_id				varchar2(32),
+   remark				varchar2(128),
+   current_user			varchar2(64),
+   last_user			varchar2(64),
+   current_node			varchar2(64),
+   last_node			varchar2(64),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
+
+create table TaskDataRecord_Summary
+(
+   id        			varchar2(32) primary key,
+   flow_id  			varchar2(32),
+   model_id				varchar2(32),
+   task_type			varchar2(32),
+   success_num			integer,
+   fail_num				integer,
+   remark				varchar2(256),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
+
+create table TaskDataRecord_Detail
+(
+   id        			varchar2(32) primary key,
+   flow_id  			varchar2(32),
+   data_id				varchar2(32),
+   model_id				varchar2(32),
+   system_id			varchar2(32),
+   task_type			varchar2(32),
+   remark				varchar2(256),
+   end_time				TIMESTAMP,
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
+
