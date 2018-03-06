@@ -85,6 +85,12 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 		List<MdmModel> list = mdmModelMapper.findAll();
 		return list;
 	}
+	
+	@Override
+	public List<MdmModel> getAllInfo() {
+		List<MdmModel> list = mdmModelMapper.findAllInfo();
+		return list;
+	}
 
 	@Override
 	public List<MdmBs> getAllBs() {

@@ -22,6 +22,7 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "username", column = "user_name"),
 		    @Result(property = "password", column = "password"),
 		    @Result(property = "modelId", column = "model_id"),
+		    @Result(property = "bsId", column = "bs_id"),
 		    @Result(property = "operationType", column = "operation_type"),
 		    @Result(property = "operation", column = "operation"),
 		    @Result(property = "wsbinding", column = "wsbinding"),
@@ -37,6 +38,10 @@ public interface ServiceInterfaceDefinedMapper {
 	@ResultMap("serviceInterfaceDefinedMapOnly")
 	List<ServiceInterfaceDefined> findByModelId();
 	
+	@Select("SELECT * FROM mdm_serviceInterface_defined where bs_id = #{modelId}")
+	@ResultMap("serviceInterfaceDefinedMapOnly")
+	List<ServiceInterfaceDefined> findByBsId();
+	
 	@Select("SELECT * FROM mdm_serviceInterface_defined WHERE id = #{id}")
     @Results(id = "serviceInterfaceDefined",
     	value = {
@@ -47,6 +52,7 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "username", column = "user_name"),
 		    @Result(property = "password", column = "password"),
 		    @Result(property = "modelId", column = "model_id"),
+		    @Result(property = "bsId", column = "bs_id"),
 		    @Result(property = "operationType", column = "operation_type"),
 		    @Result(property = "operation", column = "operation"),
 		    @Result(property = "wsbinding", column = "wsbinding"),

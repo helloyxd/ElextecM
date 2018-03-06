@@ -39,7 +39,11 @@ public interface MdmModelMapper {
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater")
 	})
-	List<MdmModel> findAll();
+	List<MdmModel> findAllInfo();
+	
+	@Select("SELECT * FROM mdm_model")
+	@ResultMap("modelMapOnly")
+	List<MdmModel>  findAll();
 	
 	@Select("SELECT * FROM mdm_model WHERE id = #{id}")
 	@ResultMap("modelMap")
