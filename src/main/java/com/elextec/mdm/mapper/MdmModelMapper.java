@@ -33,8 +33,8 @@ public interface MdmModelMapper {
 	    @Result(property = "mdmModel", column = "mdm_model"),
 	    @Result(property = "tableDefinitions", column = "id",
     		many = @Many(select = "com.elextec.mdm.mapper.TableDefinitionMapper.findByModelId") ),
-	    @Result(property = "siDefineds", column = "id",
-			many = @Many(select = "com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper.findByModelId") ),
+	 /*   @Result(property = "siDefineds", column = "id",
+			many = @Many(select = "com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper.findByModelId") ),*/
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater")

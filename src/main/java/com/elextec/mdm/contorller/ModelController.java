@@ -1,5 +1,9 @@
 package com.elextec.mdm.contorller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
+import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.service.IMdmModelService;
+import com.elextec.mdm.service.ITableDDLService;
 
 /**
  * @author zhangkj
@@ -24,6 +30,9 @@ public class ModelController {
 
 	@Autowired
 	private IMdmModelService mdmModelService;
+	
+	@Autowired
+	private ITableDDLService tableDDLService;
 	
 	@PostMapping
 	public Object add(@RequestBody MdmModel model){
@@ -69,7 +78,11 @@ public class ModelController {
 	@GetMapping
 	public Object getById(@RequestParam("id") String id){
 		VoResponse voRes = new VoResponse();
-		voRes.setData(mdmModelService.getById(id));
+		MdmModel model = mdmModelService.getById(id);
+		for(TableDefinition table : model.getTableDefinitions()){
+			 tableDDLService.setColumnsDefinition(table);
+		}
+		voRes.setData(model);
 		return voRes;
 	}
 	

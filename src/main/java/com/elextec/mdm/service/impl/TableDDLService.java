@@ -177,22 +177,13 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		return voRes;
 	}
 	
-	@Override
-	public VoResponse getTableDefinition(String id){
-		VoResponse voRes = new VoResponse();
-		TableDefinition table = tableDefinitionMapper.findById(id);
-		if(table == null){
-			voRes.setNull(voRes);
-			voRes.setMessage("TableDefinition is null");
-			return voRes;
-		}
+	public void setColumnsDefinition(TableDefinition table){
 		String tableName = table.getTableName().toUpperCase();
 		List<Map<String, String>> list = tableDDLMapper.getColumnCommentsDefine(tableName);
 		List<Map<String, String>> listColumns = tableDDLMapper.getTableColumnsDefine(tableName);
 		String dataType = null;
 		String dataLength = null;
 		List<ColumnDefinition> listColumnsDefinition = new ArrayList<ColumnDefinition>();
-		
 		for(Map<String, String> map : list){
 			System.out.println(map);
 			ColumnDefinition entity = new ColumnDefinition();
@@ -248,6 +239,18 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			listColumnsDefinition.add(entity);
 		}
 		table.setColumnDefinitions(listColumnsDefinition);
+	}
+	
+	@Override
+	public VoResponse getTableDefinition(String id){
+		VoResponse voRes = new VoResponse();
+		TableDefinition table = tableDefinitionMapper.findById(id);
+		if(table == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("TableDefinition is null");
+			return voRes;
+		}
+		setColumnsDefinition(table);
 		//dataPermission
 		List<DataPermissionDefined> listDataDefined = dataPermissionDefinedMapper.findByTableId(table.getId());
 		List<DataPermission> listData = null;
