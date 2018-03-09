@@ -4,13 +4,18 @@ import java.util.Date;
 
 import com.elextec.mdm.common.entity.BasicEntity;
 
+/**
+ * 流程数据处理明细
+ * @author zhangkj
+ *
+ */
 public class TaskDataRecordDetail extends BasicEntity {
 
 	private String flowId;
 	private String dataId;
 	private String modelId;
 	private String systemId;
-	private String taskType;
+	private String taskType;//任务类型,0push,1pull,2receive(系统推送过来)
 	private String remark;
 	private Date endTime;
 	

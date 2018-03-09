@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.DataStructureMap;
+import com.elextec.mdm.entity.MdmTableMap;
 import com.elextec.mdm.mapper.DataStructureMapper;
 import com.elextec.mdm.mapper.MdmDataMapMapper;
 import com.elextec.mdm.mapper.MdmTableMapMapper;
@@ -27,6 +28,30 @@ public class DataStructureMapService extends BaseService implements IDataStructu
 		dataStructureMap.setCreater(getUserName());
 		dataStructureMapper.insert(dataStructureMap);
 		return voRes;
+	}
+
+	@Override
+	public void save(MdmTableMap tableMap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void del(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(MdmTableMap tableMap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public MdmTableMap getById(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

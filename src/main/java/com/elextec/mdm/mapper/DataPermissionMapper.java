@@ -22,18 +22,34 @@ import com.elextec.mdm.entity.DataPermission;
 public interface DataPermissionMapper {
 
     @Select("SELECT * FROM mdm_datapermission")
-    @Results(id = "datapermissionMap",
+    @Results(id = "datapermissionMapOnly",
 	value = {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "definedId", column = "defined_id"),
 	    @Result(property = "permissionValue", column = "permission_value"),
-	    @Result(property = "dataPermissionDefined", column = "defined_id",
-			many = @Many(select = "com.elextec.mdm.mapper.DataPermissionDefinedMapper.findByIdOnly")),
+	    @Result(property = "roleId", column = "role_id"),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"), 
 	    @Result(property = "creater", column = "creater")
 	})
     List<DataPermission> findAll();
+    
+    @Select("SELECT * FROM mdm_datapermission WHERE id=#{id}")
+    @Results(id = "datapermissionMap",
+	value = {
+	    @Result(id = true, property = "id", column = "id"),
+	    @Result(property = "definedId", column = "defined_id"),
+	    @Result(property = "permissionValue", column = "permission_value"),
+	    @Result(property = "roleId", column = "role_id"),
+	    @Result(property = "role", column = "role_id",
+	    	many = @Many(select = "com.elextec.mdm.mapper.RoleMapper.findRoleById")),
+	    /*@Result(property = "dataPermissionDefined", column = "defined_id",
+			many = @Many(select = "com.elextec.mdm.mapper.DataPermissionDefinedMapper.findByIdOnly")),*/
+	    @Result(property = "status", column = "status"),
+	    @Result(property = "createTime", column = "create_time"), 
+	    @Result(property = "creater", column = "creater")
+	})
+    DataPermission findById(String id);
     
     /**
 	 * 根据UserID和tableId查询用户的数据权限信息
@@ -82,9 +98,5 @@ public interface DataPermissionMapper {
     @Select("SELECT * FROM mdm_datapermission WHERE defined_id=#{definedId}")
     @ResultMap("datapermissionMap")
     List<DataPermission> findByDefinedId(String definedId);
-    
-    @Select("SELECT * FROM mdm_datapermission WHERE id=#{id}")
-    @ResultMap("datapermissionMap")
-    DataPermission findById(String id);
     
 }

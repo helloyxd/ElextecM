@@ -4,9 +4,9 @@ import com.elextec.mdm.common.entity.BasicEntity;
 
 public class TaskList extends BasicEntity {
 
-	private String flowId;
-	private String flowType;
-	private String dataId;
+	private String flowId;//流程ID
+	private String flowType;//流程类型，0; MDM推动到业务系统，1
+	private String dataId;//数据ID
 	private String bsId;
 	private String modelId;
 	private String remark;
