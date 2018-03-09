@@ -39,4 +39,9 @@ public class ServiceParamTableDefinedService implements IServiceParamTableDefine
 		return list;
 	}
 
+	@Override
+	public ServiceParamTableDefined getById(String id) {
+		return serviceParamTableDefinedMapper.findById(id);
+	}
+
 }

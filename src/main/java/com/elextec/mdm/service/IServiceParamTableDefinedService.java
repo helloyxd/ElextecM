@@ -13,4 +13,6 @@ public interface IServiceParamTableDefinedService {
 	void update(ServiceParamTableDefined entity);
 	
 	List<ServiceParamTableDefined> getAll();
+	
+	ServiceParamTableDefined getById(String id);
 }

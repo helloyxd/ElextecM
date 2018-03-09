@@ -142,11 +142,12 @@ modify
    menu_level number(4) default 0
    );
 
+
 create table MDM_DataPermission
 (
    id                   varchar2(32) primary key,
    defined_id           varchar2(32) not null,
-   role_id              varchar2(32) not null,
+   role_id              varchar2(32),
    permission_value     varchar2(64) not null,
    status               number(1) default 0,
    creater				varchar2(64) not null,
@@ -312,6 +313,13 @@ create table MDM_ServiceInterface_Defined
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
 );
+
+alter table
+   MDM_ServiceInterface_Defined
+add
+   (
+   bs_id	varchar2(32)
+   );
 
 create table ServiceInterface_Param
 (

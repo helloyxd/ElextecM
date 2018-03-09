@@ -16,18 +16,32 @@
 
 package com.elextec.mdm.contorller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.elextec.mdm.service.ITaskDataService;
 
 @RestController
 @RequestMapping("/mdm/task")
 public class TaskDataController {
+	
+	@Autowired
+	private ITaskDataService taskDataService;
 
 	@GetMapping
 	public Object hello() {
 		String msg = "Hello,MDM system";
 		return msg;
+	}
+	
+	@PostMapping("mdmSync")
+	public Object mdmSync(@RequestParam("id") String id){
+		
+		return null;
 	}
 
 }

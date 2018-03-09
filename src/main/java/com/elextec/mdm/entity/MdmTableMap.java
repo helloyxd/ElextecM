@@ -1,6 +1,7 @@
 package com.elextec.mdm.entity;
 
 import com.elextec.mdm.common.entity.BasicEntity;
+import com.elextec.mdm.mapper.ServiceParamFieldDefinedMapper;
 
 /**
  * 主数据表结构映射
@@ -8,11 +9,13 @@ import com.elextec.mdm.common.entity.BasicEntity;
 public class MdmTableMap extends BasicEntity {
 
 	private String mdmTableId;
-	private TableDefinition tableDefined;
+	private TableDefinition mdmTableDefined;
 	private String mdmFieldId;
 	private String bsTableId;
+	private ServiceParamTableDefined spTableDefined;
 	private String bsFieldId;
-	private String bsIoType;
+	private ServiceParamFieldDefinedMapper spFieldDefined;
+	private String bsIoType;//数据in out方向，0标识从业务系统出，主数据接受，1表示业务系统接受，主数据出，2标识进出都适用
 	
 	public String getMdmTableId() {
 		return mdmTableId;
@@ -44,10 +47,22 @@ public class MdmTableMap extends BasicEntity {
 	public void setBsIoType(String bsIoType) {
 		this.bsIoType = bsIoType;
 	}
-	public TableDefinition getTableDefined() {
-		return tableDefined;
+	public ServiceParamTableDefined getSpTableDefined() {
+		return spTableDefined;
 	}
-	public void setTableDefined(TableDefinition tableDefined) {
-		this.tableDefined = tableDefined;
+	public void setSpTableDefined(ServiceParamTableDefined spTableDefined) {
+		this.spTableDefined = spTableDefined;
+	}
+	public TableDefinition getMdmTableDefined() {
+		return mdmTableDefined;
+	}
+	public void setMdmTableDefined(TableDefinition mdmTableDefined) {
+		this.mdmTableDefined = mdmTableDefined;
+	}
+	public ServiceParamFieldDefinedMapper getSpFieldDefined() {
+		return spFieldDefined;
+	}
+	public void setSpFieldDefined(ServiceParamFieldDefinedMapper spFieldDefined) {
+		this.spFieldDefined = spFieldDefined;
 	}
 }
