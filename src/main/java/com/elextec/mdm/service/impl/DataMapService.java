@@ -113,9 +113,11 @@ public class DataMapService extends BaseService implements IDataMapService{
 		//遍历，根据映射字段，判断字段类型，
 		for(Map<String,Object> mapbs : listBs){
 			flag = false;
+			//System.out.println(mapbs);
 			second:for(Map<String,Object> mapmdm : listMdm){
+				//System.out.println(mapmdm);
 				for(MdmTableMap tableMap : listMap){
-					if(mapbs.get(tableMap.getSpFieldDefined().getFieldName()) != mapmdm.get(tableMap.getMdmFieldId()) ){
+					if(mapbs.get(tableMap.getSpFieldDefined().getFieldName().toUpperCase()).equals(mapmdm.get(tableMap.getMdmFieldId().toUpperCase())) ){
 						//值不相等，
 						flag = false;
 						continue second;
@@ -126,6 +128,11 @@ public class DataMapService extends BaseService implements IDataMapService{
 			if(!flag){
 				listnew.add(mapbs);
 			}
+		}
+		
+		if(listnew.size() == 0){
+			voRes.setMessage("没有同步的数据");
+			return voRes;
 		}
 		
 		StringBuffer sb = new StringBuffer();
