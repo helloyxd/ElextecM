@@ -11,6 +11,8 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.entity.DataPermissionDefined;
 
@@ -37,7 +39,9 @@ public interface DataPermissionDefinedMapper {
     List<DataPermissionDefined> findAll();
     
     @Insert("INSERT INTO mdm_datapermission_defined(id,table_id,permission_field,status,creater,create_time)"
-		    + " VALUES(sys_guid(), #{tableId}, #{permissionField}, #{status}, #{creater}, sysdate)")
+		    + " VALUES(#{id}, #{tableId}, #{permissionField}, #{status}, #{creater}, sysdate)")
+    @SelectKey(before = true, keyProperty = "id", resultType = String.class, statementType = StatementType.STATEMENT,
+		statement="SELECT sys_guid() FROM dual")
 	void insert(DataPermissionDefined dataPermissionDefined);
 	
 	@Delete("DELETE FROM mdm_datapermission_defined WHERE id = #{id}")

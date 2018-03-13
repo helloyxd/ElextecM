@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -150,5 +151,13 @@ public class DataMapController {
 			flag = false;
 		}
 		return dataMaps;
+	}
+	
+	@PutMapping("sync")
+	public Object sync(@RequestParam("modelId") String modelId, @RequestParam("bsId") String bsId) {
+		MdmModel model = mdmModelService.getById(modelId);
+		MdmBs bs = mdmModelService.getBsById(bsId);
+		List<MdmTableMap> list = dataMapService.getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
+		return dataMapService.syncToMdm(model, bs, list);
 	}
 }

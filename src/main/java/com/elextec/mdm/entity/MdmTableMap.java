@@ -14,7 +14,7 @@ public class MdmTableMap extends BasicEntity {
 	private String bsTableId;
 	private ServiceParamTableDefined spTableDefined;
 	private String bsFieldId;
-	private ServiceParamFieldDefinedMapper spFieldDefined;
+	private ServiceParamFieldDefined spFieldDefined;
 	private String bsIoType;//数据in out方向，0标识从业务系统出，主数据接受，1表示业务系统接受，主数据出，2标识进出都适用
 	
 	public String getMdmTableId() {
@@ -59,10 +59,10 @@ public class MdmTableMap extends BasicEntity {
 	public void setMdmTableDefined(TableDefinition mdmTableDefined) {
 		this.mdmTableDefined = mdmTableDefined;
 	}
-	public ServiceParamFieldDefinedMapper getSpFieldDefined() {
+	public ServiceParamFieldDefined getSpFieldDefined() {
 		return spFieldDefined;
 	}
-	public void setSpFieldDefined(ServiceParamFieldDefinedMapper spFieldDefined) {
+	public void setSpFieldDefined(ServiceParamFieldDefined spFieldDefined) {
 		this.spFieldDefined = spFieldDefined;
 	}
 }

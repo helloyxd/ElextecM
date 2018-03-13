@@ -34,6 +34,8 @@ public interface MdmTableMapMapper {
 	    @Result(property = "mdmFieldId", column = "mdm_field_id"),
 	    @Result(property = "bsTableId", column = "bs_table_id"),
 	    @Result(property = "bsFieldId", column = "bs_field_id"),
+	    @Result(property = "spFieldDefined", column = "bs_field_id",
+	    	many = @Many(select = "com.elextec.mdm.mapper.ServiceParamFieldDefinedMapper.findById")),
 	    @Result(property = "bsIoType", column = "bs_io_type"),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
@@ -65,6 +67,10 @@ public interface MdmTableMapMapper {
 	@Select("SELECT * FROM mdm_table_mapper WHERE bs_table_id = '${bstableId}' AND mdm_table_id = '${mdmtableId}'")
     @ResultMap("mdmTableMapOnly")
 	List<MdmTableMap> findByTableId(@Param("bstableId")String bstableId, @Param("mdmtableId")String mdmtableId);
+	
+	@Select("SELECT * FROM mdm_table_mapper WHERE bs_table_id = #{bstableId} AND mdm_table_id = #{mdmtableId} AND (bs_io_type = #{ioType} OR bs_io_type = #{ioType2})")
+    @ResultMap("mdmTableMapOnly")
+	List<MdmTableMap> findByTableIdAndType(@Param("bstableId")String bstableId, @Param("mdmtableId")String mdmtableId, @Param("ioType")String ioType, @Param("ioType2")String ioType2);
 	
 	@Delete("DELETE FROM mdm_table_mapper WHERE bs_table_id = '${bstableId}' AND mdm_table_id = '${mdmtableId}'")
 	void delByTableId(@Param("bstableId")String bstableId, @Param("mdmtableId")String mdmtableId);

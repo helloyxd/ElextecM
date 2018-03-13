@@ -367,12 +367,14 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	@Override
 	public VoResponse getDefinedData(String modelName, String tableName) {
 		VoResponse voRes = new VoResponse();
+		/*System.out.println(modelName);
 		List<MdmModel> listModel =  mdmModelMapper.findByName(modelName);
+		System.out.println(listModel.size());
 		if(listModel == null || listModel.size() == 0){
 			voRes.setNull(voRes);
 			return voRes;
-		}
-		MdmModel model = listModel.get(0);
+		}*/
+		MdmModel model = mdmModelMapper.findById(modelName);
 		List<TableDefinition> listTable = tableDefinitionMapper.findByModelIdAndName(model.getId(), tableName);
 		if(listTable == null || listTable.size() == 0){
 			voRes.setNull(voRes);
@@ -389,10 +391,11 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			
 		}
 		StringBuilder sb = new StringBuilder();
+		sb.append("1=1");
 		if(listDataPermissionDefined == null || listDataPermissionDefined.size() == 0){
 			
 		}else{
-			sb.append("1=1");
+			
 			List<DataPermission> listData = null;
 			for(DataPermissionDefined dataDefined : listDataPermissionDefined){
 				listData = dataPermissionMapper.findDatasByUserIdAndDataDefined(getUserId(), dataDefined.getId());
@@ -406,9 +409,10 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				sb.deleteCharAt(sb.length() - 1);
 				sb.append(")");
 			}
-			List<Object> listObj = tableDDLMapper.findTable(table.getTableName(), sb.toString());
-			voRes.setData(listObj);
+			
 		}
+		List<Map<String,Object>> listObj = tableDDLMapper.findTable(table.getTableName(), sb.toString());
+		voRes.setData(listObj);
 		return voRes;
 	}
 

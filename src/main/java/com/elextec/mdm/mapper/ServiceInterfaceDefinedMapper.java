@@ -38,9 +38,9 @@ public interface ServiceInterfaceDefinedMapper {
 	@ResultMap("serviceInterfaceDefinedMapOnly")
 	List<ServiceInterfaceDefined> findByModelId();
 	
-	@Select("SELECT * FROM mdm_serviceInterface_defined where bs_id = #{modelId}")
+	@Select("SELECT * FROM mdm_serviceInterface_defined where bs_id = #{bsId}")
 	@ResultMap("serviceInterfaceDefinedMap")
-	List<ServiceInterfaceDefined> findByBsId();
+	List<ServiceInterfaceDefined> findByBsId(String bsId);
 	
 	@Select("SELECT * FROM mdm_serviceInterface_defined WHERE id = #{id}")
     @Results(id = "serviceInterfaceDefinedMap",

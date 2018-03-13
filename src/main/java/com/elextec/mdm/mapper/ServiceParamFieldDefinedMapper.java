@@ -27,4 +27,8 @@ public interface ServiceParamFieldDefinedMapper {
 	@Select("SELECT * FROM mdm_serviceParam_FieldDefined WHERE table_id = #{tableId}")
 	@ResultMap("serviceParamFieldDefined")
 	List<ServiceParamFieldDefined> findByTableId(String tableId);
+	
+	@Select("SELECT * FROM mdm_serviceParam_FieldDefined WHERE id = #{id}")
+	@ResultMap("serviceParamFieldDefined")
+	ServiceParamFieldDefined findById(String id);
 }

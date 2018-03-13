@@ -18,7 +18,7 @@ import com.elextec.mdm.entity.Department;
 public interface DepartmentMapper {
 
 	@Insert("INSERT INTO mdm_department(id,depart_code,depart_name,parent_id,status,creater,create_time)"
-    		+ " VALUES(sys_guid(), #{departCode}, #{departName}, #{parentId}, #{status}, #{creater}, sysdate)")
+    		+ " VALUES(sys_guid(), #{departCode}, #{departName}, #{parentId,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
     @Options(useGeneratedKeys = true, keyProperty = "id")
 	@ResultMap("departmentMap")
     void insert(Department department);
