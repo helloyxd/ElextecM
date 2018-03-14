@@ -113,8 +113,8 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 
 	@Override
 	public MdmBs getBsById(String id) {
-		MdmBs bs = mdmBsMapper.findById(id);
-		return bs;
+		List<MdmBs> bs = mdmBsMapper.findById(id);
+		return bs.get(0);
 	}
 
 }

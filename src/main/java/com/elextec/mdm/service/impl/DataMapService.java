@@ -1,6 +1,7 @@
 package com.elextec.mdm.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,11 +11,14 @@ import org.springframework.stereotype.Service;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.DataMapEnum;
 import com.elextec.mdm.common.entity.constant.SIParamEnum;
+import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.MdmTableMap;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 import com.elextec.mdm.entity.ServiceInterfaceParam;
+import com.elextec.mdm.entity.ServiceParamFieldDefined;
+import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.mapper.MdmDataMapMapper;
 import com.elextec.mdm.mapper.MdmTableMapMapper;
@@ -36,6 +40,9 @@ public class DataMapService extends BaseService implements IDataMapService{
 	
 	@Autowired
 	private TableDDLMapper tableDDLMapper;
+	
+	@Autowired
+	private ServiceInterfaceDefinedMapper serviceInterfaceDefinedMapper;
 	
 	@Override
 	public void save(MdmTableMap tableMap) {
@@ -170,6 +177,60 @@ public class DataMapService extends BaseService implements IDataMapService{
 	@Override
 	public void setMdmTableMap(TableDefinition table) {
 		tableMapMapper.findByMdmTableId(table.getId());
+	}
+
+	@Override
+	public VoResponse getMdmTableMapById(MdmModel model, String bsId) {
+		VoResponse voRes = new VoResponse();
+		ServiceInterfaceDefined siDefined = serviceInterfaceDefinedMapper.findByModelIdAndBsId(model.getId(), bsId);
+		if(siDefined == null || siDefined.getSiParams() == null || siDefined.getSiParams().size() == 0){
+			voRes.setNull(voRes);
+			voRes.setMessage("业务系统服务接口定义信息获取失败");
+			return voRes;
+		}
+		TableDefinition mdmTableDefined = model.getTableDefinitions().get(0);
+		ServiceParamTableDefined bsTableDefined = null;
+		for(ServiceInterfaceParam siParam : siDefined.getSiParams()){
+			if(siParam.getIoType().equals(SIParamEnum.paramOut)){
+				bsTableDefined = siParam.getsParamTableDefineds().get(0);
+			}
+		}
+		List<MdmTableMap> list = tableMapMapper.findByTableId(bsTableDefined.getId(), mdmTableDefined.getId());
+		if(list != null && list.size() > 0){
+			for(MdmTableMap tableMap : list){
+				if(tableMap.getBsIoType().equals(DataMapEnum.mdmSource)){
+					for(ColumnDefinition field : mdmTableDefined.getColumnDefinitions()){
+						if(field.getName().equals(tableMap.getMdmFieldId())){
+							field.setTargetId(tableMap.getBsFieldId());
+						}
+					}
+					
+				}else if(tableMap.getBsIoType().equals(DataMapEnum.bsSource)){
+					for(ServiceParamFieldDefined field : bsTableDefined.getsParamFieldDefineds()){
+						if(field.getId().equals(tableMap.getBsFieldId())){
+							field.setTargetId(tableMap.getMdmFieldId());
+						}
+					}
+					
+				}else if(tableMap.getBsIoType().equals(DataMapEnum.allSource)){
+					for(ColumnDefinition field : mdmTableDefined.getColumnDefinitions()){
+						if(field.getName().equals(tableMap.getMdmFieldId())){
+							field.setTargetId(tableMap.getBsFieldId());
+						}
+					}
+					for(ServiceParamFieldDefined field : bsTableDefined.getsParamFieldDefineds()){
+						if(field.getId().equals(tableMap.getBsFieldId())){
+							field.setTargetId(tableMap.getMdmFieldId());
+						}
+					}
+				}
+			}
+		}
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("mdmTable", mdmTableDefined);
+		map.put("bsTable", bsTableDefined);
+		voRes.setData(map);
+		return voRes;
 	}
 
 }

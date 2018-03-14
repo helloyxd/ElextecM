@@ -25,4 +25,6 @@ public interface IDataMapService {
 	
 	public void setMdmTableMap(TableDefinition table);
 	
+	public VoResponse getMdmTableMapById(MdmModel model, String bsId);
+	
 }

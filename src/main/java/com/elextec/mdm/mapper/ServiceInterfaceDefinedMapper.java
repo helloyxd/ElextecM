@@ -3,6 +3,7 @@ package com.elextec.mdm.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
@@ -36,7 +37,7 @@ public interface ServiceInterfaceDefinedMapper {
 	
 	@Select("SELECT * FROM mdm_serviceInterface_defined where model_id = #{modelId}")
 	@ResultMap("serviceInterfaceDefinedMapOnly")
-	List<ServiceInterfaceDefined> findByModelId();
+	List<ServiceInterfaceDefined> findByModelId(String modelId);
 	
 	@Select("SELECT * FROM mdm_serviceInterface_defined where bs_id = #{bsId}")
 	@ResultMap("serviceInterfaceDefinedMap")
@@ -65,4 +66,8 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "creater", column = "creater")
 	})
 	ServiceInterfaceDefined findById(String id);
+	
+	@Select("SELECT * FROM mdm_serviceInterface_defined where model_id = #{modelId} AND bs_id = #{bsId}")
+	@ResultMap("serviceInterfaceDefinedMap")
+	ServiceInterfaceDefined findByModelIdAndBsId(@Param("modelId")String modelId, @Param("bsId")String bsId);
 }

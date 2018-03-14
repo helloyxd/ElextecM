@@ -51,5 +51,6 @@ public interface MdmBsMapper {
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater") 
 	})
-	MdmBs findById(String id);
+	List<MdmBs> findById(String id);
+	
 }

@@ -102,55 +102,17 @@ public class DataMapController {
 	
 	@GetMapping
 	public Object get(@RequestParam("modelId") String modelId, @RequestParam("bsId") String bsId) {
+		VoResponse voRes = new VoResponse();
 		MdmModel model = mdmModelService.getById(modelId);
-		MdmBs bs = mdmModelService.getBsById(bsId);
-		List<MdmTableMap> list = dataMapService.getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-		List<VoDataMap> dataMaps = new ArrayList<VoDataMap>();
-		VoDataMap dataMap = null;
-		List<VoLineData> lineData = null;
-		for(MdmTableMap tableMap : list){
-			boolean flag = false;
-			if(dataMap == null){
-				flag = true;
-				dataMap = new VoDataMap();
-				lineData = new ArrayList<VoLineData>();
-				dataMap.setMdmTableId(tableMap.getMdmTableId());
-				dataMap.setBsTableId(tableMap.getBsTableId());
-			}else{
-				for(VoDataMap vo : dataMaps){
-					if(vo.getMdmTableId().equals(tableMap.getMdmTableId()) && vo.getBsTableId().equals(tableMap.getBsTableId())){
-						dataMap = vo;
-					}
-				}
-			}
-			
-			if(tableMap.getBsIoType().equals(DataMapEnum.mdmSource)){
-				VoLineData line = new VoLineData();
-				line.setSourceId(tableMap.getMdmFieldId());
-				line.setTargetId(tableMap.getBsFieldId());
-				lineData.add(line);
-			}else if(tableMap.getBsIoType().equals(DataMapEnum.bsSource)){
-				VoLineData line = new VoLineData();
-				line.setSourceId(tableMap.getBsFieldId());
-				line.setTargetId(tableMap.getMdmFieldId());
-				lineData.add(line);
-			}else if(tableMap.getBsIoType().equals(DataMapEnum.allSource)){
-				VoLineData line = new VoLineData();
-				line.setSourceId(tableMap.getMdmFieldId());
-				line.setTargetId(tableMap.getBsFieldId());
-				lineData.add(line);
-				VoLineData line2 = new VoLineData();
-				line2.setSourceId(tableMap.getBsFieldId());
-				line2.setTargetId(tableMap.getMdmFieldId());
-				lineData.add(line2);
-			}
-			dataMap.setLineData(lineData);
-			if(flag){
-				dataMaps.add(dataMap);
-			}
-			flag = false;
+		if(model == null || model.getTableDefinitions() == null || model.getTableDefinitions().size() == 0){
+			voRes.setNull(voRes);
+			voRes.setMessage("mdm模块信息获取失败");
+			return voRes;
 		}
-		return dataMaps;
+		tableDDLService.setColumnsDefinition(model.getTableDefinitions().get(0));
+		voRes = dataMapService.getMdmTableMapById(model, bsId);
+		
+		return voRes;
 	}
 	
 	@PutMapping("sync")

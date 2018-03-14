@@ -11,6 +11,7 @@ public class ServiceParamFieldDefined  extends BasicEntity{
 	private String tableId;
 	private String fieldName;
 	private String fieldType;
+	private String targetId;//映射连线
 	
 	public String getTableId() {
 		return tableId;
@@ -29,6 +30,12 @@ public class ServiceParamFieldDefined  extends BasicEntity{
 	}
 	public void setFieldType(String fieldType) {
 		this.fieldType = fieldType;
+	}
+	public String getTargetId() {
+		return targetId;
+	}
+	public void setTargetId(String targetId) {
+		this.targetId = targetId;
 	}
 	
 	

@@ -52,7 +52,7 @@ public interface MdmTableMapMapper {
 	    @Result(property = "bsTableId", column = "bs_table_id"),
 	    @Result(property = "bsFieldId", column = "bs_field_id"),
 	    @Result(property = "bsIoType", column = "bs_io_type"),
-	    @Result(property = "tableDefined", column = "mdm_table_id",
+	    @Result(property = "mdmTableDefined", column = "mdm_table_id",
 			many = @Many(select = "com.elextec.mdm.mapper.TableDefinitionMapper.findById")),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
