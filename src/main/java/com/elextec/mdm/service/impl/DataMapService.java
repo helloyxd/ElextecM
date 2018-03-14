@@ -167,4 +167,9 @@ public class DataMapService extends BaseService implements IDataMapService{
 		return voRes;
 	}
 
+	@Override
+	public void setMdmTableMap(TableDefinition table) {
+		tableMapMapper.findByMdmTableId(table.getId());
+	}
+
 }

@@ -13,6 +13,7 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.service.IDataMapService;
 import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.ITableDDLService;
 
@@ -29,6 +30,9 @@ public class ModelController {
 	
 	@Autowired
 	private ITableDDLService tableDDLService;
+	
+	@Autowired
+	private IDataMapService dataMapService;
 	
 	@PostMapping
 	public Object add(@RequestBody MdmModel model){
@@ -72,18 +76,19 @@ public class ModelController {
 	}
 	
 	@GetMapping
-	public Object getById(@RequestParam("id") String id){
+	public Object getMdmModelDetailById(@RequestParam("id") String id){
 		VoResponse voRes = new VoResponse();
 		MdmModel model = mdmModelService.getById(id);
 		for(TableDefinition table : model.getTableDefinitions()){
 			 tableDDLService.setColumnsDefinition(table);
+			 dataMapService.setMdmTableMap(table);
 		}
 		voRes.setData(model);
 		return voRes;
 	}
 	
 	@GetMapping("getBs")
-	public Object getByBsId(@RequestParam("id") String id){
+	public Object getBsDetailByBsId(@RequestParam("id") String id){
 		VoResponse voRes = new VoResponse();
 		voRes.setData(mdmModelService.getBsById(id));
 		return voRes;
