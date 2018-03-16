@@ -24,6 +24,7 @@ public class ActivitiService implements IActivitiService{
 	private TaskService taskService;
 
 	// 开始流程，传入申请者的id以及公司的id
+	@Override
 	public ProcessInstance startProcess() {
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("name", "yuxiaodong");
@@ -33,16 +34,20 @@ public class ActivitiService implements IActivitiService{
 	}
 
 	// 获得某个人的任务别表
+	@Override
 	public List<Task> getTasks(String assignee) {
 		return taskService.createTaskQuery().active().list();
 		//return taskService.createTaskQuery().taskCandidateUser(assignee).list();
 	}
 
 	// 完成任务
+	@Override
 	public void completeTasks(String taskId) {
+		System.out.println("test Variable:"+ taskService.getVariable(taskId, "name"));
+		//runtimeService.getVariable(executionId, variableName);
 		Map<String, Object> taskVariables = new HashMap<String, Object>();
-		taskVariables.put("name", "yuxiaodong");
-		taskVariables.put("age", 20);
+		//taskVariables.put("name", "yuxiaodong");
+		//taskVariables.put("age", 20);
 		taskService.complete(taskId, taskVariables);
 	}
 
