@@ -15,6 +15,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
+import org.apache.ibatis.type.JdbcType;
 
 import com.elextec.mdm.entity.Menu;
 
@@ -30,6 +31,7 @@ public interface MenuMapper {
         @Result(property = "parentId", column = "parent_id"),
 		@Result(property = "level", column = "menu_level"),
         @Result(property = "sortOrder", column = "sort_order"),
+        @Result(property = "icon", column = "icon"),
         @Result(property = "remark", column = "remark"),
         @Result(property = "status", column = "status"),
 		@Result(property = "createTime", column = "create_time"),
@@ -43,10 +45,11 @@ public interface MenuMapper {
 		@Result(id = true, property = "id", column = "id"),
 		@Result(property = "menuName",  column = "menu_name"),
         @Result(property = "menuUrl", column = "menu_url"),
-        @Result(property = "method", column = "method"),
+        @Result(property = "method", column = "method", jdbcType = JdbcType.VARCHAR),
         @Result(property = "parentId", column = "parent_id"),
 		@Result(property = "level", column = "menu_level"),
         @Result(property = "sortOrder", column = "sort_order"),
+        @Result(property = "icon", column = "icon"),
         @Result(property = "remark", column = "remark"),
         @Result(property = "status", column = "status"),
 		@Result(property = "createTime", column = "create_time"),
@@ -66,6 +69,7 @@ public interface MenuMapper {
         @Result(property = "parentId", column = "parent_id"),
 		@Result(property = "level", column = "menu_level"),
         @Result(property = "sortOrder", column = "sort_order"),
+        @Result(property = "icon", column = "icon"),
         @Result(property = "remark", column = "remark"),
         @Result(property = "status", column = "status"),
 		@Result(property = "createTime", column = "create_time"),
@@ -83,9 +87,9 @@ public interface MenuMapper {
 	@ResultMap("menuMapAll")
 	List<Menu> findByName(String menuName);
 	
-	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,creater,create_time) "
-			+ "VALUES(#{id},#{menuName},#{menuUrl},#{method,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{level},"
-			+ "#{sortOrder,jdbcType=INTEGER},#{status},#{remark,jdbcType=VARCHAR},#{creater,jdbcType=VARCHAR},sysdate)")
+	@Insert("INSERT INTO mdm_menu(id,menu_name,menu_url,method,parent_id,menu_level,sort_order,status,remark,icon,creater,create_time) "
+			+ "VALUES(#{id},#{menuName},#{menuUrl,jdbcType=VARCHAR},#{method,jdbcType=VARCHAR},#{parentId,jdbcType=VARCHAR},#{level},"
+			+ "#{sortOrder,jdbcType=INTEGER},#{status},#{remark,jdbcType=VARCHAR},#{icon,jdbcType=VARCHAR},#{creater,jdbcType=VARCHAR},sysdate)")
 	@SelectKey(before = true, keyProperty = "id",
 		resultType = String.class, statementType = StatementType.STATEMENT,
 		statement="SELECT sys_guid() FROM dual")
@@ -94,8 +98,9 @@ public interface MenuMapper {
 	@Delete("DELETE FROM mdm_menu WHERE id=#{menuId}")
 	void delById(String menuId);
 	
-	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},method=#{method},"
-			+ "sort_order=#{sortOrder},parent_id=#{parentId,jdbcType=VARCHAR},remark=#{remark} WHERE id=#{id}")
+	@Update("UPDATE mdm_menu SET menu_name=#{menuName},menu_url=#{menuUrl},method=#{method,jdbcType=VARCHAR},"
+			+ "sort_order=#{sortOrder},parent_id=#{parentId,jdbcType=VARCHAR},remark=#{remark,jdbcType=VARCHAR},icon=#{icon,jdbcType=VARCHAR} WHERE id=#{id}")
+	@ResultMap("menuMap")
 	void update(Menu menu);
 	
 	/**

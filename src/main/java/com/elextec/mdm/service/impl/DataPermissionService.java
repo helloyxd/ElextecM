@@ -1,6 +1,7 @@
 package com.elextec.mdm.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,17 +70,27 @@ public class DataPermissionService extends BaseService implements IDataPermissio
 		DataPermissionDefined newEntity = null;
 		//add
 		if(entity.getId() == null || entity.getId().equals("")){
-			newEntity = dataPermissionDefinedMapper.findByName(entity.getTableId(), entity.getPermissionField());
-			if(newEntity != null){
-				voRes.setFail(voRes);
-				voRes.setMessage("数据权限定义表字段已经存在！");
-				return voRes;
+			DataPermissionDefined oldEntity = dataPermissionDefinedMapper.findByName(entity.getTableId(), entity.getPermissionField());
+			if(oldEntity != null){//数据权限定义表字段已经存在,判断值
+				List<DataPermission> listdp = oldEntity.getDataPermission();
+				Iterator<DataPermission> it = entity.getDataPermission().iterator();
+				while(it.hasNext()){
+					DataPermission dp = it.next();
+					dp.setCreater(userName);
+					for(DataPermission olddp : listdp){
+						if(olddp.getRoleId().equals(dp.getRoleId()) && olddp.getPermissionValue().equals(dp.getPermissionValue())){
+							voRes.setFail(voRes);
+							voRes.setMessage("数据权限定义表已经存在！");
+							return voRes;
+						}
+					}
+				}
+				entity.setId(oldEntity.getId());
+			}else{
+				entity.setCreater(userName);
+				entity.setStatus(StatusEnum.StatusEnable);
+				dataPermissionDefinedMapper.insert(entity);
 			}
-			entity.setCreater(userName);
-			entity.setStatus(StatusEnum.StatusEnable);
-			dataPermissionDefinedMapper.insert(entity);
-			newEntity = dataPermissionDefinedMapper.findByName(entity.getTableId(), entity.getPermissionField());
-			entity.setId(newEntity.getId());
 			dataPermissionDefinedMapper.addDataPermissions(entity);
 			return voRes;
 		//update

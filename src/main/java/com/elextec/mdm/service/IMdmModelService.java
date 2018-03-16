@@ -21,7 +21,15 @@ public interface IMdmModelService {
 	
 	VoResponse addBs(MdmBs bs);
 	
+	VoResponse delBs(String bsId);
+	
 	List<MdmModel> getAll();
 	
+	List<MdmModel> getAllInfo();
 	
+	List<MdmBs> getAllBs();
+	
+	MdmModel getById(String id);
+	
+	MdmBs getBsById(String id);
 }

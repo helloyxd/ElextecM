@@ -9,6 +9,7 @@ public class MdmModel extends BasicEntity{
 	private String mdmModel;
 	private List<MdmBs> mdmBses;
 	private List<TableDefinition> tableDefinitions; 
+	private List<ServiceInterfaceDefined>  siDefineds;
 
 	public String getMdmModel() {
 		return mdmModel;
@@ -32,5 +33,13 @@ public class MdmModel extends BasicEntity{
 
 	public void setTableDefinitions(List<TableDefinition> tableDefinitions) {
 		this.tableDefinitions = tableDefinitions;
+	}
+
+	public List<ServiceInterfaceDefined> getSiDefineds() {
+		return siDefineds;
+	}
+
+	public void setSiDefineds(List<ServiceInterfaceDefined> siDefineds) {
+		this.siDefineds = siDefineds;
 	}
 }

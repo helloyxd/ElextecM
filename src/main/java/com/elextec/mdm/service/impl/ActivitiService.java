@@ -8,13 +8,17 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+//import org.activiti.engine.RuntimeService;
+//import org.activiti.engine.TaskService;
+//import org.activiti.engine.runtime.ProcessInstance;
+//import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.elextec.mdm.service.IActivitiService;
 
-@Service
+//@Service
 @Transactional
 public class ActivitiService implements IActivitiService{
 	@Autowired
@@ -24,6 +28,7 @@ public class ActivitiService implements IActivitiService{
 	private TaskService taskService;
 
 	// 开始流程，传入申请者的id以及公司的id
+	
 	@Override
 	public ProcessInstance startProcess() {
 		Map<String, Object> variables = new HashMap<String, Object>();
@@ -49,6 +54,9 @@ public class ActivitiService implements IActivitiService{
 		//taskVariables.put("name", "yuxiaodong");
 		//taskVariables.put("age", 20);
 		taskService.complete(taskId, taskVariables);
+		taskVariables.put("name", "yuxiaodong");
+		taskVariables.put("age", 20);
+		//taskService.complete(taskId, taskVariables);
 	}
 
 }

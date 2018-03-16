@@ -4,38 +4,38 @@ import java.sql.Date;
 
 import com.elextec.mdm.common.entity.BasicEntity;
 
-public class MdmDataMapper extends BasicEntity {
+public class MdmDataMap extends BasicEntity {
 
-	private int mdmDataId;
-	private int bsDataId;
-	private int modelId;
-	private int bsId;
+	private String mdmDataId;
+	private String bsDataId;
+	private String modelId;
+	private MdmModel model;
+	private String bsId;
 	private String modifier;
 	private Date modifierTime;
 	
-	
-	public int getMdmDataId() {
+	public String getMdmDataId() {
 		return mdmDataId;
 	}
-	public void setMdmDataId(int mdmDataId) {
+	public void setMdmDataId(String mdmDataId) {
 		this.mdmDataId = mdmDataId;
 	}
-	public int getBsDataId() {
+	public String getBsDataId() {
 		return bsDataId;
 	}
-	public void setBsDataId(int bsDataId) {
+	public void setBsDataId(String bsDataId) {
 		this.bsDataId = bsDataId;
 	}
-	public int getModelId() {
+	public String getModelId() {
 		return modelId;
 	}
-	public void setModelId(int modelId) {
+	public void setModelId(String modelId) {
 		this.modelId = modelId;
 	}
-	public int getBsId() {
+	public String getBsId() {
 		return bsId;
 	}
-	public void setBsId(int bsId) {
+	public void setBsId(String bsId) {
 		this.bsId = bsId;
 	}
 	public String getModifier() {
@@ -50,7 +50,11 @@ public class MdmDataMapper extends BasicEntity {
 	public void setModifierTime(Date modifierTime) {
 		this.modifierTime = modifierTime;
 	}
-	
-	
+	public MdmModel getModel() {
+		return model;
+	}
+	public void setModel(MdmModel model) {
+		this.model = model;
+	}
 	
 }

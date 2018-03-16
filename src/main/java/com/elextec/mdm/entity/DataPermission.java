@@ -6,6 +6,7 @@ public class DataPermission extends BasicEntity{
 
 	private String definedId;
 	private String roleId;
+	private Role role;
 	private String permissionValue;
 	private DataPermissionDefined dataPermissionDefined;
 	
@@ -32,6 +33,12 @@ public class DataPermission extends BasicEntity{
 	}
 	public void setDataPermissionDefined(DataPermissionDefined dataPermissionDefined) {
 		this.dataPermissionDefined = dataPermissionDefined;
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 	

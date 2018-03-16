@@ -17,6 +17,8 @@ public interface ITableDDLService {
 	public List<TableDefinition> getAll();
 	
 	public TableDefinition getById(String id);
+	
+	void setColumnsDefinition(TableDefinition table);
 
 	VoResponse getTableDefinition(String id);
 	

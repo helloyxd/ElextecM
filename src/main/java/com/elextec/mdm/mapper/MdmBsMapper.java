@@ -1,13 +1,12 @@
-/**
- * 
- */
 package com.elextec.mdm.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
@@ -27,7 +26,7 @@ public interface MdmBsMapper {
 	void del(String id);
 	
 	@Select("SELECT * FROM mdm_bs")
-    @Results(id = "bsMap",
+    @Results(id = "bsMapOnly",
     	value = { 
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "bsName", column = "bs_name"),
@@ -36,4 +35,22 @@ public interface MdmBsMapper {
 	    @Result(property = "creater", column = "creater") 
 	})
 	List<MdmBs> findAll();
+	
+	@Select("SELECT * FROM mdm_bs WHERE bs_name = #{name}")
+	@ResultMap("bsMapOnly")
+	List<MdmBs> findByName(String name);
+	
+	@Select("SELECT * FROM mdm_bs WHERE id = #{id}")
+	@Results(id = "bsMap",
+		value = { 
+	    @Result(id = true, property = "id", column = "id"),
+	    @Result(property = "bsName", column = "bs_name"),
+	    @Result(property = "siDefineds", column = "id",
+			many = @Many(select = "com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper.findByBsId") ),
+	    @Result(property = "status", column = "status"),
+	    @Result(property = "createTime", column = "create_time"),
+	    @Result(property = "creater", column = "creater") 
+	})
+	List<MdmBs> findById(String id);
+	
 }

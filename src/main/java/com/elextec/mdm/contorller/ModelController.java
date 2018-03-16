@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
+import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.service.IDataMapService;
 import com.elextec.mdm.service.IMdmModelService;
+import com.elextec.mdm.service.ITableDDLService;
 
 /**
  * @author zhangkj
@@ -24,6 +27,12 @@ public class ModelController {
 
 	@Autowired
 	private IMdmModelService mdmModelService;
+	
+	@Autowired
+	private ITableDDLService tableDDLService;
+	
+	@Autowired
+	private IDataMapService dataMapService;
 	
 	@PostMapping
 	public Object add(@RequestBody MdmModel model){
@@ -47,6 +56,41 @@ public class ModelController {
 		return voRes;
 	}
 	
+	@GetMapping("getAllInfo")
+	public Object getAllInfo(){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(mdmModelService.getAllInfo());
+		return voRes;
+	}
 	
+	@GetMapping("getAllBs")
+	public Object getAllBs(){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(mdmModelService.getAllBs());
+		return voRes;
+	}
 	
+	@DeleteMapping("delBs")
+	public Object delBs(@RequestParam("id") String id){
+		return mdmModelService.delBs(id);
+	}
+	
+	@GetMapping
+	public Object getMdmModelDetailById(@RequestParam("id") String id){
+		VoResponse voRes = new VoResponse();
+		MdmModel model = mdmModelService.getById(id);
+		for(TableDefinition table : model.getTableDefinitions()){
+			 tableDDLService.setColumnsDefinition(table);
+			 dataMapService.setMdmTableMap(table);
+		}
+		voRes.setData(model);
+		return voRes;
+	}
+	
+	@GetMapping("getBs")
+	public Object getBsDetailByBsId(@RequestParam("id") String id){
+		VoResponse voRes = new VoResponse();
+		voRes.setData(mdmModelService.getBsById(id));
+		return voRes;
+	}
 }

@@ -160,7 +160,7 @@ public class TableMapperTest {
 		System.out.println(message.getElementQName());
 		String topName = message.getTypeQName().getLocalPart();
 		XmlSchemaElement top = (XmlSchemaElement) (message.getXmlSchema());
-		search(top.getSchemaType());
+		search(top.getSchemaType(),top.getSchemaType().getName());
 		/*
 		 * if(top.getSchemaType() instanceof XmlSchemaComplexType) {
 		 * XmlSchemaComplexType xmlSchemaComplexType =
@@ -216,7 +216,7 @@ public class TableMapperTest {
 				String elemtName = elemt.getName();
 				if (elemtName.equals("")) {
 					XmlSchemaType elemtNameType = elemt.getSchemaType();
-					search(elemtNameType); // search函数用于对复杂类型进行专门的处理
+					search(elemtNameType,elemtNameType.getName()); // search函数用于对复杂类型进行专门的处理
 				}
 			}
 			Iterator typesItr = smlSchemaObjectTable.entrySet().iterator();// 对complexType进行进一步深入
@@ -224,17 +224,32 @@ public class TableMapperTest {
 				XmlSchemaType type = (XmlSchemaType) typesItr.next();
 				String typeName = type.getName();
 				if (typeName.equals("")) {
-					search(type);
+					search(type,type.getName());
 				}
 			}
 		}
 	}
 
-	public static void search(XmlSchemaType type) {
+	public static void search(XmlSchemaType type,String parentName) {
 		// 如果是复杂类型，则按照XmlSchemaComplexType-> XmlSchemaSequence->
 		// XmlSchemaElement的层次进行解析，因为XmlSchemaElement可能任然是复杂类型，所以需要进一步判断递归调用Search。如图6，图7
 		if (type instanceof XmlSchemaComplexType) {
-			String tableName = type.getQName().getLocalPart();
+			String tableName = "";
+			if(type.getQName()==null) {//说明其是个集合类型，下面包含具体类型
+				XmlSchemaParticle xmlSchemaParticle = ((XmlSchemaComplexType) type).getParticle();
+				XmlSchemaSequence xmlSchemaSequence = (XmlSchemaSequence) xmlSchemaParticle;
+				List<XmlSchemaSequenceMember> sequenceMembers = xmlSchemaSequence.getItems();
+				XmlSchemaElement element = (XmlSchemaElement)(sequenceMembers.get(0));
+				tableName = element.getName();
+				search(element.getSchemaType(),tableName);
+				
+			}else {
+				tableName = type.getQName().getLocalPart();
+			}
+			
+			
+			
+			
 			if (dataMap.get(tableName) == null) {
 				dataMap.put(tableName, new HashMap<String, String>());
 			}else {
@@ -242,7 +257,7 @@ public class TableMapperTest {
 			}
 			XmlSchemaComplexType xmlSchemaComplexType = (XmlSchemaComplexType) type;
 			XmlSchemaContentModel xmlSchemaContentModel = xmlSchemaComplexType.getContentModel();
-			if (xmlSchemaContentModel != null && xmlSchemaContentModel instanceof XmlSchemaComplexContent) {
+			if (xmlSchemaContentModel != null && xmlSchemaContentModel instanceof XmlSchemaComplexContent) {//如果复杂类型下面不存在xmlSchemaContentModel(即complexContent元素)
 				XmlSchemaComplexContent xmlSchemaComplexContent = (XmlSchemaComplexContent) xmlSchemaContentModel;
 				if (xmlSchemaComplexContent != null) { // 判断是否存在complexContent
 					XmlSchemaContent xmlSchemaContent = xmlSchemaComplexContent.getContent();
@@ -257,12 +272,18 @@ public class TableMapperTest {
 								XmlSchemaElement xmlSchemaElement = (XmlSchemaElement) sequenceMembers.get(i);
 								System.out.println(xmlSchemaElement.getQName().getLocalPart());
 								String elementName = xmlSchemaElement.getName();
+								if(elementName.equals("roles")) {
+									System.out.println(11);
+								}
 								XmlSchemaType xmlSchemaType = xmlSchemaElement.getSchemaType();
 								String elementTypeName = xmlSchemaType.getName();
-								if (elementTypeName != null) {
-									System.out.println(elementName);
+								if(xmlSchemaType instanceof XmlSchemaSimpleType) {
+									if (elementTypeName != null) {
+										System.out.println("---"+elementTypeName);
+									}
+								}else {
+									search(xmlSchemaType,elementName);
 								}
-								search(xmlSchemaType);
 							}
 						}
 					} else {
@@ -282,13 +303,13 @@ public class TableMapperTest {
 							if (elementTypeName != null) {
 								System.out.println(elementName);
 							}
-							search(xmlSchemaType);
+							search(xmlSchemaType,elementName);
 						}
 					}
 
 				}
 
-			} else {
+			} else { //如果复杂类型下面不存在xmlSchemaContentModel(即complexContent元素)
 				XmlSchemaParticle xmlSchemaParticle = xmlSchemaComplexType.getParticle();
 				XmlSchemaSequence xmlSchemaSequence = (XmlSchemaSequence) xmlSchemaParticle;
 				List<XmlSchemaSequenceMember> sequenceMembers = xmlSchemaSequence.getItems();

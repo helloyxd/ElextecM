@@ -29,14 +29,14 @@ public class MenuService extends BaseService implements IMenuService{
 	
 	@Override
 	public List<VoMenu> getAllMenusTree() {
-		List<Menu> listMenu = menuMapper.findAllMenusTree();
-		List<VoMenu> list = setMenu(listMenu);
-		return list;
+		List<Menu> list = menuMapper.findAllMenusTree();
+		List<VoMenu> listMenu = setMenu(list);
+		return listMenu;
 	}
 	
-	private List<VoMenu> setMenu(List<Menu> listMenu){
-		List<VoMenu> list = new ArrayList<VoMenu>();
-		for(Menu menu : listMenu){
+	private List<VoMenu> setMenu(List<Menu> list){
+		List<VoMenu> listMenu = new ArrayList<VoMenu>();
+		for(Menu menu : list){
 			VoMenu e = new VoMenu();
 			e.setPath(menu.getMenuUrl());
 			e.setComponent(menu.getMenuUrl()==null?"":menu.getMenuUrl().replace("/", ""));
@@ -47,9 +47,9 @@ public class MenuService extends BaseService implements IMenuService{
 				//e.setRedirect(menu.getMenuUrl()==null?"":menu.getMenuUrl() + menu.getMenus().get(0).getMenuUrl());
 			}
 			e.setName(menu.getMenuName());
-			list.add(e);
+			listMenu.add(e);
 		}
-		return list;
+		return listMenu;
 	}
 	
 	@Override
@@ -91,6 +91,7 @@ public class MenuService extends BaseService implements IMenuService{
 			Menu perMenu = menuMapper.findById(menu.getParentId());
 			if(perMenu == null){
 				voRes.setNull(voRes);
+				voRes.setMessage("上级菜单获取异常");
 				return voRes;
 			}
 			if(menu.getLevel() == null || menu.getLevel() != 1000){
@@ -101,12 +102,22 @@ public class MenuService extends BaseService implements IMenuService{
 				menu.setParentId(initMenu());
 				menu.setLevel(1);
 			}else{
-				menu.setLevel(0);
+				menu.setParentId(getParentId());
+				menu.setLevel(1);
 			}
 		}
 		menu.setCreater(getUserName());
 		menuMapper.insert(menu);
 		return voRes;
+	}
+	
+	private String getParentId(){
+		String parentId = null;
+		List<Menu> list = menuMapper.findByName("佳源集团主数据管理系统");
+		if(list!=null && list.size()>0){
+			parentId =  list.get(0).getId();
+		}
+		return parentId;
 	}
 	
 	private String initMenu(){
@@ -148,10 +159,10 @@ public class MenuService extends BaseService implements IMenuService{
 			voRes.setNull(voRes);
 			return voRes;
 		}
-		if(oldMenu.getMenuName().equals("主数据管理") && oldMenu.getLevel() == 1){
+		/*if(oldMenu.getMenuName().equals("主数据管理") && oldMenu.getLevel() == 1){
 			voRes.setFail(voRes);
 			return voRes;
-		}
+		}*/
 		menuMapper.update(menu);
 		return voRes;
 	}
@@ -188,6 +199,7 @@ public class MenuService extends BaseService implements IMenuService{
 					menu.setMenuUrl("/mdm/table/defined/"+tableName);
 					menu.setSortOrder(0);
 					menu.setMethod("get");
+					menu.setLevel(3);
 					menu.setCreater(getUserName());
 					menuMapper.insert(menu);
 				}else{
@@ -200,6 +212,7 @@ public class MenuService extends BaseService implements IMenuService{
 				menu.setMenuUrl("/mdm/table/defined/");
 				menu.setSortOrder(0);
 				menu.setMethod("get");
+				menu.setLevel(2);
 				menu.setCreater(getUserName());
 				menuMapper.insert(menu);
 			}
@@ -242,7 +255,7 @@ public class MenuService extends BaseService implements IMenuService{
 			Menu e = new Menu();
 			String[] s = ss[i].split(",");
 			e.setMenuName(s[0]);
-			e.setParentId(menu.getParentId());
+			e.setParentId(menu.getId());
 			e.setCreater(getUserName());
 			e.setLevel(1000);
 			e.setMenuUrl(menu.getMenuUrl());

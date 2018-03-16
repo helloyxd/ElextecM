@@ -1,5 +1,7 @@
 package com.elextec.mdm.entity;
 
+import java.util.List;
+
 import com.elextec.mdm.common.entity.BasicEntity;
 
 /**
@@ -9,7 +11,8 @@ import com.elextec.mdm.common.entity.BasicEntity;
 public class ServiceInterfaceDefined extends BasicEntity{
 
 	private String type;//接口类型,0 webservice,1 存储过程
-	private String siurl;//WSDL地址，如果接口是存储过程，需要填入数据库连接字符串
+	private String wsdlLocation;//WSDL地址，如果接口是存储过程，需要填入数据库连接字符串
+	private String dburl;
 	private String username;
 	private String password;
 	private String modelId;//所属MDM模块
@@ -19,12 +22,25 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	private String wsbinding;//webservice binding
 	private String bingNamespace;//webservice binding namespance
 	private String operationNamespace;//webservice operation namespance
+	private List<ServiceInterfaceParam> siParams;
 	
 	public String getType() {
 		return type;
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getWsdlLocation() {
+		return wsdlLocation;
+	}
+	public void setWsdlLocation(String wsdlLocation) {
+		this.wsdlLocation = wsdlLocation;
+	}
+	public String getDburl() {
+		return dburl;
+	}
+	public void setDburl(String dburl) {
+		this.dburl = dburl;
 	}
 	public String getUsername() {
 		return username;
@@ -43,12 +59,6 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	}
 	public void setModelId(String modelId) {
 		this.modelId = modelId;
-	}
-	public String getBsId() {
-		return bsId;
-	}
-	public void setBsId(String bsId) {
-		this.bsId = bsId;
 	}
 	public String getOperationType() {
 		return operationType;
@@ -80,11 +90,17 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	public void setOperationNamespace(String operationNamespace) {
 		this.operationNamespace = operationNamespace;
 	}
-	public String getSiurl() {
-		return siurl;
+	public List<ServiceInterfaceParam> getSiParams() {
+		return siParams;
 	}
-	public void setSiurl(String siurl) {
-		this.siurl = siurl;
+	public void setSiParams(List<ServiceInterfaceParam> siParams) {
+		this.siParams = siParams;
+	}
+	public String getBsId() {
+		return bsId;
+	}
+	public void setBsId(String bsId) {
+		this.bsId = bsId;
 	}
 	
 	

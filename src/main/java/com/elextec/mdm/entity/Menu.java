@@ -18,7 +18,7 @@ public class Menu extends BasicEntity{
 	private String remark;
 	@JsonProperty("children") 
 	private List<Menu> menus;
-	
+	private boolean leaf;
 	
 	public String getMenuName() {
 		return menuName;
@@ -73,5 +73,11 @@ public class Menu extends BasicEntity{
 	}
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+	public boolean isLeaf() {
+		return leaf;
+	}
+	public void setLeaf(boolean leaf) {
+		this.leaf = leaf;
 	}
 }

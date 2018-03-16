@@ -58,7 +58,7 @@ public interface UserMapper {
     List<User> findUserByName(String userName);
 
     @Insert("INSERT INTO mdm_user(id,user_name,user_password,full_name,department_id,status,creater,create_time)"
-	    + " VALUES(sys_guid(), #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, "
+	    + " VALUES(#{id}, #{userName}, #{userPassword}, #{fullName,jdbcType=VARCHAR}, "
 	    + "#{dpartmentId,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
     @SelectKey(before = true, keyProperty = "id",
 		resultType = String.class, statementType = StatementType.STATEMENT,

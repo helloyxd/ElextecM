@@ -16,7 +16,7 @@ import com.elextec.mdm.entity.DataStructureMap;
  * @author zhangkj
  *
  */
-public interface DataStructureMapping {
+public interface DataStructureMapper {
 
 	@Insert("INSERT INTO mdm_datastructure_mapping(id,table_id,interface_id,field1,field2,status,creater,create_time)"
 		    + " VALUES(sys_guid(),#{tableId},#{interfaceId},#{field1},#{field2},#{status},#{creater},sysdate)")
@@ -29,7 +29,7 @@ public interface DataStructureMapping {
 		    + "department_id=#{department.id,jdbcType=VARCHAR},status=#{status} WHERE id =#{id}")
 	void update(DataStructureMap entity);
 	
-	@Select("SELECT * FROM mdm_queryfield_defined")
+	@Select("SELECT * FROM mdm_datastructure_mapping")
     @Results(id = "queryFieldMap",
     	value = {
 	    @Result(id = true, property = "id", column = "id"),

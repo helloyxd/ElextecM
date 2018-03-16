@@ -3,10 +3,13 @@ package com.elextec.mdm.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 
 public interface TableDDLMapper {
 	
@@ -52,6 +55,23 @@ public interface TableDDLMapper {
 	 */
 	@Select("SELECT * FROM ${tableName} WHERE ${queryParam}")
 	@ResultType(List.class)
-	List<Object> findTable(@Param("tableName") String tableName, @Param("queryParam") String queryParam);
+	List<Map<String,Object>> findTable(@Param("tableName") String tableName, @Param("queryParam") String queryParam);
 	
+	/**
+	 * queryParam = "1=1"
+	 * @param tableName
+	 * @param queryfield
+	 * @param queryParam
+	 * @return
+	 */
+	@Select("SELECT ${queryfield} FROM ${tableName} WHERE ${queryParam}")
+	@ResultType(List.class)
+	List<Map<String,Object>> findTableField(@Param("tableName") String tableName, @Param("queryfield") String queryfield, @Param("queryParam") String queryParam);
+	
+	@Insert("INSERT INTO ${tableName}(id,mdm_model,status,creater,create_time)"
+		    + " VALUES(#{id}, #{mdmModel}, #{status}, #{creater}, sysdate)")
+	@SelectKey(before = true, keyProperty = "id",
+		resultType = String.class, statementType = StatementType.STATEMENT,
+		statement="SELECT sys_guid() FROM dual")
+	void insert(Map<String,Object> map, @Param("tableName") String tableName);
 }

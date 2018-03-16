@@ -1,5 +1,6 @@
 package com.elextec.mdm.contorller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,20 @@ public class MenuController {
 	public Object getMenus(@RequestParam("level") String level) {
 		VoResponse voResponse = new VoResponse();
 		List<Menu> list = menuService.getMenus(level);
-		voResponse.setData(list);
+		List<Menu> listMenu = setMenu(list);
+		voResponse.setData(listMenu);
 		return voResponse;
+	}
+	
+	private List<Menu> setMenu(List<Menu> list){
+		for(Menu menu : list){
+			menu.setLeaf(true);
+			if(menu.getMenus().size() > 0 && menu.getLevel() < 1000){
+				menu.setLeaf(false);
+				menu.setMenus(setMenu(menu.getMenus()));
+			}
+		}
+		return list;
 	}
 	
 	@DeleteMapping

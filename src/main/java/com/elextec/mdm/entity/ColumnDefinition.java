@@ -9,6 +9,7 @@ public class ColumnDefinition {
 	private String columnComment;//字段中文名称
 	private Map<String, String> dataTypeMap;//字段数据类型
 	private List<String> constraints;//字段约束条件
+	private String targetId;//映射连线字段
 	
 	public String getName() {
 		return name;
@@ -33,6 +34,12 @@ public class ColumnDefinition {
 	}
 	public void setConstraints(List<String> constraints) {
 		this.constraints = constraints;
+	}
+	public String getTargetId() {
+		return targetId;
+	}
+	public void setTargetId(String targetId) {
+		this.targetId = targetId;
 	}
 	
 }
