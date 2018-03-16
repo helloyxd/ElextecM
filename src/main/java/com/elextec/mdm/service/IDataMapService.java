@@ -23,6 +23,8 @@ public interface IDataMapService {
 	
 	public VoResponse syncToMdm(MdmModel model, MdmBs bs, List<MdmTableMap> list);
 	
+	public VoResponse send(MdmModel model, MdmBs bs, List<MdmTableMap> list);
+	
 	public void setMdmTableMap(TableDefinition table);
 	
 	public VoResponse getMdmTableMapById(MdmModel model, String bsId);

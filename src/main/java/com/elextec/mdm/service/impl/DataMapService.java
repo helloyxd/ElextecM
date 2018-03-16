@@ -173,6 +173,98 @@ public class DataMapService extends BaseService implements IDataMapService{
 		}
 		return voRes;
 	}
+	
+	@Override
+	public VoResponse send(MdmModel model, MdmBs bs, List<MdmTableMap> list) {
+		VoResponse voRes = new VoResponse();
+		List<TableDefinition> mdmtables = model.getTableDefinitions();
+		//模块下获取自定义表
+		TableDefinition mdmtable = mdmtables.get(0);
+		List<ServiceInterfaceDefined> siDefineds = bs.getSiDefineds();
+		ServiceInterfaceDefined siDefined = siDefineds.get(0);
+		List<ServiceInterfaceParam> siParams = siDefined.getSiParams();
+		ServiceInterfaceParam siParam = null;
+		for(ServiceInterfaceParam entity : siParams){
+			if(entity.getIoType().equals(SIParamEnum.paramOut)){
+				siParam = entity;
+				break;
+			}
+		}
+		//获取映射关系
+		List<MdmTableMap> listMap = tableMapMapper.findByTableIdAndType(siParam.getsParamTableDefineds().get(0).getId(),
+				mdmtable.getId(), DataMapEnum.mdmSource, DataMapEnum.allSource);
+		//获取映射字段
+		StringBuffer queryFieldMdm = new StringBuffer();
+		StringBuffer queryFieldBs = new StringBuffer();
+		for(MdmTableMap tableMap : listMap){
+			queryFieldBs.append(tableMap.getSpFieldDefined().getFieldName()).append(",");
+			queryFieldMdm.append(tableMap.getMdmFieldId()).append(",");
+		}
+		queryFieldBs.deleteCharAt(queryFieldBs.length() - 1);
+		queryFieldMdm.deleteCharAt(queryFieldMdm.length() - 1);
+		System.out.println(queryFieldBs);
+		System.out.println(queryFieldMdm);
+		//业务系统下表数据
+		List<Map<String,Object>> listBs = tableDDLMapper.findTableField(siParam.getTableName(), queryFieldBs.toString(), "1=1");
+		//MDM模块下自定义表的数据
+		List<Map<String,Object>> listMdm = tableDDLMapper.findTableField(mdmtable.getTableName(), queryFieldMdm.toString(), "1=1");
+		
+		List<Map<String,Object>> listnew = new ArrayList<Map<String,Object>>();
+		boolean flag;
+		//遍历，根据映射字段，判断字段类型，
+		for(Map<String,Object> mapmdm : listMdm){
+			flag = false;
+			second:for(Map<String,Object> mapbs : listBs){
+				for(MdmTableMap tableMap : listMap){
+					if(mapmdm.get(tableMap.getMdmFieldId().toUpperCase()).equals(mapbs.get(tableMap.getSpFieldDefined().getFieldName().toUpperCase())) ){
+						//值相等，存在
+						flag = false;
+						continue second;
+					}
+					flag = true;
+				}
+			}
+			if(!flag){
+				listnew.add(mapmdm);
+			}
+		}
+		
+		if(listnew.size() == 0){
+			voRes.setMessage("没有同步的数据");
+			return voRes;
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		//sb.append("INSERT ALL ");
+		sb.append("INTO ").append(siParam.getTableName().toLowerCase());
+		for(MdmTableMap tableMap : listMap){
+			sb.append(tableMap.getMdmFieldId()).append(",");
+		}
+		sb.deleteCharAt(sb.length() - 1).append(")");
+		sb.append("VALUES(");
+		StringBuffer sb1 = new StringBuffer();
+		for(Map<String,Object> map : listnew){
+			sb1.append(sb);
+			//System.out.println(map);
+			for(MdmTableMap tableMap : listMap){
+				//System.out.println(tableMap.getSpFieldDefined().getFieldName());
+				//System.out.println(map.get(tableMap.getSpFieldDefined().getFieldName()));
+				sb1.append("'").append(map.get(tableMap.getSpFieldDefined().getFieldName().toUpperCase())).append("'").append(",");
+			}
+			sb1.deleteCharAt(sb1.length() - 1).append(") ");
+		}
+		sb1.append("SELECT 1 FROM DUAL");
+		sb1.insert(0, "INSERT ALL ");
+		System.out.println(sb1.toString());
+		try{
+			tableDDLMapper.alterTable(sb1.toString());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			voRes.setMessage(ex.getMessage());
+			voRes.setFail(voRes);
+		}
+		return voRes;
+	}
 
 	@Override
 	public void setMdmTableMap(TableDefinition table) {
