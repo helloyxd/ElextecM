@@ -168,8 +168,7 @@ public class MenuService extends BaseService implements IMenuService{
 	}
 
 	@Override
-	public boolean createMDMenu(MdmModel model, String tableName,
-			String tableLabel) {
+	public boolean createMDMenu(MdmModel model, String tableName, String tableLabel) {
 		List<Menu> listMenu = menuMapper.findByName("主数据管理");
 		Menu MDMenu = null;
 		for(Menu menu : listMenu){
@@ -196,7 +195,8 @@ public class MenuService extends BaseService implements IMenuService{
 					//创建model下的 三级菜单
 					menu.setParentId(MDMenu.getParentId());
 					menu.setMenuName(tableLabel);
-					menu.setMenuUrl("/mdm/table/defined/"+tableName);
+					menu.setMenuUrl(tableName);
+					//System.out.println(menu.getMenuUrl());
 					menu.setSortOrder(0);
 					menu.setMethod("get");
 					menu.setLevel(3);
@@ -209,7 +209,7 @@ public class MenuService extends BaseService implements IMenuService{
 				//创建model 二级菜单
 				menu.setParentId(parentId);
 				menu.setMenuName(model.getMdmModel());
-				menu.setMenuUrl("/mdm/table/defined/");
+				menu.setMenuUrl(tableName);
 				menu.setSortOrder(0);
 				menu.setMethod("get");
 				menu.setLevel(2);

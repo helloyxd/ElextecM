@@ -175,6 +175,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		tableDefinitionMapper.del(id);
 		table.setModel(mdmModelMapper.findById(table.getModelId()));
 		voRes.setData(table);
+		voRes.setMessage("删除定义表"+table.getTableName()+"成功");
 		return voRes;
 	}
 	

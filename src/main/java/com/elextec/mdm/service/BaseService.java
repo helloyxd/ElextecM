@@ -30,7 +30,7 @@ public class BaseService {
 	
 	public String getUserId(){
 		Object obj = session.getAttribute("mdm_user");
-		String userId = "798D5F70C6434815A1A3194C48695EC4";
+		String userId = "64365789BCA1ECF1E05013AC0688161E";
 		if(obj != null){
 			userId = ((User)obj).getId();
 		}

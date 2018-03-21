@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.catalina.filters.AddDefaultCharsetFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +17,7 @@ import com.elextec.mdm.common.entity.constant.UserStatusEnum;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
+import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.mapper.UserMapper;
 import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IUserService;
@@ -27,6 +27,9 @@ public class UserService extends BaseService implements IUserService{
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private MenuMapper menuMapper;
 	
 	@Override
 	public VoResult add(User user){
@@ -175,6 +178,10 @@ public class UserService extends BaseService implements IUserService{
 		List<Role> roles = user.getRoles();
 		List<Menu> myMenus = new ArrayList<Menu>();
 		for(Role role : roles){
+			if(role.getRoleName().equals("admin")){//管理员获取所有菜单
+				myMenus = menuMapper.findAllByLevel("1");
+				return myMenus;
+			}
 			List<Menu> menus = role.getMenus();
 			myMenus = transMenus(myMenus, menus);
 		}

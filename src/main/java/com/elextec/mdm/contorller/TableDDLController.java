@@ -94,6 +94,9 @@ public class TableDDLController {
 		voRes = tableDDLService.createTable(table);
 		if(voRes.getSuccess()){
 			if(table.getIsMenu()){
+				System.out.println(table.getTableName());
+				System.out.println(table.getTableLabel());
+				
 				if(!menuService.createMDMenu((MdmModel) voRes.getData(), table.getTableName(), table.getTableLabel())){
 					voRes.setMessage(voRes.getMessage() + "<br>创建菜单失败");
 				}

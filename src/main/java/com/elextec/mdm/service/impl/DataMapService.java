@@ -274,51 +274,48 @@ public class DataMapService extends BaseService implements IDataMapService{
 	@Override
 	public VoResponse getMdmTableMapById(MdmModel model, String bsId) {
 		VoResponse voRes = new VoResponse();
-		ServiceInterfaceDefined siDefined = serviceInterfaceDefinedMapper.findByModelIdAndBsId(model.getId(), bsId);
-		if(siDefined == null || siDefined.getSiParams() == null || siDefined.getSiParams().size() == 0){
-			voRes.setNull(voRes);
-			voRes.setMessage("业务系统服务接口定义信息获取失败");
-			return voRes;
-		}
+		Map<String,Object> map = new HashMap<String,Object>();
 		TableDefinition mdmTableDefined = model.getTableDefinitions().get(0);
 		ServiceParamTableDefined bsTableDefined = null;
-		for(ServiceInterfaceParam siParam : siDefined.getSiParams()){
-			if(siParam.getIoType().equals(SIParamEnum.paramOut)){
-				bsTableDefined = siParam.getsParamTableDefineds().get(0);
+		ServiceInterfaceDefined siDefined = serviceInterfaceDefinedMapper.findByModelIdAndBsId(model.getId(), bsId);
+		if(siDefined != null && siDefined.getSiParams() != null && siDefined.getSiParams().size() > 0){
+			for(ServiceInterfaceParam siParam : siDefined.getSiParams()){
+				if(siParam.getIoType().equals(SIParamEnum.paramOut)){
+					bsTableDefined = siParam.getsParamTableDefineds().get(0);
+				}
 			}
-		}
-		List<MdmTableMap> list = tableMapMapper.findByTableId(bsTableDefined.getId(), mdmTableDefined.getId());
-		if(list != null && list.size() > 0){
-			for(MdmTableMap tableMap : list){
-				if(tableMap.getBsIoType().equals(DataMapEnum.mdmSource)){
-					for(ColumnDefinition field : mdmTableDefined.getColumnDefinitions()){
-						if(field.getName().equals(tableMap.getMdmFieldId())){
-							field.setTargetId(tableMap.getBsFieldId());
+			List<MdmTableMap> list = tableMapMapper.findByTableId(bsTableDefined.getId(), mdmTableDefined.getId());
+			if(list != null && list.size() > 0){
+				for(MdmTableMap tableMap : list){
+					if(tableMap.getBsIoType().equals(DataMapEnum.mdmSource)){
+						for(ColumnDefinition field : mdmTableDefined.getColumnDefinitions()){
+							if(field.getName().equals(tableMap.getMdmFieldId())){
+								field.setTargetId(tableMap.getBsFieldId());
+							}
 						}
-					}
-					
-				}else if(tableMap.getBsIoType().equals(DataMapEnum.bsSource)){
-					for(ServiceParamFieldDefined field : bsTableDefined.getsParamFieldDefineds()){
-						if(field.getId().equals(tableMap.getBsFieldId())){
-							field.setTargetId(tableMap.getMdmFieldId());
+						
+					}else if(tableMap.getBsIoType().equals(DataMapEnum.bsSource)){
+						for(ServiceParamFieldDefined field : bsTableDefined.getsParamFieldDefineds()){
+							if(field.getId().equals(tableMap.getBsFieldId())){
+								field.setTargetId(tableMap.getMdmFieldId());
+							}
 						}
-					}
-					
-				}else if(tableMap.getBsIoType().equals(DataMapEnum.allSource)){
-					for(ColumnDefinition field : mdmTableDefined.getColumnDefinitions()){
-						if(field.getName().equals(tableMap.getMdmFieldId())){
-							field.setTargetId(tableMap.getBsFieldId());
+						
+					}else if(tableMap.getBsIoType().equals(DataMapEnum.allSource)){
+						for(ColumnDefinition field : mdmTableDefined.getColumnDefinitions()){
+							if(field.getName().equals(tableMap.getMdmFieldId())){
+								field.setTargetId(tableMap.getBsFieldId());
+							}
 						}
-					}
-					for(ServiceParamFieldDefined field : bsTableDefined.getsParamFieldDefineds()){
-						if(field.getId().equals(tableMap.getBsFieldId())){
-							field.setTargetId(tableMap.getMdmFieldId());
+						for(ServiceParamFieldDefined field : bsTableDefined.getsParamFieldDefineds()){
+							if(field.getId().equals(tableMap.getBsFieldId())){
+								field.setTargetId(tableMap.getMdmFieldId());
+							}
 						}
 					}
 				}
 			}
 		}
-		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("mdmTable", mdmTableDefined);
 		map.put("bsTable", bsTableDefined);
 		voRes.setData(map);

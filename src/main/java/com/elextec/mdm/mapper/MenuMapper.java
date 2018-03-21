@@ -108,7 +108,7 @@ public interface MenuMapper {
 	 * @param parentId
 	 * @return
 	 */
-	@Select("SELECT * FROM mdm_menu WHERE parent_id=#{parentId}")
+	@Select("SELECT * FROM mdm_menu WHERE parent_id=#{parentId} ORDER BY sort_order")
 	@ResultMap("menuMapAll")
 	Menu findMenusByParentId(String parentId);
 	
