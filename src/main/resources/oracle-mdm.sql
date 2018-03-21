@@ -1,3 +1,62 @@
+SELECT * FROM mdm_datapermission_defined;
+SELECT * FROM mdm_datapermission;
+SELECT * FROM Empoyeer;
+SELECT * FROM mdm_Employeer;
+delete from mdm_Employeer where age is null
+
+SELECT name,age,post FROM Empoyeer WHERE 1=1
+ALTER TABLE Employeer RENAME TO Empoyeer;
+
+select * from  mdm_table_mapper;
+delete from mdm_table_mapper
+
+create table Employeer
+(
+   name            varchar2(64),
+   age       		integer,
+   post            varchar2(64)
+   
+);
+
+SELECT * FROM mdm_model WHERE mdm_model ='职员模块'
+SELECT * FROM mdm_datapermission_defined WHERE table_id = ''
+delete from mdm_datapermission_defined;
+delete from mdm_datapermission;
+
+insert into mdm_Employeer values(sys_guid(),'a',1,'111');
+insert into mdm_Employeer values(sys_guid(),'zkj',1,'222');
+insert into Employeer values('c',1,'ccc');
+insert into Employeer values('d',1,'ddd');
+insert into Employeer values('e',1,'eee');
+
+
+delete from mdm_datapermission_defined
+delete from mdm_datapermission
+
+INSERT ALL 
+INTO mdm_employeer(id,REMARK)VALUES(sys_guid(),null) 
+INTO mdm_employeer(id,REMARK)VALUES(sys_guid(),null)
+INTO mdm_employeer(id,REMARK)VALUES(sys_guid(),null) 
+INTO mdm_employeer(id,REMARK)VALUES(sys_guid(),null) 
+INTO mdm_employeer(id,REMARK)VALUES(sys_guid(),null) 
+SELECT 1 FROM DUAL
+
+INSERT ALL 
+INTO mdm_datapermission(id,defined_id,role_id,permission_value,create_time,creater,status)
+VALUES(sys_guid(), ?, ?, ?, sysdate, ?, 0)
+INTO mdm_datapermission(id,defined_id,role_id,permission_value,create_time,creater,status) 
+VALUES(sys_guid(), ?, ?, ?, sysdate, ?, 0) 
+SELECT 1 FROM DUAL
+
+select * from MDM_ServiceInterface_Defined;
+
+select * from MDM_ServiceInterface_Param;
+select * from MDM_ServiceParam_FieldDefined;
+select * from MDM_ServiceParam_TableDefined;
+
+
+update MDM_ServiceInterface_Defined set model_id='66F49B32E0229EFFE05013AC0688029C';
+
 create or replace directory UTL_DIR as 'C:\dba';
 grant write on directory UTL_DIR to public;
 grant read on directory UTL_DIR to public;
