@@ -16,18 +16,25 @@
 
 package com.elextec.mdm.contorller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/mdm")
-public class MyController {
+import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.service.ITaskDataService;
 
+@RestController
+@RequestMapping("/mdm/main")
+public class MainController {
+	
+	@Autowired
+	private ITaskDataService taskDataService;
+	
 	@GetMapping
-	public Object hello() {
-		String msg = "Hello,MDM system";
-		return msg;
+	public Object get() {
+		VoResponse voRes = taskDataService.getMainData();
+		return voRes;
 	}
 
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.DataMapEnum;
 import com.elextec.mdm.common.entity.constant.SIParamEnum;
+import com.elextec.mdm.common.entity.constant.TaskDataRecordStateEnum;
+import com.elextec.mdm.common.entity.constant.TaskTypeEnum;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
@@ -20,13 +22,15 @@ import com.elextec.mdm.entity.ServiceInterfaceParam;
 import com.elextec.mdm.entity.ServiceParamFieldDefined;
 import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.entity.TaskDataRecordSummary;
 import com.elextec.mdm.mapper.MdmDataMapMapper;
 import com.elextec.mdm.mapper.MdmTableMapMapper;
 import com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
+import com.elextec.mdm.mapper.TaskDataRecordDetailMapper;
+import com.elextec.mdm.mapper.TaskDataRecordSummaryMapper;
 import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IDataMapService;
-import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.vo.VoDataMap;
 
 @Service
@@ -43,6 +47,12 @@ public class DataMapService extends BaseService implements IDataMapService{
 	
 	@Autowired
 	private ServiceInterfaceDefinedMapper serviceInterfaceDefinedMapper;
+	
+	@Autowired
+	private TaskDataRecordSummaryMapper taskDataRecordSummaryMapper;
+	
+	@Autowired
+	private TaskDataRecordDetailMapper taskDataRecordDetailMapper;
 	
 	@Override
 	public void save(MdmTableMap tableMap) {
@@ -99,6 +109,11 @@ public class DataMapService extends BaseService implements IDataMapService{
 		}
 		//获取映射关系
 		List<MdmTableMap> listMap = tableMapMapper.findByTableIdAndType(siParam.getsParamTableDefineds().get(0).getId(), mdmtable.getId(), DataMapEnum.bsSource, DataMapEnum.allSource);
+		if(listMap == null || listMap.size() == 0){
+			voRes.setNull(voRes);
+			voRes.setMessage("映射关系未定义");
+			return voRes;
+		}
 		//获取映射字段
 		StringBuffer queryFieldMdm = new StringBuffer();
 		StringBuffer queryFieldBs = new StringBuffer();
@@ -108,8 +123,8 @@ public class DataMapService extends BaseService implements IDataMapService{
 		}
 		queryFieldBs.deleteCharAt(queryFieldBs.length() - 1);
 		queryFieldMdm.deleteCharAt(queryFieldMdm.length() - 1);
-		System.out.println(queryFieldBs);
-		System.out.println(queryFieldMdm);
+		//System.out.println(queryFieldBs);
+		//System.out.println(queryFieldMdm);
 		//业务系统下表数据
 		List<Map<String,Object>> listBs = tableDDLMapper.findTableField(siParam.getTableName(), queryFieldBs.toString(), "1=1");
 		//MDM模块下自定义表的数据
@@ -137,7 +152,18 @@ public class DataMapService extends BaseService implements IDataMapService{
 			}
 		}
 		
+		//记录同步日志
+		TaskDataRecordSummary summary = new TaskDataRecordSummary();
+		String userName = getUserName();
+		summary.setCreater(userName);
+		summary.setModelId(model.getId());
+		summary.setTaskType(TaskTypeEnum.typePull);
+		summary.setBsId(bs.getId());
 		if(listnew.size() == 0){
+			summary.setSuccessNum(0);
+			summary.setFailNum(0);
+			summary.setStatus(TaskDataRecordStateEnum.taskStateSuccess2);
+			taskDataRecordSummaryMapper.insert(summary);
 			voRes.setMessage("没有同步的数据");
 			return voRes;
 		}
@@ -166,11 +192,19 @@ public class DataMapService extends BaseService implements IDataMapService{
 		System.out.println(sb1.toString());
 		try{
 			tableDDLMapper.alterTable(sb1.toString());
+			summary.setSuccessNum(listnew.size());
+			summary.setFailNum(0);
+			summary.setStatus(TaskDataRecordStateEnum.taskStateSuccess);
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 			voRes.setMessage(ex.getMessage());
 			voRes.setFail(voRes);
+			summary.setSuccessNum(0);
+			summary.setFailNum(listnew.size());
+			summary.setStatus(TaskDataRecordStateEnum.taskStateFail);
 		}
+		taskDataRecordSummaryMapper.insert(summary);
 		return voRes;
 	}
 	

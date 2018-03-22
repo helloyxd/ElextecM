@@ -49,6 +49,10 @@ public interface MdmModelMapper {
 	@ResultMap("modelMap")
 	MdmModel findById(String id);
 	
+	@Select("SELECT * FROM mdm_model WHERE id = #{id}")
+	@ResultMap("modelMapOnly")
+	MdmModel findByIdOnly(String id);
+	
 	@Select("SELECT * FROM mdm_model WHERE mdm_model = #{name}")
 	@Results(id = "modelMapOnly",
 	value = { 

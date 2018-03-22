@@ -4,18 +4,29 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Many;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.entity.TaskDataRecordSummary;
 
 public interface TaskDataRecordSummaryMapper {
-	@Insert("INSERT INTO taskdatarecord_summary VALUES(sys_guid(),#{flowId},#{modelId},#{taskType},#{successNum},#{failNum},"
-			+ "#{remark},#{status},#{creater},sysdate)")
+	@Insert("INSERT INTO taskdatarecord_summary VALUES(#{id},#{flowId,jdbcType=VARCHAR},#{modelId},#{taskType},#{successNum},#{failNum},"
+			+ "#{remark,jdbcType=VARCHAR},#{status},#{creater},sysdate)")
+	@SelectKey(before = true, keyProperty = "id",
+		resultType = String.class, statementType = StatementType.STATEMENT,
+		statement="SELECT sys_guid() FROM dual")
 	void insert(TaskDataRecordSummary entity);
+	
+	@InsertProvider(type = MapperProvider.class, method = "addTaskDataRecordDetails")
+    void addSummaryDetails(@Param("summary")TaskDataRecordSummary summary) ;
 	
 	@Delete("DELETE FROM taskdatarecord_summary WHERE id = #{id}")
 	void del(String id);
@@ -29,6 +40,8 @@ public interface TaskDataRecordSummaryMapper {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "flowId", column = "flow_id"),
 	    @Result(property = "modelId", column = "model_id"),
+	    @Result(property = "model", column = "model_id",
+			many = @Many(select = "com.elextec.mdm.mapper.MdmModelMapper.findByIdOnly") ),
 	    @Result(property = "taskType", column = "task_type"),
 	    @Result(property = "successNum", column = "success_num"),
 	    @Result(property = "failNum", column = "fail_num"),
@@ -45,6 +58,8 @@ public interface TaskDataRecordSummaryMapper {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "flowId", column = "flow_id"),
 	    @Result(property = "modelId", column = "model_id"),
+	    @Result(property = "model", column = "model_id",
+    		many = @Many(select = "com.elextec.mdm.mapper.MdmModelMapper.findByIdOnly") ),
 	    @Result(property = "taskType", column = "task_type"),
 	    @Result(property = "successNum", column = "success_num"),
 	    @Result(property = "failNum", column = "fail_num"),

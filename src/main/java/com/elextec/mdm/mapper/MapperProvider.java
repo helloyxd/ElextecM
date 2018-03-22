@@ -8,6 +8,7 @@ import java.util.Map;
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.DataPermissionDefined;
 import com.elextec.mdm.entity.Role;
+import com.elextec.mdm.entity.TaskDataRecordSummary;
 import com.elextec.mdm.entity.User;
 
 public class MapperProvider {
@@ -62,6 +63,20 @@ public class MapperProvider {
         		+ "VALUES(sys_guid(), #'{'dataPermissionDefined.id}, #'{'dataPermissionDefined.dataPermission[{0}].roleId}, "
         		+ "#'{'dataPermissionDefined.dataPermission[{0}].permissionValue}, sysdate, #'{'dataPermissionDefined.dataPermission[{0}].creater}, 0) ");
         for(int i = 0; i < entity.getDataPermission().size(); i++) {
+        	sb.append(mf.format(new Object[]{i}));
+        }
+        sb.append("SELECT 1 FROM DUAL");
+        System.out.println(sb);
+		return sb.toString();
+	}
+	
+	public String addTaskDataRecordDetails(Map<String, TaskDataRecordSummary> map){
+		TaskDataRecordSummary summary = map.get("summary");
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT ALL ");
+        MessageFormat mf = new MessageFormat("INTO taskdatarecord_detail(id,flow_id,data_id,model_id,system_id,task_type,remark,end_time,create_time,creater,status) "
+        		+ "VALUES(sys_guid(),'','', summary.modelId, summary.bsId, summary.taskType, '', '', sysdate, summary.creater, 0) ");
+        for(int i = 0; i < summary.getDetails().size(); i++) {
         	sb.append(mf.format(new Object[]{i}));
         }
         sb.append("SELECT 1 FROM DUAL");
