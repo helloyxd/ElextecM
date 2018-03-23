@@ -407,3 +407,13 @@ create table TaskDataRecord_Detail
    create_time			TIMESTAMP
 );
 
+create table mdm_model_flow
+(
+   id        			varchar2(32) primary key,
+   activiti_id  		varchar2(32),
+   model_id				varchar2(32),
+   operation_type		varchar2(32),
+   status               number(1) default 0,
+   creater				varchar2(64) not null,
+   create_time			TIMESTAMP
+);
