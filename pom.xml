@@ -10,7 +10,7 @@
 		<relativePath>../spring-boot-master/spring-boot-samples</relativePath>
 	</parent>
 	<artifactId>mdm</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>mdm</name>
 	<description>jy mdm system</description>
 	<properties>

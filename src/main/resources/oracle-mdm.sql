@@ -3,6 +3,10 @@ SELECT * FROM mdm_datapermission;
 SELECT * FROM Empoyeer;
 SELECT * FROM mdm_Employeer;
 delete from mdm_Employeer where age is null
+select * from MDM_TABLERELATION
+update MDM_TABLERELATION set table2='685C9755336AAA91E05013AC0688141C'
+
+SELECT * FROM TaskDataRecord_Summary
 
 SELECT name,age,post FROM Empoyeer WHERE 1=1
 ALTER TABLE Employeer RENAME TO Empoyeer;

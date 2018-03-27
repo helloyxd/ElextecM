@@ -40,3 +40,4 @@ public class CxfConfig {
         return endpoint;
     }*/
 }
+

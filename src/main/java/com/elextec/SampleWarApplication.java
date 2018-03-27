@@ -35,7 +35,6 @@ import com.elextec.mdm.webservice.impl.SampleService;
 /**
  * Sample WAR application
  */
-@RestController
 @SpringBootApplication
 @EnableTransactionManagement
 @MapperScan("com.elextec.mdm.*")
@@ -53,7 +52,7 @@ public class SampleWarApplication extends SpringBootServletInitializer {
 		//System.out.println(SampleWarApplication.class.getResource("/").toString());
 		//System.setProperty("spring.devtools.restart.enabled", "false");
 		SpringApplication.run(SampleWarApplication.class, args);
-		//Endpoint.publish("http://localhost:8080/mpc", new SampleService());  
+		//Endpoint.publish("http://localhost:8080/mdm/mpc", new SampleService());  
 	}
 
 	/*@Bean  
