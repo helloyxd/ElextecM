@@ -351,6 +351,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		tableRelation.setStatus(StatusEnum.StatusEnable);
 		tableRelation.setCreater(getUserName());
 		tableRelationMapper.insert(tableRelation);
+		voRes.setData(tableRelation);
 		return voRes;
 	}
 
