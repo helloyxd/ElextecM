@@ -37,7 +37,7 @@ public class ActivitiController {
 	
 	@PostMapping("saveBpm")
 	public VoResponse saveBpm(Map map) throws Exception{
-		return bpmFileService.download(map);
+		return bpmFileService.saveBpm(map);
 	}
 	
 	
