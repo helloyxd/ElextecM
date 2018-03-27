@@ -24,7 +24,6 @@ import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.mapper.DataPermissionDefinedMapper;
 import com.elextec.mdm.mapper.DataPermissionMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
-import com.elextec.mdm.mapper.MdmTableMapMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
 import com.elextec.mdm.mapper.TableRelationMapper;
