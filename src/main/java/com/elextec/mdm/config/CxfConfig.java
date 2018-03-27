@@ -18,7 +18,7 @@ import com.elextec.mdm.webservice.impl.SampleService;
 @Configuration
 public class CxfConfig {
 	
-	@Autowired
+	/*@Autowired
 	ISampleService sampleService;
 	
 	@Bean
@@ -38,5 +38,5 @@ public class CxfConfig {
         EndpointImpl endpoint = new EndpointImpl(springBus(), new SampleService());
         endpoint.publish("/user");
         return endpoint;
-    }
+    }*/
 }
