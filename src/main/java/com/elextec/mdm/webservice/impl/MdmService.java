@@ -17,7 +17,7 @@ import com.elextec.mdm.entity.User;
 import com.elextec.mdm.mapper.UserMapper;
 import com.elextec.mdm.webservice.IMdmService;
 
-@WebService(serviceName="MdmService", endpointInterface = "com.elextec.mdm.ws.IMdmService")
+@WebService(serviceName="MdmService", endpointInterface = "com.elextec.mdm.webservice.IMdmService")
 public class MdmService implements IMdmService {
 
 	@Autowired
