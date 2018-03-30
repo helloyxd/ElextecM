@@ -38,36 +38,35 @@ public class ActivitiyService implements IActivitiService{
 	
 	@Override
 	public ProcessInstance startProcess(String processId) {
-		
-		
-		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("name", "yuxiaodong");
-		variables.put("age", 20);
-		ProcessInstance process = runtimeService.startProcessInstanceByKey(processId, variables);
+		ProcessInstance process = runtimeService.startProcessInstanceByKey(processId);
 		//return process;
-		return null;
+		return process;
 	}
 
 	// 获得某个人的任务别表
 	@Override
 	public List<Task> getTasks(String assignee) {
-		//return taskService.createTaskQuery().active().list();
-		//return taskService.createTaskQuery().taskCandidateUser(assignee).list();
-		return null;
+		return taskService.createTaskQuery().taskCandidateUser(assignee).active().list();
+	}
+	
+	
+	public List<Task> getAllActiveTasks() {
+		return taskService.createTaskQuery().active().list();
+	}
+	
+	public void completeAllTasks() {
+		List<Task> taskList = taskService.createTaskQuery().active().list();
+		if(taskList!=null && taskList.size()>0) {
+			for(Task task:taskList) {
+				taskService.complete(task.getId());
+			}
+		}
 	}
 
 	// 完成任务
 	@Override
 	public void completeTasks(String taskId) {
-		//System.out.println("test Variable:"+ taskService.getVariable(taskId, "name"));
-		//runtimeService.getVariable(executionId, variableName);
-		Map<String, Object> taskVariables = new HashMap<String, Object>();
-		//taskVariables.put("name", "yuxiaodong");
-		//taskVariables.put("age", 20);
-		//taskService.complete(taskId, taskVariables);
-		taskVariables.put("name", "yuxiaodong");
-		taskVariables.put("age", 20);
-		//taskService.complete(taskId, taskVariables);
+		taskService.complete(taskId);
 	}
 
 }
