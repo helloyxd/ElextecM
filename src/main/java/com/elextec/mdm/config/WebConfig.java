@@ -82,7 +82,8 @@ public class WebConfig {
         return corsConfiguration;
     }
 
-    @Bean
+    
+	@Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", buildConfig()); // 4 对接口配置跨域设置
