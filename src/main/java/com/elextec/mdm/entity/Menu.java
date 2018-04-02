@@ -16,8 +16,9 @@ public class Menu extends BasicEntity{
 	private Integer level;
 	private Integer sortOrder;
 	private String remark;
-	@JsonProperty("children") 
-	private List<Menu> menus;
+	@JsonProperty("children")
+	private List<Menu> menus;//菜单
+	private List<Menu> authmenus;//功能按钮
 	private boolean leaf;
 	
 	public String getMenuName() {
@@ -79,5 +80,11 @@ public class Menu extends BasicEntity{
 	}
 	public void setLeaf(boolean leaf) {
 		this.leaf = leaf;
+	}
+	public List<Menu> getAuthmenus() {
+		return authmenus;
+	}
+	public void setAuthmenus(List<Menu> authmenus) {
+		this.authmenus = authmenus;
 	}
 }

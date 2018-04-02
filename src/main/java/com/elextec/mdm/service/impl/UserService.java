@@ -169,6 +169,25 @@ public class UserService extends BaseService implements IUserService{
 	@Override
 	public List<Menu> getCurrentUserMenus(){
 		List<Menu> list =  getUserMenuById(getUserId());
+		setMenu(list, null);
+		return list;
+	}
+	
+	private List<Menu> setMenu(List<Menu> list, Menu lastMenu){
+		Iterator<Menu> it = list.iterator();
+		List<Menu> listnull = new ArrayList<>();
+		while (it.hasNext()) {
+			Menu menu = it.next();
+			menu.setLeaf(true);
+			if(menu.getMenus().size() > 0 && menu.getLevel() < 1000){
+				menu.setLeaf(false);
+				setMenu(menu.getMenus(), menu);
+			}else if(menu.getLevel() == 1000){
+				lastMenu.setAuthmenus(list);
+				lastMenu.setMenus(listnull);
+				lastMenu.setLeaf(true);
+			}
+		}
 		return list;
 	}
 	
