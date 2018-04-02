@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.activity.IBpmFileService;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.ModelFlow;
 
 @Service
 public class BpmFileService implements IBpmFileService{
@@ -80,6 +81,7 @@ public class BpmFileService implements IBpmFileService{
     			e.printStackTrace();
     		}
             
+    		//modelFlow.setStatus(0);
             
             
             
@@ -118,6 +120,8 @@ public class BpmFileService implements IBpmFileService{
 		VoResponse voResponse = new VoResponse();
 		voResponse.setSuccess(true);
 		voResponse.setCode(1);
+		ModelFlow modelFlow = new ModelFlow();
+		modelFlow.setStatus(1);
 		String processId = param.get("processId");
 		String modelId = param.get("modelId");
 		String operateType = param.get("operateType");

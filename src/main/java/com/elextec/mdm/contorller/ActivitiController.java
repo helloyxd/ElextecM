@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,15 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.activity.IBpmFileService;
 import com.elextec.mdm.common.entity.VoResponse;
-import com.elextec.mdm.service.IActivitiService;
-import com.elextec.mdm.service.IActivitiTestService;
 
 @RestController
 @RequestMapping("/mdm/flow")
 public class ActivitiController {
 	
-	@Autowired
-	private IActivitiService activitiyService;
+	//@Autowired
+	//private IActivitiService activitiyService;
 	
 	//@Autowired
 	//private IActivitiTestService activitiTestyService;
@@ -29,6 +28,7 @@ public class ActivitiController {
 	private IMdmModelService mdmModelService;*/
 	@Autowired
 	private IBpmFileService bpmFileService;
+	
 	
 	
 	@PostMapping("publish")
