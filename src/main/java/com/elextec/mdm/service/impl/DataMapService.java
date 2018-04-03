@@ -24,6 +24,7 @@ import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TaskDataRecordSummary;
 import com.elextec.mdm.mapper.MdmDataMapMapper;
+import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.MdmTableMapMapper;
 import com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
@@ -53,6 +54,9 @@ public class DataMapService extends BaseService implements IDataMapService{
 	
 	@Autowired
 	private TaskDataRecordDetailMapper taskDataRecordDetailMapper;
+	
+	@Autowired
+	private MdmModelMapper mdmModelMapper;
 	
 	@Override
 	public void save(MdmTableMap tableMap) {
@@ -353,6 +357,44 @@ public class DataMapService extends BaseService implements IDataMapService{
 		map.put("mdmTable", mdmTableDefined);
 		map.put("bsTable", bsTableDefined);
 		voRes.setData(map);
+		return voRes;
+	}
+
+	@Override
+	public VoResponse syncToMdm(String modelId) {
+		VoResponse voRes = new VoResponse();
+		MdmModel model = mdmModelMapper.findById(modelId);
+		if(model == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("mdm模块获取失败");
+			return voRes;
+		}
+		List<MdmBs> listBs = model.getMdmBses();
+		List<MdmTableMap> listMap = null;
+		
+		for(MdmBs bs : listBs){
+			listMap = getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
+			voRes.setMessage(voRes.getMessage() + syncToMdm(model, bs, listMap).getMessage());
+		}
+		return voRes;
+	}
+
+	@Override
+	public VoResponse send(String modelId) {
+		VoResponse voRes = new VoResponse();
+		MdmModel model = mdmModelMapper.findById(modelId);
+		if(model == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("mdm模块获取失败");
+			return voRes;
+		}
+		List<MdmBs> listBs = model.getMdmBses();
+		List<MdmTableMap> listMap = null;
+		
+		for(MdmBs bs : listBs){
+			listMap = getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
+			voRes.setMessage(voRes.getMessage() + send(model, bs, listMap).getMessage());
+		}
 		return voRes;
 	}
 
