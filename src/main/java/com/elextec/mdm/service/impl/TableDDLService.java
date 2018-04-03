@@ -24,6 +24,7 @@ import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.mapper.DataPermissionDefinedMapper;
 import com.elextec.mdm.mapper.DataPermissionMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
+import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
 import com.elextec.mdm.mapper.TableRelationMapper;
@@ -51,6 +52,10 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	
 	@Autowired
 	private DataPermissionMapper dataPermissionMapper;
+	
+	@Autowired
+	private MenuMapper menuMapper;
+	
 	
 	@Override
 	@Transactional
@@ -365,19 +370,12 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		List<TableDefinition> list = tableDefinitionMapper.findByModelId(modelId);
 		return list;
 	}
+	
 
 	@Override
-	public VoResponse getDefinedData(String modelName, String tableName) {
+	public VoResponse getDefinedData(MdmModel model) {
 		VoResponse voRes = new VoResponse();
-		/*System.out.println(modelName);
-		List<MdmModel> listModel =  mdmModelMapper.findByName(modelName);
-		System.out.println(listModel.size());
-		if(listModel == null || listModel.size() == 0){
-			voRes.setNull(voRes);
-			return voRes;
-		}*/
-		MdmModel model = mdmModelMapper.findById(modelName);
-		List<TableDefinition> listTable = tableDefinitionMapper.findByModelIdAndName(model.getId(), tableName);
+		List<TableDefinition> listTable = tableDefinitionMapper.findByModelId(model.getId());
 		if(listTable == null || listTable.size() == 0){
 			voRes.setNull(voRes);
 			return voRes;
@@ -419,19 +417,19 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	}
 
 	@Override
-	public VoResponse postDefinedData(String modelName, String tableName) {
+	public VoResponse postDefinedData(String modelName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public VoResponse delDefinedData(String modelName, String tableName) {
+	public VoResponse delDefinedData(String modelName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public VoResponse updateDefinedData(String modelName, String tableName) {
+	public VoResponse updateDefinedData(String modelName) {
 		// TODO Auto-generated method stub
 		return null;
 	}

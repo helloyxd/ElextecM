@@ -32,4 +32,7 @@ public interface IMdmModelService {
 	MdmModel getById(String id);
 	
 	MdmBs getBsById(String id);
+	
+	MdmModel getByName(String name);
+	
 }

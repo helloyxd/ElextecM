@@ -9,6 +9,8 @@ import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.vo.VoMenu;
 
 public interface IMenuService {
+	
+	Menu getById(String id);
 
 	List<Menu> getAllMenus();
 	

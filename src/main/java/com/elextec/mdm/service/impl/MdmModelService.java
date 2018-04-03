@@ -117,4 +117,10 @@ public class MdmModelService extends BaseService implements IMdmModelService {
 		return bs.get(0);
 	}
 
+	@Override
+	public MdmModel getByName(String name) {
+		List<MdmModel> list = mdmModelMapper.findByName(name);
+		return list.get(0);
+	}
+
 }

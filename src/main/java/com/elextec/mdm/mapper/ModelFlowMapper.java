@@ -2,16 +2,28 @@ package com.elextec.mdm.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.elextec.mdm.entity.ModelFlow;
 
 public interface ModelFlowMapper {
 
+	@Insert("INSERT INTO mdm_model_flow VALUES(sys_guid(),#{activitiId},#{siId},#{operationType},#{status},#{creater},sysdate)")
+	void insert(ModelFlow entity);
+	
+	@Delete("DELETE FROM mdm_model_flow WHERE id = #{id}")
+	void del(String id);
+	
+	@Update("UPDATE mdm_model_flow SET model_id=#{siId},operation_type=#{operationType}, status=#{status} WHERE id =#{id}")
+	void update(ModelFlow entity);
+	
 	@Select("SELECT * FROM mdm_model_flow")
     @Results(id = "modelFlowMapOnly",
     	value = {

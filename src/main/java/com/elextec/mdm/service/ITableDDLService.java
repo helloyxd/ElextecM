@@ -3,6 +3,7 @@ package com.elextec.mdm.service;
 import java.util.List;
 
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
 
@@ -28,11 +29,11 @@ public interface ITableDDLService {
 	
 	public List<TableDefinition> getByModelId(String modelId);
 	
-	public VoResponse getDefinedData(String modelName, String tableName);
+	public VoResponse getDefinedData(MdmModel model);
 	
-	public VoResponse postDefinedData(String modelName, String tableName);
+	public VoResponse postDefinedData(String modelName);
 	
-	public VoResponse delDefinedData(String modelName, String tableName);
+	public VoResponse delDefinedData(String modelName);
 	
-	public VoResponse updateDefinedData(String modelName, String tableName);
+	public VoResponse updateDefinedData(String modelName);
 }

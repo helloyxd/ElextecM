@@ -22,6 +22,11 @@ public class MenuService extends BaseService implements IMenuService{
 	private MenuMapper menuMapper;
 	
 	@Override
+	public Menu getById(String id) {
+		return menuMapper.findById(id);
+	}
+	
+	@Override
 	public List<Menu> getAllMenus() {
 		List<Menu> list = menuMapper.findAll();
 		return list;
@@ -264,6 +269,7 @@ public class MenuService extends BaseService implements IMenuService{
 			menuMapper.insert(e);
 		}
 	}
+
 	
 
 }

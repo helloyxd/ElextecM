@@ -21,9 +21,13 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.TableDDLMap;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmModel;
+import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.QueryFieldDefined;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
+import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.IMenuService;
+import com.elextec.mdm.service.IQueryFieldDefinedService;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
 
@@ -37,6 +41,11 @@ public class TableDDLController {
 	@Autowired
 	private IMenuService menuService;
 	
+	@Autowired
+	private IMdmModelService mdmModelService;
+	
+	@Autowired
+	private IQueryFieldDefinedService queryFieldDefinedService;
 	
 	@GetMapping("getAll")
 	public Object getAll(){
@@ -139,23 +148,50 @@ public class TableDDLController {
 		return voRes;
 	}
 	
-	@GetMapping("defined/{modelId}/{tableId}")
-	public Object getDefinedData(@PathVariable("modelId") String modelId, @PathVariable("tableId") String tableId){
-		return tableDDLService.getDefinedData(modelId, tableId);
+	@GetMapping("defined/{menuId}")
+	public Object getDefinedData(@PathVariable("menuId") String menuId){
+		VoResponse voRes = new VoResponse();
+		Menu menu = menuService.getById(menuId);
+		MdmModel model = mdmModelService.getByName(menu.getMenuName());
+		return tableDDLService.getDefinedData(model);
 	}
 	
-	@PostMapping("defined/{modelId}/{tableId}")
+	@PostMapping("defined/{modelId}")
 	public Object postDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId ){
-		return tableDDLService.postDefinedData(modelId, tableId);
+		return tableDDLService.postDefinedData(modelId);
 	}
 	
-	@DeleteMapping("defined/{modelId}/{tableId}")
+	@DeleteMapping("defined/{modelId}")
 	public Object delDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
-		return tableDDLService.delDefinedData(modelId, tableId);
+		return tableDDLService.delDefinedData(modelId);
 	}
 	
-	@PutMapping("defined/{modelId}/{tableId}")
+	@PutMapping("defined/{modelId}")
 	public Object updateDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
-		return tableDDLService.updateDefinedData(modelId, tableId);
+		return tableDDLService.updateDefinedData(modelId);
+	}
+	
+	@PostMapping("queryFieldDefined")
+	public Object addQueryFieldDefined(@RequestBody QueryFieldDefined queryFieldDefined){
+		VoResponse voRes = queryFieldDefinedService.add(queryFieldDefined);
+		return voRes;
+	}
+	
+	@DeleteMapping("queryFieldDefined")
+	public Object delQueryFieldDefined(@RequestParam("id") String id){
+		VoResponse voRes = queryFieldDefinedService.del(id);
+		return voRes;
+	}
+	
+	@PutMapping("queryFieldDefined")
+	public Object updateQueryFieldDefined(@RequestBody QueryFieldDefined queryFieldDefined){
+		VoResponse voRes = queryFieldDefinedService.add(queryFieldDefined);
+		return voRes;
+	}
+	
+	@GetMapping("queryFieldDefined")
+	public Object getQueryFieldDefined(@RequestParam("tableId") String tableId){
+		VoResponse voRes = queryFieldDefinedService.getById(tableId);
+		return voRes;
 	}
 }

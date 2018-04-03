@@ -16,17 +16,24 @@ public class QueryFieldDefinedService implements IQueryFieldDefinedService {
 
 	@Override
 	public VoResponse add(QueryFieldDefined entity) {
-		return null;
+		VoResponse voRes = new VoResponse();
+		queryFieldDefinedMapper.insert(entity);
+		return voRes;
 	}
 
 	@Override
 	public VoResponse del(String id) {
-		return null;
+		VoResponse voRes = new VoResponse();
+		queryFieldDefinedMapper.del(id);
+		return voRes;
 	}
 
 	@Override
 	public VoResponse getById(String id) {
-		return null;
+		VoResponse voRes = new VoResponse();
+		queryFieldDefinedMapper.findByTableId(id);
+		voRes.setData(voRes);
+		return voRes;
 	}
 
 }
