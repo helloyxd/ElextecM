@@ -31,7 +31,7 @@ public class BpmFileService implements IBpmFileService{
 	ProcessEngine engine;
 	
 	@Autowired
-	IModelFlowService modelFlowServie;
+	IModelFlowService modelFlowService;
 	
 	@Override
 	public VoResponse download(Map<String, String> param) {
@@ -89,9 +89,9 @@ public class BpmFileService implements IBpmFileService{
     		}
             
     		//modelFlow.setStatus(0);
-    		ModelFlow  modelFlow = modelFlowServie.getModelFlowByActivitiId(processId);
+    		ModelFlow  modelFlow = modelFlowService.getModelFlowByActivitiId(processId);
     		modelFlow.setStatus(StatusEnum.StatusEnable);
-    		modelFlowServie.addOrUpdate(modelFlow);
+    		modelFlowService.addOrUpdate(modelFlow);
             
         }       
         catch(Exception e)
@@ -135,7 +135,7 @@ public class BpmFileService implements IBpmFileService{
 		modelFlow.setModelId(modelId);
 		modelFlow.setOperationType(operateType);
 		modelFlow.setActivitiId(processId);
-		modelFlowServie.addOrUpdate(modelFlow);
+		modelFlowService.addOrUpdate(modelFlow);
 		return voResponse;
 		
 	}
@@ -147,13 +147,13 @@ public class BpmFileService implements IBpmFileService{
 		RepositoryService repositoryService = engine
   	            .getRepositoryService();
 		repositoryService.deleteDeployment(processId);
-		modelFlowServie.del(processId);
+		modelFlowService.del(processId);
 		return voResponse;
 		
 	}
 	
 	public VoResponse findByModel(String modelId) {
-		return modelFlowServie.getByModelId(modelId);
+		return modelFlowService.getByModelId(modelId);
 	}
 	
 	public static void main(String[] arg0) {
