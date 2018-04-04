@@ -41,18 +41,32 @@ public class BpmFileService implements IBpmFileService{
 		voResponse.setCode(1);
 		BufferedInputStream bufferedInputStream = null;
         FileOutputStream fout = null;
+        OutputStreamWriter out = null;
         try{
           
            
+        	URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
+			URLConnection connection = url.openConnection();
+			connection.setDoInput(true);  
+			connection.setDoOutput(true);  
+			out = new OutputStreamWriter(connection  
+					    .getOutputStream(), "GBK");  
+					//传入数据  
+					out.write("j_username=admin&j_password=test");   
+					out.flush();  
+					//注意记得关闭流，不然连接不能结束会抛出异常  
+					out.close();
+					String cooki = connection.getHeaderField("Set-Cookie");
+        	
+        	
         	String urlString = param.get("url");
-            String cooki = param.get("cooki");
             String fileName = param.get("bpmName");
             String processId = param.get("processId");
             //System.out.println();
             
             //URL url = new URL("http://localhost:8080/activiti-app/app/rest/models/8cab7989-fee2-4e81-97b5-311855c4a926/bpmn20");
-            URL url = new URL(urlString);
-            URLConnection connection = url.openConnection();
+            url = new URL(urlString);
+            connection = url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestProperty("Cookie", cooki); 
             connection.getInputStream();
@@ -118,6 +132,15 @@ public class BpmFileService implements IBpmFileService{
 				}
 			}
 			
+			if(out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 		}
 		return voResponse;
 	}
@@ -152,10 +175,13 @@ public class BpmFileService implements IBpmFileService{
 	}
 	
 	public static void main(String[] arg0) {
-		
+		BufferedInputStream bufferedInputStream = null;
+        FileOutputStream fout = null;
 		try {
-			 URL url = new URL("http://localhost:8080/activiti-app/editor/index.html#/processes/e5db86e4-cce3-49c1-aabe-e8c0be68b86f/bpmn20");
-			//URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
+			
+			
+			 URL url1 = new URL("http://localhost:8080/activiti-app/app/rest/models/894a9931-f41b-461f-b790-650ee9074816/bpmn20?version=1522815417194");
+			URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
 			URLConnection connection = url.openConnection();
 			 connection.setDoInput(true);  
 			 connection.setDoOutput(true);  
@@ -168,7 +194,29 @@ public class BpmFileService implements IBpmFileService{
 					out.close();
 					String cookieVal = connection.getHeaderField("Set-Cookie");
 				System.out.println(cookieVal);
-					
+				
+				 
+		            connection = url1.openConnection();
+		            connection.setDoOutput(true);
+		            connection.setRequestProperty("Cookie", cookieVal); 
+		            connection.getInputStream();
+		            
+		            bufferedInputStream = new BufferedInputStream(connection.getInputStream());
+		            
+		            String realPath = "C:/workspace/svn/processes/test.bpmn20.xml";
+		            File file = new File(realPath.substring(0,realPath.lastIndexOf("/")));
+		            if(!file.exists()){
+		            	file.mkdirs();
+		            }
+		            fout=new FileOutputStream(realPath);
+		            byte[]  bytes = new byte[1024];
+		            
+		            while(bufferedInputStream.read(bytes)!=-1){
+		            	fout.write(bytes);
+		            	fout.flush();
+		            }
+		            
+		            fout.flush();
 					
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
