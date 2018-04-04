@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
@@ -19,12 +21,16 @@ import org.springframework.stereotype.Service;
 import com.elextec.mdm.activity.IBpmFileService;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.ModelFlow;
+import com.elextec.mdm.service.IModelFlowService;
 
 @Service
 public class BpmFileService implements IBpmFileService{
 	
 	@Autowired
 	ProcessEngine engine;
+	
+	@Autowired
+	IModelFlowService modelFlowServie;
 	
 	@Override
 	public VoResponse download(Map<String, String> param) {
@@ -141,7 +147,35 @@ public class BpmFileService implements IBpmFileService{
 		
 	}
 	
+	public VoResponse findByModel(String modelId) {
+		return modelFlowServie.getByModelId(modelId);
+	}
 	
-	
+	public static void main(String[] arg0) {
+		
+		try {
+			 URL url = new URL("http://localhost:8080/activiti-app/editor/index.html#/processes/e5db86e4-cce3-49c1-aabe-e8c0be68b86f/bpmn20");
+			//URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
+			URLConnection connection = url.openConnection();
+			 connection.setDoInput(true);  
+			 connection.setDoOutput(true);  
+			 OutputStreamWriter out = new OutputStreamWriter(connection  
+					    .getOutputStream(), "GBK");  
+					//传入数据  
+					out.write("j_username=admin&j_password=test");   
+					out.flush();  
+					//注意记得关闭流，不然连接不能结束会抛出异常  
+					out.close();
+					String cookieVal = connection.getHeaderField("Set-Cookie");
+				System.out.println(cookieVal);
+					
+					
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+         
+         
+	}
 	
 }

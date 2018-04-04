@@ -1,16 +1,40 @@
 package com.elextec.mdm.activity.impl;
 
+import java.util.List;
+
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.elextec.mdm.entity.MdmModel;
+import com.elextec.mdm.entity.ModelFlow;
+import com.elextec.mdm.service.IDataMapService;
+import com.elextec.mdm.service.IMdmModelService;
+import com.elextec.mdm.service.IModelFlowService;
 
 public class DataPullService implements JavaDelegate {
-	private Expression text2;
+	
+	@Autowired
+	IMdmModelService mdmModelService;
+	
+	@Autowired
+	IDataMapService dataMapService;
+	
+	@Autowired
+	IModelFlowService modelFlowService;
+	
 	@Override
 	public void execute(DelegateExecution execution) {
 		// TODO Auto-generated method stub
-		String value1 = (String) text2.getValue(execution);
-		System.out.println(value1);
+		String proccessId = execution.getProcessDefinitionId();
+		List<ModelFlow> modelFlowList = (List<ModelFlow>) modelFlowService.getByActivitiId(proccessId).getData();
+		if(modelFlowList.size()>0) {
+			dataMapService.syncToMdm(modelFlowList.get(0).getModelId());
+		}
+		
+		
 	}
 
 }

@@ -47,4 +47,9 @@ public class ActivitiController {
 		return bpmFileService.deleteBpm(processId);
 	}
 	
+	@GetMapping("findByModelId")
+	public VoResponse findByModelId(@RequestParam("modelId") String modelId) {
+		return bpmFileService.findByModel(modelId);
+	}
+	
 }

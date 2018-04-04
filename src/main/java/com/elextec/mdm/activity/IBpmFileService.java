@@ -12,6 +12,8 @@ public interface IBpmFileService {
 	
 	public VoResponse deleteBpm(String processId);
 	
+	public VoResponse findByModel(String modelId);
+	
 }
 
 
