@@ -17,9 +17,13 @@ public class ModelFlowService implements IModelFlowService {
 	private ModelFlowMapper modelFlowMapper;
 	
 	@Override
-	public VoResponse add(ModelFlow entity) {
+	public VoResponse addOrUpdate(ModelFlow entity) {
 		VoResponse voRes = new VoResponse();
-		modelFlowMapper.insert(entity);
+		if(entity.getId() == null){
+			modelFlowMapper.insert(entity);
+		}else{
+			modelFlowMapper.update(entity);
+		}
 		return voRes;
 	}
 
@@ -36,6 +40,15 @@ public class ModelFlowService implements IModelFlowService {
 		List<ModelFlow>  list = modelFlowMapper.findByModelId(id);
 		voRes.setData(list);
 		return voRes;
+	}
+	
+	@Override
+	public ModelFlow getModelFlowByActivitiId(String id) {
+		List<ModelFlow>  list = modelFlowMapper.findByActivitiId(id);
+		if(list == null || list.size() == 0){
+			return null;
+		}
+		return list.get(0);
 	}
 
 	@Override

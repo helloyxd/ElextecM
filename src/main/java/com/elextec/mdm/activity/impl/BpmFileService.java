@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.activity.IBpmFileService;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.common.entity.constant.StatusEnum;
 import com.elextec.mdm.entity.ModelFlow;
 import com.elextec.mdm.service.IModelFlowService;
 
@@ -30,7 +31,7 @@ public class BpmFileService implements IBpmFileService{
 	ProcessEngine engine;
 	
 	@Autowired
-	IModelFlowService modelFlowServie;
+	IModelFlowService modelFlowService;
 	
 	@Override
 	public VoResponse download(Map<String, String> param) {
@@ -102,9 +103,9 @@ public class BpmFileService implements IBpmFileService{
     		}
             
     		//modelFlow.setStatus(0);
-            
-            
-            
+    		ModelFlow  modelFlow = modelFlowService.getModelFlowByActivitiId(processId);
+    		modelFlow.setStatus(StatusEnum.StatusEnable);
+    		modelFlowService.addOrUpdate(modelFlow);
             
         }       
         catch(Exception e)
@@ -154,7 +155,10 @@ public class BpmFileService implements IBpmFileService{
 		String processId = param.get("processId");
 		String modelId = param.get("modelId");
 		String operateType = param.get("operateType");
-		
+		modelFlow.setModelId(modelId);
+		modelFlow.setOperationType(operateType);
+		modelFlow.setActivitiId(processId);
+		modelFlowService.addOrUpdate(modelFlow);
 		return voResponse;
 		
 	}
@@ -166,12 +170,13 @@ public class BpmFileService implements IBpmFileService{
 		RepositoryService repositoryService = engine
   	            .getRepositoryService();
 		repositoryService.deleteDeployment(processId);
+		modelFlowService.del(processId);
 		return voResponse;
 		
 	}
 	
 	public VoResponse findByModel(String modelId) {
-		return modelFlowServie.getByModelId(modelId);
+		return modelFlowService.getByModelId(modelId);
 	}
 	
 	public static void main(String[] arg0) {
