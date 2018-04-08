@@ -22,6 +22,9 @@ public interface TableDDLMapper {
 	@Update("${alterSql}")
 	public void alterTable(@Param("alterSql") String alterSql);
 	
+	@Update("${sql}")
+	public void executeTable(@Param("sql") String sql);
+	
 	@Select("SELECT count(*) FROM ${tableName}")
 	@ResultType(Integer.class)
 	public int queryTable(@Param("tableName") String tableName);

@@ -81,6 +81,10 @@ public interface MenuMapper {
 	@ResultMap("menuMapAll")
 	Menu findById(String id);
 	
+	@Select("SELECT * FROM mdm_menu WHERE id=#{id} ")
+	@ResultMap("menuMapOnly")
+	Menu findMenuById(String id);
+	
 	@Select("SELECT * FROM mdm_menu WHERE menu_name=#{menuName} ")
 	@ResultMap("menuMapAll")
 	List<Menu> findByName(String menuName);

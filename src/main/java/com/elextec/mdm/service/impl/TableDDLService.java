@@ -201,6 +201,8 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				entity.setConstraints(constraints);
 				Map<String, String> dataTypeMap = new HashMap<String, String>();
 				dataTypeMap.put("VARCHAR2", "32");
+				entity.setDataType("VARCHAR2");
+				entity.setDataTypeLength("32");
 				entity.setDataTypeMap(dataTypeMap);
 				listColumnsDefinition.add(entity);
 				continue;
@@ -209,7 +211,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				if(entity.getName().equals(map1.get("COLUMN_NAME"))){
 					System.out.println(map1);
 					List<String> constraints = new ArrayList<String>();
-					constraints.add(TableDDLMap.oracleColumnConstraintMap.get(map1.get("NULLABLE")));
+					constraints.add(map1.get("NULLABLE"));
 					entity.setConstraints(constraints);
 					Map<String, String> dataTypeMap = new HashMap<String, String>();
 					dataType = map1.get("DATA_TYPE");
@@ -222,21 +224,32 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 						case "FLOAT":
 						case "REAL":
 							dataTypeMap.put(dataType, dataLength);
+							entity.setDataType(dataType);
+							entity.setDataTypeLength(dataLength);
 							break;
 						case "NUMBER":
 							if(map1.get("DATA_PRECISION") == null){
 								dataTypeMap.put("INTEGER", "");
+								entity.setDataType("INTEGER");
+								entity.setDataTypeLength("");
 							}else{
-								dataTypeMap.put(dataType, String.valueOf(map1.get("DATA_PRECISION")) + 
-										"," + String.valueOf(map1.get("DATA_SCALE")));
+								dataLength = String.valueOf(map1.get("DATA_PRECISION")) + 
+										"," + String.valueOf(map1.get("DATA_SCALE"));
+								dataTypeMap.put(dataType, dataLength);
+								entity.setDataType(dataType);
+								entity.setDataTypeLength(dataLength);
 							}
 							break;
 						case "DATE":
 						case "TIMESTAMP(6)":
 							dataTypeMap.put(TableDDLMap.oracleDataTypeMap.get(dataType), "");
+							entity.setDataType(TableDDLMap.oracleDataTypeMap.get(dataType));
+							entity.setDataTypeLength("");
 							break;
 						default:
 							dataTypeMap.put(dataType, dataLength);
+							entity.setDataType(dataType);
+							entity.setDataTypeLength(dataLength);
 							break;
 					}
 					entity.setDataTypeMap(dataTypeMap);
@@ -418,20 +431,66 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	}
 
 	@Override
-	public VoResponse postDefinedData(String modelName) {
-		// TODO Auto-generated method stub
-		return null;
+	public VoResponse postDefinedData(TableDefinition table, Map<String,String> map) {
+		StringBuilder sb = new StringBuilder("INSERT INTO ");
+		StringBuilder sb2 = new StringBuilder("VALUES(sys_guid(),");
+		sb.append(table.getTableName()).append("(id,");
+		for (String key : map.keySet()) {
+			sb.append(key).append(",");
+			sb2.append("'").append(map.get(key)).append("'").append(",");
+		}
+		sb.deleteCharAt(sb.length() - 1);
+		sb2.deleteCharAt(sb2.length() - 1);
+		sb.append(") ");
+		sb2.append(");");
+		String sql = sb.append(sb2).toString();
+		System.out.println(sql);
+		VoResponse voRes= new VoResponse();
+		try{
+			tableDDLMapper.executeTable(sql);
+		}catch(Exception ex){
+			ex.printStackTrace();
+			voRes.setFail(voRes);
+			voRes.setMessage(ex.getMessage());
+		}
+		return voRes;
 	}
 
 	@Override
-	public VoResponse delDefinedData(String modelName) {
-		// TODO Auto-generated method stub
-		return null;
+	public VoResponse delDefinedData(TableDefinition table, String id) {
+		StringBuilder sb = new StringBuilder("DELETE FROM ");
+		sb.append(table.getTableName()).append(" WHERE id='").append(id).append("'");
+		System.out.println( sb.toString());
+		VoResponse voRes= new VoResponse();
+		try{
+			tableDDLMapper.executeTable(sb.toString());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			voRes.setFail(voRes);
+			voRes.setMessage(ex.getMessage());
+		}
+		return voRes;
 	}
 
 	@Override
-	public VoResponse updateDefinedData(String modelName) {
-		// TODO Auto-generated method stub
-		return null;
+	public VoResponse updateDefinedData(TableDefinition table, Map<String,String> map) {
+		StringBuilder sb = new StringBuilder("UPDATE ");
+		sb.append(table.getTableName()).append(" SET ");
+		for (String key : map.keySet()) {
+			sb.append(key).append("='").append(map.get(key)).append("',");
+			sb.append("id='").append(key).append("'");
+		}
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append(" WHERE id='").append(map.get("id")).append("'");
+		System.out.println(sb.toString());
+		VoResponse voRes= new VoResponse();
+		try{
+			tableDDLMapper.executeTable(sb.toString());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			voRes.setFail(voRes);
+			voRes.setMessage(ex.getMessage());
+		}
+		return voRes;
 	}
 }

@@ -1,6 +1,7 @@
 package com.elextec.mdm.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmModel;
@@ -31,9 +32,9 @@ public interface ITableDDLService {
 	
 	public VoResponse getDefinedData(MdmModel model);
 	
-	public VoResponse postDefinedData(String modelName);
+	public VoResponse postDefinedData(TableDefinition table, Map<String,String> map);
 	
-	public VoResponse delDefinedData(String modelName);
+	public VoResponse delDefinedData(TableDefinition table, String id);
 	
-	public VoResponse updateDefinedData(String modelName);
+	public VoResponse updateDefinedData(TableDefinition table, Map<String,String> map);
 }

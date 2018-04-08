@@ -152,7 +152,7 @@ public class TableDDLController {
 	@GetMapping("defined/{menuId}")
 	public Object getDefinedData(@PathVariable("menuId") String menuId){
 		VoResponse voRes = new VoResponse();
-		Menu menu = menuService.getById(menuId);
+		Menu menu = menuService.getMenuById(menuId);
 		MdmModel model = mdmModelService.getByName(menu.getMenuName());
 		TableDefinition table = model.getTableDefinitions().get(0);
 		tableDDLService.setColumnsDefinition(table);
@@ -174,19 +174,35 @@ public class TableDDLController {
 		return voRes;
 	}
 	
-	@PostMapping("defined/{modelId}")
-	public Object postDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId ){
-		return tableDDLService.postDefinedData(modelId);
+	@PostMapping("defined/{menuId}")
+	public Object postDefinedData(@PathVariable("menuId") String menuId, @RequestBody Map<String,String> map){
+		VoResponse voRes = new VoResponse();
+		System.out.println(menuId);
+		Menu menu = menuService.getMenuById(menuId);
+		MdmModel model = mdmModelService.getByName(menu.getMenuName());
+		TableDefinition table = model.getTableDefinitions().get(0);
+		voRes = tableDDLService.postDefinedData(table,map);
+		return voRes;
 	}
 	
-	@DeleteMapping("defined/{modelId}")
-	public Object delDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
-		return tableDDLService.delDefinedData(modelId);
+	@DeleteMapping("defined/{menuId}")
+	public Object delDefinedData(@PathVariable("menuId") String menuId, @RequestParam("id") String id){
+		VoResponse voRes = new VoResponse();
+		Menu menu = menuService.getMenuById(menuId);
+		MdmModel model = mdmModelService.getByName(menu.getMenuName());
+		TableDefinition table = model.getTableDefinitions().get(0);
+		voRes = tableDDLService.delDefinedData(table, id);
+		return voRes;
 	}
 	
-	@PutMapping("defined/{modelId}")
-	public Object updateDefinedData(@PathParam("modelId") String modelId, @PathParam("tableId") String tableId){
-		return tableDDLService.updateDefinedData(modelId);
+	@PutMapping("defined/{menuId}")
+	public Object updateDefinedData(@PathVariable("menuId") String menuId, @RequestBody Map<String,String> map){
+		VoResponse voRes = new VoResponse();
+		Menu menu = menuService.getMenuById(menuId);
+		MdmModel model = mdmModelService.getByName(menu.getMenuName());
+		TableDefinition table = model.getTableDefinitions().get(0);
+		voRes = tableDDLService.updateDefinedData(table,map);
+		return voRes;
 	}
 	
 	@PostMapping("queryFieldDefined")

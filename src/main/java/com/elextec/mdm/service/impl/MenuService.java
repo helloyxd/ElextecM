@@ -27,6 +27,11 @@ public class MenuService extends BaseService implements IMenuService{
 	}
 	
 	@Override
+	public Menu getMenuById(String id) {
+		return menuMapper.findMenuById(id);
+	}
+	
+	@Override
 	public List<Menu> getAllMenus() {
 		List<Menu> list = menuMapper.findAll();
 		return list;

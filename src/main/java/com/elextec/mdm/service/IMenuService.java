@@ -11,6 +11,8 @@ import com.elextec.mdm.vo.VoMenu;
 public interface IMenuService {
 	
 	Menu getById(String id);
+	
+	Menu getMenuById(String id);
 
 	List<Menu> getAllMenus();
 	
