@@ -412,6 +412,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			
 		}
 		List<Map<String,Object>> listObj = tableDDLMapper.findTable(table.getTableName(), sb.toString());
+		System.out.println(listObj);
 		voRes.setData(listObj);
 		return voRes;
 	}

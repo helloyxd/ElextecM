@@ -1,5 +1,6 @@
 package com.elextec.mdm.contorller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -153,7 +154,24 @@ public class TableDDLController {
 		VoResponse voRes = new VoResponse();
 		Menu menu = menuService.getById(menuId);
 		MdmModel model = mdmModelService.getByName(menu.getMenuName());
-		return tableDDLService.getDefinedData(model);
+		TableDefinition table = model.getTableDefinitions().get(0);
+		tableDDLService.setColumnsDefinition(table);
+		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> mapColumn = null;
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		for(ColumnDefinition column : table.getColumnDefinitions()){
+			if(column.getConstraints().contains("P")){
+				continue;
+			}
+			mapColumn = new HashMap<String,Object>();
+			mapColumn.put("ch", column.getColumnComment());
+			mapColumn.put("en", column.getName());
+			list.add(mapColumn);
+		}
+		map.put("definedColumn", list);
+		map.put("definedData", tableDDLService.getDefinedData(model).getData());
+		voRes.setData(map);
+		return voRes;
 	}
 	
 	@PostMapping("defined/{modelId}")

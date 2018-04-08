@@ -42,7 +42,14 @@ public interface MdmModelMapper {
 	List<MdmModel> findAllInfo();
 	
 	@Select("SELECT * FROM mdm_model")
-	@ResultMap("modelMapOnly")
+	@Results(id = "modelMapOnly",
+	value = { 
+	    @Result(id = true, property = "id", column = "id"),
+	    @Result(property = "mdmModel", column = "mdm_model"),
+	    @Result(property = "status", column = "status"),
+	    @Result(property = "createTime", column = "create_time"),
+	    @Result(property = "creater", column = "creater")
+	})
 	List<MdmModel>  findAll();
 	
 	@Select("SELECT * FROM mdm_model WHERE id = #{id}")
@@ -54,13 +61,6 @@ public interface MdmModelMapper {
 	MdmModel findByIdOnly(String id);
 	
 	@Select("SELECT * FROM mdm_model WHERE mdm_model = #{name}")
-	@Results(id = "modelMapOnly",
-	value = { 
-	    @Result(id = true, property = "id", column = "id"),
-	    @Result(property = "mdmModel", column = "mdm_model"),
-	    @Result(property = "status", column = "status"),
-	    @Result(property = "createTime", column = "create_time"),
-	    @Result(property = "creater", column = "creater")
-	})
+	@ResultMap("modelMap")
 	List<MdmModel> findByName(String name);
 }
