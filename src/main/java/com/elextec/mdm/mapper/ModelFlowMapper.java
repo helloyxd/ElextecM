@@ -15,14 +15,14 @@ import com.elextec.mdm.entity.ModelFlow;
 
 public interface ModelFlowMapper {
 
-	@Insert("INSERT INTO mdm_model_flow(id,activiti_id,model_id,operation_type,status,creater,create_time) "
-			+ "VALUES(sys_guid(),#{activitiId},#{modelId},#{operationType},#{status},#{creater},sysdate)")
+	@Insert("INSERT INTO mdm_model_flow(id,activiti_id,model_id,activiti_model_id,operation_type,status,creater,create_time) "
+			+ "VALUES(sys_guid(),#{activitiId},#{modelId},#{activitiModelId},#{operationType},#{status},#{creater},sysdate)")
 	void insert(ModelFlow entity);
 	
 	@Delete("DELETE FROM mdm_model_flow WHERE id = #{id}")
 	void del(String id);
 	
-	@Update("UPDATE mdm_model_flow SET model_id=#{modelId},operation_type=#{operationType}, status=#{status} WHERE id =#{id}")
+	@Update("UPDATE mdm_model_flow SET status=#{status} WHERE id =#{id}")
 	void update(ModelFlow entity);
 	
 	@Select("SELECT * FROM mdm_model_flow")
@@ -31,6 +31,7 @@ public interface ModelFlowMapper {
 		    @Result(id = true, property = "id", column = "id"),
 		    @Result(property = "activitiId", column = "activiti_id"),
 		    @Result(property = "modelId", column = "model_id"),
+		    @Result(property = "activitiModelId", column = "activiti_model_id"),
 		    @Result(property = "operationType", column = "operation_type"),
 		    @Result(property = "status", column = "status"),
 		    @Result(property = "createTime", column = "create_time"),
@@ -52,6 +53,7 @@ public interface ModelFlowMapper {
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "activitiId", column = "activiti_id"),
 	    @Result(property = "modelId", column = "model_id"),
+	    @Result(property = "activitiModelId", column = "activiti_model_id"),
 	    @Result(property = "operationType", column = "operation_type"),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
