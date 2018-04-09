@@ -442,7 +442,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		sb.deleteCharAt(sb.length() - 1);
 		sb2.deleteCharAt(sb2.length() - 1);
 		sb.append(") ");
-		sb2.append(");");
+		sb2.append(")");
 		String sql = sb.append(sb2).toString();
 		System.out.println(sql);
 		VoResponse voRes= new VoResponse();
@@ -477,11 +477,13 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		StringBuilder sb = new StringBuilder("UPDATE ");
 		sb.append(table.getTableName()).append(" SET ");
 		for (String key : map.keySet()) {
+			if(key.equals("ID")){
+				continue;
+			}
 			sb.append(key).append("='").append(map.get(key)).append("',");
-			sb.append("id='").append(key).append("'");
 		}
 		sb.deleteCharAt(sb.length() - 1);
-		sb.append(" WHERE id='").append(map.get("id")).append("'");
+		sb.append(" WHERE id='").append(map.get("ID")).append("'");
 		System.out.println(sb.toString());
 		VoResponse voRes= new VoResponse();
 		try{
