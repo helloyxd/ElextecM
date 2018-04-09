@@ -8,7 +8,7 @@ public class TableRelation extends BasicEntity {
 	private TableDefinition tableDefinition1;
 	private String table2;
 	private TableDefinition tableDefinition2;
-	private int relation;
+	private int relation;//0:1对1关系, 1:1对N关系, 2:N对N关系
 	private String foreignKey1;//表1的外键字段，即表2的主键，默认表名_id
 	private String foreignKey2;//表2的外键字段，即表1的主键，默认表名_id
 	private String mutiRelationTable;//N对N时的中间表

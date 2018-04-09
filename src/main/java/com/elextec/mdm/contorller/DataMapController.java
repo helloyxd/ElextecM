@@ -120,7 +120,7 @@ public class DataMapController {
 		MdmModel model = mdmModelService.getById(modelId);
 		MdmBs bs = mdmModelService.getBsById(bsId);
 		List<MdmTableMap> list = dataMapService.getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-		return dataMapService.syncToMdm(model, bs, list);
+		return dataMapService.syncToMdm(model, bs, list, "");
 	}
 	
 	@PutMapping("send")
@@ -128,6 +128,6 @@ public class DataMapController {
 		MdmModel model = mdmModelService.getById(modelId);
 		MdmBs bs = mdmModelService.getBsById(bsId);
 		List<MdmTableMap> list = dataMapService.getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-		return dataMapService.syncToMdm(model, bs, list);
+		return dataMapService.syncToMdm(model, bs, list, "");
 	}
 }

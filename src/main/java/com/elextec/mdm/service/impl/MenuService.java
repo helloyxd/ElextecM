@@ -205,7 +205,7 @@ public class MenuService extends BaseService implements IMenuService{
 					//创建model下的 三级菜单
 					menu.setParentId(MDMenu.getParentId());
 					menu.setMenuName(tableLabel);
-					menu.setMenuUrl(tableName);
+					menu.setMenuUrl("mdm");
 					//System.out.println(menu.getMenuUrl());
 					menu.setSortOrder(0);
 					menu.setMethod("get");
@@ -219,7 +219,7 @@ public class MenuService extends BaseService implements IMenuService{
 				//创建model 二级菜单
 				menu.setParentId(parentId);
 				menu.setMenuName(model.getMdmModel());
-				menu.setMenuUrl(tableName);
+				menu.setMenuUrl("mdm");
 				menu.setSortOrder(0);
 				menu.setMethod("get");
 				menu.setLevel(2);

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.TableDDLMap;
+import com.elextec.mdm.common.entity.constant.TableRelationEnum;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.Menu;
@@ -60,8 +61,7 @@ public class TableDDLController {
 		return tableDDLService.getTableDefinition(id);
 	}
 	
-	@PostMapping
-	public Object create(@RequestBody TableDefinition table){
+	private VoResponse validateTable(TableDefinition table){
 		VoResponse voRes = new VoResponse();
 		if(table.getTableName() == null || table.getTableName().equals("")){
 			voRes.setNull(voRes);
@@ -101,14 +101,22 @@ public class TableDDLController {
 			}
 			//判断constraints
 		}
-		voRes = tableDDLService.createTable(table);
+		return voRes;
+	}
+	
+	@PostMapping
+	public VoResponse create(@RequestBody TableDefinition table){
+		VoResponse voRes = validateTable(table);
 		if(voRes.getSuccess()){
-			if(table.getIsMenu()){
-				System.out.println(table.getTableName());
-				System.out.println(table.getTableLabel());
-				
-				if(!menuService.createMDMenu((MdmModel) voRes.getData(), table.getTableName(), table.getTableLabel())){
-					voRes.setMessage(voRes.getMessage() + "<br>创建菜单失败");
+			voRes = tableDDLService.createTable(table);
+			if(voRes.getSuccess()){
+				if(table.getIsMenu()){
+					System.out.println(table.getTableName());
+					System.out.println(table.getTableLabel());
+					
+					if(!menuService.createMDMenu((MdmModel) voRes.getData(), table.getTableName(), table.getTableLabel())){
+						voRes.setMessage(voRes.getMessage() + "<br>创建菜单失败");
+					}
 				}
 			}
 		}
@@ -138,7 +146,13 @@ public class TableDDLController {
 	
 	@PostMapping("addTableRelation")
 	public Object addTableRelation(@RequestBody TableRelation tableRelation){
-		VoResponse voRes = tableDDLService.addTableRelation(tableRelation);
+		tableRelation.getTableDefinition2().setIsMenu(false);
+		VoResponse voRes = create(tableRelation.getTableDefinition2());
+		if(voRes.getSuccess()){
+			tableRelation.setTable2(((MdmModel)voRes.getData()).getTableDefinitions().get(0).getId());
+			tableRelation.setRelation(TableRelationEnum.Relation1N);
+			voRes = tableDDLService.addTableRelation(tableRelation);
+		}
 		return voRes;
 	}
 	

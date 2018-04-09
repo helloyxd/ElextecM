@@ -96,7 +96,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 	}
 
 	@Override
-	public VoResponse syncToMdm(MdmModel model, MdmBs bs, List<MdmTableMap> list) {
+	public VoResponse syncToMdm(MdmModel model, MdmBs bs, List<MdmTableMap> list, String processId) {
 		VoResponse voRes = new VoResponse();
 		List<TableDefinition> mdmtables = model.getTableDefinitions();
 		//模块下获取自定义表
@@ -213,7 +213,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 	}
 	
 	@Override
-	public VoResponse send(MdmModel model, MdmBs bs, List<MdmTableMap> list) {
+	public VoResponse send(MdmModel model, MdmBs bs, List<MdmTableMap> list, String processId) {
 		VoResponse voRes = new VoResponse();
 		List<TableDefinition> mdmtables = model.getTableDefinitions();
 		//模块下获取自定义表
@@ -361,7 +361,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 	}
 
 	@Override
-	public VoResponse syncToMdm(String modelId) {
+	public VoResponse syncToMdm(String modelId, String processId) {
 		VoResponse voRes = new VoResponse();
 		MdmModel model = mdmModelMapper.findById(modelId);
 		if(model == null){
@@ -374,13 +374,13 @@ public class DataMapService extends BaseService implements IDataMapService{
 		
 		for(MdmBs bs : listBs){
 			listMap = getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-			voRes.setMessage(voRes.getMessage() + syncToMdm(model, bs, listMap).getMessage());
+			voRes.setMessage(voRes.getMessage() + syncToMdm(model, bs, listMap, processId).getMessage());
 		}
 		return voRes;
 	}
 
 	@Override
-	public VoResponse send(String modelId) {
+	public VoResponse send(String modelId, String processId) {
 		VoResponse voRes = new VoResponse();
 		MdmModel model = mdmModelMapper.findById(modelId);
 		if(model == null){
@@ -393,9 +393,21 @@ public class DataMapService extends BaseService implements IDataMapService{
 		
 		for(MdmBs bs : listBs){
 			listMap = getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-			voRes.setMessage(voRes.getMessage() + send(model, bs, listMap).getMessage());
+			voRes.setMessage(voRes.getMessage() + send(model, bs, listMap, processId).getMessage());
 		}
 		return voRes;
+	}
+
+	@Override
+	public VoResponse syncToMdm(String modelId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public VoResponse send(String modelId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

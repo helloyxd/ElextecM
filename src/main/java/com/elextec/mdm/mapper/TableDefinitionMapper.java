@@ -5,12 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
-import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.entity.TableDefinition;
 
@@ -21,7 +22,10 @@ import com.elextec.mdm.entity.TableDefinition;
 public interface TableDefinitionMapper {
 	
 	@Insert("INSERT INTO mdm_tabledefinition(id,table_name,table_label,model_id,isMenu,status,creater,create_time)"
-		    + " VALUES(sys_guid(), #{tableName}, #{tableLabel}, #{modelId}, #{isMenu,jdbcType=BIT}, #{status}, #{creater}, sysdate)")
+		    + " VALUES(#{id}, #{tableName}, #{tableLabel}, #{modelId}, #{isMenu,jdbcType=BIT}, #{status}, #{creater}, sysdate)")
+	@SelectKey(before = true, keyProperty = "id",
+		resultType = String.class, statementType = StatementType.STATEMENT,
+		statement="SELECT sys_guid() FROM dual")
 	void insert(TableDefinition table);
 	
 	@Delete("DELETE FROM mdm_tabledefinition WHERE id = #{id}")
@@ -35,8 +39,8 @@ public interface TableDefinitionMapper {
 	    @Result(property = "tableLabel", column = "table_label"),
 	    @Result(property = "modelId", column = "model_id"),
 	    @Result(property = "isMenu", column = "isMenu"),
-	    /*@Result(property = "model", column = "model_id",
-			one = @One(select = "com.elextec.mdm.mapper.MdmModelMapper.findById") ),*/
+	    @Result(property = "model", column = "model_id",
+    		many = @Many(select = "com.elextec.mdm.mapper.MdmModelMapper.findByIdOnly") ),
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater") 

@@ -72,6 +72,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			voRes.setMessage("表名 " + table.getTableName() + "已经存在");
 			return voRes;
 		}
+		table.setModel(mdmModel);
 		table.setModelId(mdmModel.getId());
 		StringBuilder sb = new StringBuilder();
 		StringBuilder sbComment  = new StringBuilder();
@@ -152,6 +153,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			tableDDLMapper.dropTable(sbDrop.toString());
 			return voRes;
 		}
+		List<TableDefinition> tableDefinitions = new ArrayList<TableDefinition>();
+		tableDefinitions.add(table);
+		mdmModel.setTableDefinitions(tableDefinitions);
 		voRes.setData(mdmModel);
 		return voRes;
 	}
@@ -242,8 +246,8 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 							break;
 						case "DATE":
 						case "TIMESTAMP(6)":
-							dataTypeMap.put(TableDDLMap.oracleDataTypeMap.get(dataType), "");
-							entity.setDataType(TableDDLMap.oracleDataTypeMap.get(dataType));
+							dataTypeMap.put(dataType, "");
+							entity.setDataType(dataType);
 							entity.setDataTypeLength("");
 							break;
 						default:
