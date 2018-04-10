@@ -16,7 +16,7 @@ import com.elextec.mdm.entity.ModelFlow;
 public interface ModelFlowMapper {
 
 	@Insert("INSERT INTO mdm_model_flow(id,activiti_id,model_id,activiti_model_id,operation_type,status,creater,create_time) "
-			+ "VALUES(sys_guid(),#{activitiId,jdbcType=VARCHAR},#{modelId},#{activitiModelId,jdbcType=VARCHAR},#{operationType},#{status},#{creater},sysdate)")
+			+ "VALUES(sys_guid(),#{activitiId,jdbcType=VARCHAR},#{modelId},#{activitiModelId,jdbcType=VARCHAR},#{operationType},#{status},#{creater,jdbcType=VARCHAR},sysdate)")
 	void insert(ModelFlow entity);
 	
 	@Delete("DELETE FROM mdm_model_flow WHERE id = #{id}")

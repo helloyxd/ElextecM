@@ -158,6 +158,7 @@ public class TableDDLController {
 	@PostMapping("addTableRelation")
 	public Object addTableRelation(@RequestBody TableRelation tableRelation){
 		VoResponse voRes = new VoResponse();
+		
 		TableDefinition table = tableDDLService.getById(tableRelation.getTable1());
 		if(table == null){
 			voRes.setNull(voRes);
