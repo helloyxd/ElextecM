@@ -59,4 +59,12 @@ public class ModelFlowService implements IModelFlowService {
 		return voRes;
 	}
 
+	@Override
+	public VoResponse getAll() {
+		VoResponse voRes = new VoResponse();
+		List<ModelFlow> list = modelFlowMapper.findAll();
+		voRes.setData(list);
+		return voRes;
+	}
+
 }

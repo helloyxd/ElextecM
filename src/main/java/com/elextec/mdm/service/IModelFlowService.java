@@ -13,4 +13,6 @@ public interface IModelFlowService {
 	ModelFlow getModelFlowByActivitiId(String id);
 	 
 	VoResponse getByActivitiId(String id);
+	
+	VoResponse getAll();
 }

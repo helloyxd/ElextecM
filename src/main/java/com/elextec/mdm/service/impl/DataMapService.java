@@ -22,6 +22,7 @@ import com.elextec.mdm.entity.ServiceInterfaceParam;
 import com.elextec.mdm.entity.ServiceParamFieldDefined;
 import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.entity.TaskDataRecordDetail;
 import com.elextec.mdm.entity.TaskDataRecordSummary;
 import com.elextec.mdm.mapper.MdmDataMapMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
@@ -181,10 +182,17 @@ public class DataMapService extends BaseService implements IDataMapService{
 		sb.deleteCharAt(sb.length() - 1).append(")");
 		sb.append("VALUES(sys_guid(),");
 		StringBuffer sb1 = new StringBuffer();
+		TaskDataRecordDetail detail = null;
 		for(Map<String,Object> map : listnew){
 			sb1.append(sb);
 			//System.out.println(map);
 			for(MdmTableMap tableMap : listMap){
+				detail = new TaskDataRecordDetail();
+				detail.setCreater(userName);
+				detail.setDataId(map.get("id").toString());
+				detail.setFlowId(processId);
+				detail.setModelId(model.getId());
+				taskDataRecordDetailMapper.insert(detail);
 				//System.out.println(tableMap.getSpFieldDefined().getFieldName());
 				//System.out.println(map.get(tableMap.getSpFieldDefined().getFieldName()));
 				sb1.append("'").append(map.get(tableMap.getSpFieldDefined().getFieldName().toUpperCase())).append("'").append(",");

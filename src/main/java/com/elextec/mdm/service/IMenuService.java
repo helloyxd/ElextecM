@@ -28,7 +28,7 @@ public interface IMenuService {
 
 	VoResponse updateMenu(Menu menu);
 
-	boolean createMDMenu(MdmModel model, String tableName, String tableLabel);
+	boolean createMDMenu(String modelName, String tableLabel);
 	
 	boolean dropMDMenu(TableDefinition table);
 }

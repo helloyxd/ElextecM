@@ -61,19 +61,13 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	@Transactional
 	public VoResponse createTable(TableDefinition table) {
 		VoResponse voRes = new VoResponse();
-		MdmModel mdmModel = mdmModelMapper.findById(table.getModelId());
-		if(mdmModel == null){
-			voRes.setNull(voRes);
-			voRes.setMessage("MDM Model is null");
-			return voRes;
-		}
+		//MdmModel mdmModel = mdmModelMapper.findByIdOnly(table.getModelId());
+		
 		if(tableDDLMapper.queryTableName(table.getTableName().toUpperCase()) > 0){
 			voRes.setFail(voRes);
 			voRes.setMessage("表名 " + table.getTableName() + "已经存在");
 			return voRes;
 		}
-		table.setModel(mdmModel);
-		table.setModelId(mdmModel.getId());
 		StringBuilder sb = new StringBuilder();
 		StringBuilder sbComment  = new StringBuilder();
 		sbComment.append("BEGIN ");
@@ -153,10 +147,10 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			tableDDLMapper.dropTable(sbDrop.toString());
 			return voRes;
 		}
-		List<TableDefinition> tableDefinitions = new ArrayList<TableDefinition>();
-		tableDefinitions.add(table);
-		mdmModel.setTableDefinitions(tableDefinitions);
-		voRes.setData(mdmModel);
+		//List<TableDefinition> tableDefinitions = new ArrayList<TableDefinition>();
+		//tableDefinitions.add(table);
+		//mdmModel.setTableDefinitions(tableDefinitions);
+		voRes.setData(table);
 		return voRes;
 	}
 	
@@ -179,8 +173,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		StringBuilder sb = new StringBuilder();
 		sb.append("DROP TABLE ").append(tableName);
 		System.out.println(sb.toString());
-		tableDDLMapper.dropTable(sb.toString());
 		tableDefinitionMapper.del(id);
+		tableDDLMapper.dropTable(sb.toString());
+		
 		table.setModel(mdmModelMapper.findById(table.getModelId()));
 		voRes.setData(table);
 		voRes.setMessage("删除定义表"+table.getTableName()+"成功");
@@ -274,6 +269,20 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			return voRes;
 		}
 		setColumnsDefinition(table);
+		List<TableDefinition> tables = new ArrayList<TableDefinition>(); 
+		tables.add(table);
+		//获取table关系
+		List<TableRelation> relations = tableRelationMapper.findByTableId(table.getId());
+		if(relations.size() > 0){
+			TableDefinition table2 = null;
+			for(TableRelation relation : relations){
+				table2 = tableDefinitionMapper.findById(relation.getTable2());
+				table2.setIsMenu(false);
+				setColumnsDefinition(table2);
+				tables.add(table2);
+			}
+			
+		}
 		//dataPermission
 		List<DataPermissionDefined> listDataDefined = dataPermissionDefinedMapper.findByTableId(table.getId());
 		List<DataPermission> listData = null;
@@ -283,7 +292,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			mapData.put(dataDefined.getPermissionField(), listData);
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("table", table);
+		map.put("table", tables);
 		map.put("data", mapData);
 		voRes.setData(map);
 		return voRes;

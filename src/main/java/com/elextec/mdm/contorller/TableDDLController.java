@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,14 +105,19 @@ public class TableDDLController {
 	@PostMapping
 	public VoResponse create(@RequestBody TableDefinition table){
 		VoResponse voRes = validateTable(table);
+		MdmModel mdmModel = mdmModelService.getById(table.getModelId());
+		if(mdmModel == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("MDM模型为空");
+			return voRes;
+		}
 		if(voRes.getSuccess()){
 			voRes = tableDDLService.createTable(table);
 			if(voRes.getSuccess()){
 				if(table.getIsMenu()){
-					System.out.println(table.getTableName());
-					System.out.println(table.getTableLabel());
-					
-					if(!menuService.createMDMenu((MdmModel) voRes.getData(), table.getTableName(), table.getTableLabel())){
+					//System.out.println(table.getTableName());
+					//System.out.println(table.getTableLabel());
+					if(!menuService.createMDMenu(mdmModel.getMdmModel(), table.getTableLabel())){
 						voRes.setMessage(voRes.getMessage() + "<br>创建菜单失败");
 					}
 				}
@@ -149,7 +152,7 @@ public class TableDDLController {
 		tableRelation.getTableDefinition2().setIsMenu(false);
 		VoResponse voRes = create(tableRelation.getTableDefinition2());
 		if(voRes.getSuccess()){
-			tableRelation.setTable2(((MdmModel)voRes.getData()).getTableDefinitions().get(0).getId());
+			tableRelation.setTable2(((TableDefinition)voRes.getData()).getId());
 			tableRelation.setRelation(TableRelationEnum.Relation1N);
 			voRes = tableDDLService.addTableRelation(tableRelation);
 		}
