@@ -154,15 +154,11 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		return voRes;
 	}
 	
+	
+	
 	@Override
-	public VoResponse dropTable(String id) {
+	public VoResponse dropTable(TableDefinition table) {
 		VoResponse voRes = new VoResponse();
-		TableDefinition table = tableDefinitionMapper.findById(id);
-		if(table == null){
-			voRes.setNull(voRes);
-			voRes.setMessage("TableDefinition is null");
-			return voRes;
-		}
 		String tableName = table.getTableName();
 		int count = tableDDLMapper.queryTable(tableName);
 		if(count > 0){
@@ -173,7 +169,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		StringBuilder sb = new StringBuilder();
 		sb.append("DROP TABLE ").append(tableName);
 		System.out.println(sb.toString());
-		tableDefinitionMapper.del(id);
+		tableDefinitionMapper.del(table.getId());
 		tableDDLMapper.dropTable(sb.toString());
 		
 		table.setModel(mdmModelMapper.findById(table.getModelId()));

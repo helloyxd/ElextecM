@@ -19,8 +19,8 @@ public interface TableRelationMapper {
 
 	@Insert("INSERT INTO mdm_tablerelation(id,table1,table2,relation,foreign_key1,foreign_key2,"
 			+ "muti_relation_table,status,creater,create_time)"
-		    + " VALUES(sys_guid(), #{table1}, #{table2}, #{relation}, #{foreignKey1}, #{foreignKey2},"
-		    + " #{mutiRelationTable}, #{status}, #{creater}, sysdate)")
+		    + " VALUES(sys_guid(), #{table1}, #{table2}, #{relation}, #{foreignKey1,jdbcType=VARCHAR}, #{foreignKey2,jdbcType=VARCHAR},"
+		    + " #{mutiRelationTable,jdbcType=VARCHAR}, #{status}, #{creater}, sysdate)")
 	void insert(TableRelation tableRelation);
 	
 	@Delete("DELETE FROM mdm_tablerelation WHERE id = #{id}")

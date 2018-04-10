@@ -128,8 +128,16 @@ public class TableDDLController {
 	
 	@DeleteMapping
 	public Object del(@RequestParam("id") String id){
-		VoResponse voRes = tableDDLService.dropTable(id);
-		if(voRes.getSuccess()){
+		VoResponse voRes = new VoResponse();
+		TableDefinition table = tableDDLService.getById(id);
+		if(table == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("table is null");
+			return voRes;
+		}
+		
+		voRes = tableDDLService.dropTable(table);
+		if(voRes.getSuccess() && table.getIsMenu()){
 			if(!menuService.dropMDMenu((TableDefinition) voRes.getData())){
 				voRes.setMessage(voRes.getMessage() + "<br>删除菜单失败");
 			}
@@ -149,8 +157,15 @@ public class TableDDLController {
 	
 	@PostMapping("addTableRelation")
 	public Object addTableRelation(@RequestBody TableRelation tableRelation){
+		VoResponse voRes = new VoResponse();
+		TableDefinition table = tableDDLService.getById(tableRelation.getTable1());
+		if(table == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("table1 is null");
+			return voRes;
+		}
 		tableRelation.getTableDefinition2().setIsMenu(false);
-		VoResponse voRes = create(tableRelation.getTableDefinition2());
+		voRes = create(tableRelation.getTableDefinition2());
 		if(voRes.getSuccess()){
 			tableRelation.setTable2(((TableDefinition)voRes.getData()).getId());
 			tableRelation.setRelation(TableRelationEnum.Relation1N);

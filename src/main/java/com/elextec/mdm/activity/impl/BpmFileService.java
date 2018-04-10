@@ -169,9 +169,11 @@ public class BpmFileService implements IBpmFileService{
 		String processId = param.get("processId");
 		String modelId = param.get("modelId");
 		String operateType = param.get("operateType");
+		String activitiModelId = param.get("activitiModelId");
 		modelFlow.setModelId(modelId);
 		modelFlow.setOperationType(operateType);
 		modelFlow.setActivitiId(processId);
+		modelFlow.setActivitiModelId(activitiModelId);
 		modelFlowService.addOrUpdate(modelFlow);
 		return voResponse;
 		
