@@ -30,6 +30,7 @@ import com.elextec.mdm.service.IMenuService;
 import com.elextec.mdm.service.IQueryFieldDefinedService;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.utils.StringUtil;
+import com.elextec.mdm.vo.VoTable;
 
 @RestController
 @RequestMapping("/mdm/table")
@@ -155,10 +156,31 @@ public class TableDDLController {
 		return voRes;
 	}
 	
+	@PostMapping("addTables")
+	public Object addTables(@RequestBody List<VoTable> tables){
+		VoResponse voRes = new VoResponse();
+		TableRelation tableRelation = new TableRelation();
+		for(VoTable table : tables){
+			if(table.getTableId() == null || table.getTableId().equals("")){
+				voRes = create(table.getTableDefinition());
+				if(!voRes.getSuccess()){
+					return voRes;
+				}
+				if(table.getTableDefinition().getIsMenu()){
+					tableRelation.setTable1(((TableDefinition)voRes.getData()).getId());
+					tableRelation.setRelation(TableRelationEnum.Relation1N);
+				}else{
+					tableRelation.setTable2(((TableDefinition)voRes.getData()).getId());
+				}
+			}
+		}
+		voRes = tableDDLService.addTableRelation(tableRelation);
+		return voRes;
+	}
+	
 	@PostMapping("addTableRelation")
 	public Object addTableRelation(@RequestBody TableRelation tableRelation){
 		VoResponse voRes = new VoResponse();
-		
 		TableDefinition table = tableDDLService.getById(tableRelation.getTable1());
 		if(table == null){
 			voRes.setNull(voRes);
