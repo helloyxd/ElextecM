@@ -60,11 +60,10 @@ public class ModelFlowService implements IModelFlowService {
 	}
 
 	@Override
-	public VoResponse getAll() {
-		VoResponse voRes = new VoResponse();
+	public List<ModelFlow> getAll() {
+		
 		List<ModelFlow> list = modelFlowMapper.findAll();
-		voRes.setData(list);
-		return voRes;
+		return list;
 	}
 
 }

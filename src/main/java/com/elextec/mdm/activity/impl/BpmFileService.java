@@ -1,15 +1,19 @@
 package com.elextec.mdm.activity.impl;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.ProcessEngine;
@@ -48,7 +52,7 @@ public class BpmFileService implements IBpmFileService{
           
            
         	URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
-			URLConnection connection = url.openConnection();
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true);  
 			connection.setDoOutput(true);  
 			out = new OutputStreamWriter(connection  
@@ -64,11 +68,13 @@ public class BpmFileService implements IBpmFileService{
         	String urlString = param.get("url");
             String fileName = param.get("bpmName");
             String processId = param.get("processId");
+            String modelId = param.get("modelId");
+            String activitiModelId = param.get("activitiModelId");
             //System.out.println();
             
             //URL url = new URL("http://localhost:8080/activiti-app/app/rest/models/8cab7989-fee2-4e81-97b5-311855c4a926/bpmn20");
             url = new URL(urlString);
-            connection = url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestProperty("Cookie", cooki); 
             connection.getInputStream();
@@ -103,8 +109,15 @@ public class BpmFileService implements IBpmFileService{
     			e.printStackTrace();
     		}
             
+    		connection.disconnect();
     		//modelFlow.setStatus(0);
     		ModelFlow  modelFlow = modelFlowService.getModelFlowByActivitiId(processId);
+    		if(modelFlow==null) {
+    			modelFlow = new ModelFlow();
+    			modelFlow.setActivitiModelId(activitiModelId);
+    			modelFlow.setActivitiId(processId);
+    			modelFlow.setModelId(modelId);
+    		}
     		modelFlow.setStatus(StatusEnum.StatusEnable);
     		modelFlowService.addOrUpdate(modelFlow);
             
@@ -181,55 +194,100 @@ public class BpmFileService implements IBpmFileService{
 	}
 	
 	public static void main(String[] arg0) {
-		BufferedInputStream bufferedInputStream = null;
+		//getFlowModelJson();
+    }
+	
+	
+	public VoResponse getAllFlowData(){
+		VoResponse vr = new VoResponse();
+		List<ModelFlow> modelFlowList = modelFlowService.getAll();
+		if(modelFlowList==null) {
+			return vr;
+		}
+		for(ModelFlow modelFlow:modelFlowList) {
+			modelFlow.setFlowChartContent(this.getFlowModelJson(modelFlow.getActivitiModelId()));
+		}
+		vr.setCode(1);;
+		vr.setData(modelFlowList);
+		return vr;
+		
+	}
+	
+	
+	//	获取流程模版定义的json字符串
+	public String getFlowModelJson(String activeModelId) {
+		//?nocaching=1523264560327
+		//BufferedInputStream bufferedInputStream = null;
         FileOutputStream fout = null;
+        BufferedReader reader = null;
+        InputStreamReader inputStreamReader = null;
+        String content  = null;
 		try {
+		URL url1 = new URL("http://localhost:8080/activiti-app/app/rest/models/"+activeModelId+"/model-json");
+		URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		 connection.setDoInput(true);
+		 connection.setDoOutput(true);  
+		 OutputStreamWriter out = new OutputStreamWriter(connection  
+				    .getOutputStream(), "GBK");  
+				//传入数据  
+				out.write("j_username=admin&j_password=test");   
+				out.flush();  
+				//注意记得关闭流，不然连接不能结束会抛出异常  
+				out.close();
+				String cookieVal = connection.getHeaderField("Set-Cookie");
+			System.out.println(cookieVal);
 			
-			
-			 URL url1 = new URL("http://localhost:8080/activiti-app/app/rest/models/894a9931-f41b-461f-b790-650ee9074816/bpmn20?version=1522815417194");
-			URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
-			URLConnection connection = url.openConnection();
-			 connection.setDoInput(true);  
-			 connection.setDoOutput(true);  
-			 OutputStreamWriter out = new OutputStreamWriter(connection  
-					    .getOutputStream(), "GBK");  
-					//传入数据  
-					out.write("j_username=admin&j_password=test");   
-					out.flush();  
-					//注意记得关闭流，不然连接不能结束会抛出异常  
-					out.close();
-					String cookieVal = connection.getHeaderField("Set-Cookie");
-				System.out.println(cookieVal);
-				
-				 
-		            connection = url1.openConnection();
-		            connection.setDoOutput(true);
-		            connection.setRequestProperty("Cookie", cookieVal); 
-		            connection.getInputStream();
-		            
-		            bufferedInputStream = new BufferedInputStream(connection.getInputStream());
-		            
-		            String realPath = "C:/workspace/svn/processes/test.bpmn20.xml";
-		            File file = new File(realPath.substring(0,realPath.lastIndexOf("/")));
-		            if(!file.exists()){
-		            	file.mkdirs();
-		            }
-		            fout=new FileOutputStream(realPath);
-		            byte[]  bytes = new byte[1024];
-		            
-		            while(bufferedInputStream.read(bytes)!=-1){
-		            	fout.write(bytes);
-		            	fout.flush();
-		            }
-		            
-		            fout.flush();
-					
+			 
+	            connection = (HttpURLConnection) url1.openConnection();
+	            connection.setDoOutput(true);
+	            connection.setRequestProperty("Cookie", cookieVal); 
+	            connection.setRequestMethod("GET");
+	            //bufferedInputStream = new BufferedInputStream(connection.getInputStream());
+	            inputStreamReader = new InputStreamReader(connection.getInputStream());
+	            reader = new BufferedReader(inputStreamReader);
+	            
+	            StringBuilder builder = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    builder.append(line).append("\n");
+                }
+                content = builder.toString();
+                connection.disconnect();
+	            
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			if(inputStreamReader!=null){
+				try {
+					inputStreamReader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if(fout != null){
+				try {
+					fout.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if(reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 		}
-         
-         
+		return content;
 	}
 	
 }

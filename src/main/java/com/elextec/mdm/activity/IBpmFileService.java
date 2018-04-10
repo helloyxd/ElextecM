@@ -14,6 +14,8 @@ public interface IBpmFileService {
 	
 	public VoResponse findByModel(String modelId);
 	
+	public VoResponse getAllFlowData();
+	
 }
 
 

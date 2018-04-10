@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.elextec.mdm.entity.ModelFlow;
 import com.elextec.mdm.service.IActivitiService;
+import com.elextec.mdm.service.IModelFlowService;
 @Service
 public class ActivitiyService implements IActivitiService{
 	@Autowired
@@ -32,14 +34,26 @@ public class ActivitiyService implements IActivitiService{
 	@Autowired
 	private TaskService taskService;
 	
+	@Autowired
+	IModelFlowService modelFlowService;
 	
 
-	// 开始流程，传入申请者的id以及公司的id
 	
+	//开始流程，根据传入的modelId,启动流程
+	public void startProcessByModel(String modelId) {
+		List<ModelFlow> modelFlowList = (List<ModelFlow>) modelFlowService.getByModelId(modelId);
+		if(modelFlowList.size()>0) {
+			String processId = modelFlowList.get(0).getActivitiId();
+			this.startProcess(processId);
+		}
+	}
+	
+	
+	// 开始流程，传入申请者的id以及公司的id
 	@Override
 	public ProcessInstance startProcess(String processId) {
 		ProcessInstance process = runtimeService.startProcessInstanceByKey(processId);
-		//return process;
+		//return process;process
 		return process;
 	}
 

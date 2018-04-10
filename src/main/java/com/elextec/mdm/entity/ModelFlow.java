@@ -11,6 +11,9 @@ public class ModelFlow extends BasicEntity{
 	private String activitiModelId;//流程模版再activiti系统中的主键		
 	//state 状态，0正常启用，1禁用，2删除
 	
+	private String flowChartContent;
+	
+	
 	public String getActivitiId() {
 		return activitiId;
 	}
@@ -34,6 +37,12 @@ public class ModelFlow extends BasicEntity{
 	}
 	public void setActivitiModelId(String activitiModelId) {
 		this.activitiModelId = activitiModelId;
+	}
+	public String getFlowChartContent() {
+		return flowChartContent;
+	}
+	public void setFlowChartContent(String flowChartContent) {
+		this.flowChartContent = flowChartContent;
 	}
 	
 	

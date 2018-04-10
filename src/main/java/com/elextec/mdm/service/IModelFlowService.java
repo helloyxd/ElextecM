@@ -1,5 +1,7 @@
 package com.elextec.mdm.service;
 
+import java.util.List;
+
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.ModelFlow;
 
@@ -14,5 +16,5 @@ public interface IModelFlowService {
 	 
 	VoResponse getByActivitiId(String id);
 	
-	VoResponse getAll();
+	List<ModelFlow> getAll();
 }
