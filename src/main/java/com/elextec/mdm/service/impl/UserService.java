@@ -119,8 +119,9 @@ public class UserService extends BaseService implements IUserService{
 			voRes.setFail(voRes);
 			voRes.setMessage("User is not exist");
 		}else{
-			user.setStatus(UserStatusEnum.UserStatusDel);
-			userMapper.update(user);
+			//user.setStatus(UserStatusEnum.UserStatusDel);
+			//userMapper.update(user);
+			userMapper.delete(id);
 		}
 		return voRes;
 	}
