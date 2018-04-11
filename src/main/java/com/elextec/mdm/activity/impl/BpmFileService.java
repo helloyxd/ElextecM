@@ -25,7 +25,10 @@ import org.springframework.stereotype.Service;
 import com.elextec.mdm.activity.IBpmFileService;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.StatusEnum;
+import com.elextec.mdm.entity.MdmConfig;
 import com.elextec.mdm.entity.ModelFlow;
+import com.elextec.mdm.mapper.MdmConfigMapper;
+import com.elextec.mdm.mapper.MdmDataMapMapper;
 import com.elextec.mdm.service.IModelFlowService;
 
 @Service
@@ -36,6 +39,9 @@ public class BpmFileService implements IBpmFileService{
 	
 	@Autowired
 	IModelFlowService modelFlowService;
+	
+	@Autowired
+	private MdmConfigMapper mdmConfigMapper;
 	
 	@Override
 	public VoResponse download(Map<String, String> param) {
@@ -49,9 +55,14 @@ public class BpmFileService implements IBpmFileService{
         FileOutputStream fout = null;
         OutputStreamWriter out = null;
         try{
-          
-           
-        	URL url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
+        	URL url = null;
+        	List<MdmConfig> configs = mdmConfigMapper.findByConfigName("Activiti-URL");
+        	if(configs.size() > 0){
+        		url = new URL(configs.get(0).getConfigValue()); 
+        	}else{
+        		url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
+        	}
+        	
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true);  
 			connection.setDoOutput(true);  
