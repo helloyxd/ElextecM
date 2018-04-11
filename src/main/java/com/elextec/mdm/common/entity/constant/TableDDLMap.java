@@ -16,7 +16,7 @@ public class TableDDLMap {
 		oracleDataTypeMap.put("CHAR", "CHAR");//固定长度字符串
 		oracleDataTypeMap.put("VARCHAR2", "VARCHAR2");//可变长度
 		oracleDataTypeMap.put("DATE", "DATE");//DD-MM-YY(HH-MI-SS)
-		oracleDataTypeMap.put("TIMESTAMP(6)", "TIMESTAMP");
+		//oracleDataTypeMap.put("TIMESTAMP(6)", "TIMESTAMP");
 		oracleDataTypeMap.put("LONG", "LONG");//超长字符串
 		oracleDataTypeMap.put("BLOB", "BLOB");//超长字符串
 		oracleDataTypeMap.put("NUMBER", "NUMBER(P,S)");//数字类型，P为整数位，S为小数位

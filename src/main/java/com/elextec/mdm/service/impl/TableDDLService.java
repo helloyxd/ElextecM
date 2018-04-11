@@ -450,6 +450,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		StringBuilder sb2 = new StringBuilder("VALUES(sys_guid(),");
 		sb.append(table.getTableName()).append("(id,");
 		for (String key : map.keySet()) {
+			if(map.get(key).equals("")){
+				continue;
+			}
 			sb.append(key).append(",");
 			sb2.append("'").append(map.get(key)).append("'").append(",");
 		}

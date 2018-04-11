@@ -221,6 +221,9 @@ public class TableDDLController {
 			mapColumn = new HashMap<String,Object>();
 			mapColumn.put("ch", column.getColumnComment());
 			mapColumn.put("en", column.getName());
+			mapColumn.put("constraint", column.getConstraints());
+			mapColumn.put("dataType", column.getDataType());
+			mapColumn.put("dataTypeLength", column.getDataTypeLength());
 			list.add(mapColumn);
 		}
 		map.put("definedColumn", list);
