@@ -109,7 +109,9 @@ public class DataMapController {
 			voRes.setMessage("mdm模块信息获取失败");
 			return voRes;
 		}
-		tableDDLService.setColumnsDefinition(model.getTableDefinitions().get(0));
+		for(TableDefinition table : model.getTableDefinitions()){
+			tableDDLService.setColumnsDefinition(table);
+		}
 		voRes = dataMapService.getMdmTableMapById(model, bsId);
 		
 		return voRes;
