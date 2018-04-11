@@ -58,7 +58,7 @@ public class BpmFileService implements IBpmFileService{
         	URL url = null;
         	List<MdmConfig> configs = mdmConfigMapper.findByConfigName("Activiti-port");
         	if(configs.size() > 0){
-        		url = new URL("http://localhost:"+configs.get(0)+"/activiti-app/app/authentication"); 
+        		url = new URL("http://localhost:"+configs.get(0).getConfigValue()+"/activiti-app/app/authentication"); 
         	}else{
         		url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
         	}
@@ -245,13 +245,14 @@ public class BpmFileService implements IBpmFileService{
 		URL url = null;
     	List<MdmConfig> configs = mdmConfigMapper.findByConfigName("Activiti-port");
     	if(configs.size() > 0){
-    		url = new URL("http://localhost:"+configs.get(0)+"/activiti-app/app/authentication"); 
-    		url1 = new URL("http://localhost:"+configs.get(0)+"/activiti-app/app/rest/models/"+activeModelId+"/model-json");
+    		url = new URL("http://localhost:"+configs.get(0).getConfigValue()+"/activiti-app/app/authentication"); 
+    		url1 = new URL("http://localhost:"+configs.get(0).getConfigValue()+"/activiti-app/app/rest/models/"+activeModelId+"/model-json");
     	}else{
     		url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
     		url1 = new URL("http://localhost:8080/activiti-app/app/rest/models/"+activeModelId+"/model-json");
     	}
-		
+    	System.out.println(url);
+    	System.out.println(url1);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		 connection.setDoInput(true);
 		 connection.setDoOutput(true);  
