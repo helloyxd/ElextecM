@@ -66,4 +66,11 @@ public class ModelFlowService implements IModelFlowService {
 		return list;
 	}
 
+	@Override
+	public VoResponse delByActivitiId(String id) {
+		VoResponse voRes = new VoResponse();
+		modelFlowMapper.delByActivitiId(id);
+		return voRes;
+	}
+
 }

@@ -10,6 +10,8 @@ public interface IModelFlowService {
 	
 	VoResponse del(String id);
 	
+	VoResponse delByActivitiId(String id);
+	
 	VoResponse getByModelId(String id);
 	
 	ModelFlow getModelFlowByActivitiId(String id);

@@ -160,10 +160,16 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	public VoResponse dropTable(TableDefinition table) {
 		VoResponse voRes = new VoResponse();
 		String tableName = table.getTableName();
-		int count = tableDDLMapper.queryTable(tableName);
+		int count = 0;
+		count = tableDDLMapper.queryTable(tableName);
+		if(count == 0){//数据表不存在情况
+			tableDefinitionMapper.del(table.getId());
+			return voRes;
+		}
+		count = tableDDLMapper.queryTable(tableName);
 		if(count > 0){
 			voRes.setFail(voRes);
-			voRes.setMessage("tableName " + tableName + " alreadly exist " + count + " data");
+			voRes.setMessage("mdm数据表 " + tableName + " 已经存在 " + count + " 条数据");
 			return voRes;
 		}
 		StringBuilder sb = new StringBuilder();
@@ -171,9 +177,8 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		System.out.println(sb.toString());
 		tableDefinitionMapper.del(table.getId());
 		tableDDLMapper.dropTable(sb.toString());
-		
-		table.setModel(mdmModelMapper.findById(table.getModelId()));
-		voRes.setData(table);
+		//table.setModel(mdmModelMapper.findById(table.getModelId()));
+		//voRes.setData(table);
 		voRes.setMessage("删除定义表"+table.getTableName()+"成功");
 		return voRes;
 	}

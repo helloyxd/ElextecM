@@ -22,6 +22,9 @@ public interface ModelFlowMapper {
 	@Delete("DELETE FROM mdm_model_flow WHERE id = #{id}")
 	void del(String id);
 	
+	@Delete("DELETE FROM mdm_model_flow WHERE activiti_id = #{id}")
+	void delByActivitiId(String id);
+	
 	@Update("UPDATE mdm_model_flow SET status=#{status} WHERE id =#{id}")
 	void update(ModelFlow entity);
 	

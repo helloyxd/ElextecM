@@ -29,10 +29,21 @@ public interface TableDDLMapper {
 	@ResultType(Integer.class)
 	public int queryTable(@Param("tableName") String tableName);
 	
+	/**
+	 * 查询数据表是否存在
+	 * @param tableName
+	 * @return
+	 */
 	@Select("SELECT count(*) FROM user_tables WHERE table_name = #{tableName}")
 	@ResultType(Integer.class)
 	public int queryTableName(@Param("tableName") String tableName);
 	
+	/**
+	 * 查询数据表的某个字段是否存在
+	 * @param tableName
+	 * @param columnName
+	 * @return
+	 */
 	@Select("SELECT count(*) FROM user_tab_columns WHERE table_name = #{tableName} AND column_name = #{columnName}")
 	@ResultType(Integer.class)
 	public int queryColumnName(@Param("tableName") String tableName, @Param("columnName") String columnName);

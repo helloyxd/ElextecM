@@ -188,7 +188,7 @@ public class BpmFileService implements IBpmFileService{
 		RepositoryService repositoryService = engine
   	            .getRepositoryService();
 		repositoryService.deleteDeployment(processId);
-		modelFlowService.del(processId);
+		modelFlowService.delByActivitiId(processId);
 		return voResponse;
 		
 	}
