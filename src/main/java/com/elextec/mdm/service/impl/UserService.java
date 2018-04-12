@@ -173,13 +173,19 @@ public class UserService extends BaseService implements IUserService{
 		return list;
 	}
 	
+	/**
+	 * 转前端树形菜单数据
+	 * @param list
+	 * @param lastMenu
+	 * @return
+	 */
 	private List<Menu> setMenu(List<Menu> list, Menu lastMenu){
 		Iterator<Menu> it = list.iterator();
 		List<Menu> listnull = new ArrayList<>();
 		while (it.hasNext()) {
 			Menu menu = it.next();
 			menu.setLeaf(true);
-			if(menu.getMenus().size() > 0 && menu.getLevel() < 1000){
+			if(menu.getMenus() != null && menu.getMenus().size() > 0 && menu.getLevel() < 1000){
 				menu.setLeaf(false);
 				setMenu(menu.getMenus(), menu);
 			}else if(menu.getLevel() == 1000){
@@ -191,47 +197,66 @@ public class UserService extends BaseService implements IUserService{
 		return list;
 	}
 	
-	
+	/**
+	 * 获取用户菜单列表
+	 */
 	public List<Menu> getUserMenuById(String userId){
 		User user = getById(userId);
 		List<Role> roles = user.getRoles();
 		List<Menu> myMenus = new ArrayList<Menu>();
+		List<Menu> allMenus = menuMapper.findAllByLevel("1");
 		for(Role role : roles){
 			if(role.getRoleName().equals("admin")){//管理员获取所有菜单
-				myMenus = menuMapper.findAllByLevel("1");
-				return myMenus;
+				return allMenus;
 			}
 			List<Menu> menus = role.getMenus();
-			myMenus = transMenus(myMenus, menus);
+			if(myMenus.size() == 0){
+				myMenus.addAll(menus);
+				continue;
+			}
+			boolean flag = false;
+			for(Menu e : menus){
+				flag = false;
+				for(Menu menu : myMenus){
+					if(e.getId().equals(menu.getId())){
+						flag = true;
+						continue;
+					}
+				}
+				if(!flag){
+					myMenus.add(e);
+				}
+			}
 		}
-		return myMenus;
+		transMenus(myMenus, allMenus);
+		return allMenus;
 	}
 	
-	private List<Menu> transMenus(List<Menu> myMenus, List<Menu> menus){
-		for(Menu menu : menus){
+	/**
+	 * 迭代出菜单树形的目录
+	 * @param myMenus用户的菜单列表
+	 * @param menus所有的树形菜单
+	 */
+	private void transMenus(List<Menu> myMenus, List<Menu> menus){
+		Iterator<Menu> itMenu = menus.iterator();
+		while(itMenu.hasNext()){
+			Menu menu = itMenu.next();
 			boolean flag = false;
-			Menu e = null;
-			Iterator<Menu> it = myMenus.iterator();
-			while(it.hasNext()){
-				Menu mymenu = it.next();
-				if(mymenu.getId().equals(menu.getId())){
+			for(Menu mymenu : myMenus){
+				if(menu.getId().equals(mymenu.getId())){
 					flag = true;
-					e = mymenu;
+					break;
 				}
 			}
 			if(!flag){
-				menu.setMenus(null);
-				e = menu;
+				itMenu.remove();
 				flag = false;
+				continue;
 			}
 			if(menu.getMenus() != null && menu.getMenus().size() > 0){
-				List<Menu> subMenus = new ArrayList<Menu>();
-				subMenus = transMenus(subMenus, menu.getMenus());
-				e.setMenus(subMenus);
+				transMenus(myMenus, menu.getMenus());
 			}
-			myMenus.add(e);
 		}
-		return myMenus;
 	}
 	
 	public VoResponse method(String id){
