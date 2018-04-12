@@ -13,6 +13,7 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	private String type;//接口类型,0 webservice,1 存储过程
 	private String wsdlLocation;//WSDL地址，如果接口是存储过程，需要填入数据库连接字符串
 	private String dburl;
+	private String remark;//描述
 	private String username;
 	private String password;
 	private String modelId;//所属MDM模块
@@ -23,6 +24,7 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	private String bingNamespace;//webservice binding namespance
 	private String operationNamespace;//webservice operation namespance
 	private List<ServiceInterfaceParam> siParams;
+	private boolean isDataSource;//是否数据源
 	
 	public String getType() {
 		return type;
@@ -101,6 +103,18 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	}
 	public void setBsId(String bsId) {
 		this.bsId = bsId;
+	}
+	public boolean isDataSource() {
+		return isDataSource;
+	}
+	public void setDataSource(boolean isDataSource) {
+		this.isDataSource = isDataSource;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	

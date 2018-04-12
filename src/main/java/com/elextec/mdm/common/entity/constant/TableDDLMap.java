@@ -30,7 +30,7 @@ public class TableDDLMap {
 		oracleColumnConstraintMap.put("Y", "NULL");//非空
 		oracleColumnConstraintMap.put("DAFAULT", "DAFAULT");//default 1，默认值 1
 		oracleColumnConstraintMap.put("UNIQUE", "UNIQUE");//唯一
-		oracleColumnConstraintMap.put("P", "PRIMARY KEY");//主键
+		//oracleColumnConstraintMap.put("P", "PRIMARY KEY");//主键
 		oracleColumnConstraintMap.put("F", "FOREIGN KEY");//外键
 		//oracleColumnConstraintMap.put(6, "CHECK");
 		

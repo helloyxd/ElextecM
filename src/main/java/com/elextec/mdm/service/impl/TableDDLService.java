@@ -187,13 +187,14 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		String dataType = null;
 		String dataLength = null;
 		List<ColumnDefinition> listColumnsDefinition = new ArrayList<ColumnDefinition>();
+		List<String> constraints = null;
 		for(Map<String, String> map : list){
 			System.out.println(map);
 			ColumnDefinition entity = new ColumnDefinition();
 			entity.setName(map.get("COLUMN_NAME"));
 			entity.setColumnComment(map.get("COMMENTS"));
-			/*if(map.get("COLUMN_NAME").equals("ID")){
-				List<String> constraints = new ArrayList<String>();
+			if(map.get("COLUMN_NAME").equals("ID")){
+				constraints = new ArrayList<String>();
 				constraints.add("P");
 				entity.setConstraints(constraints);
 				Map<String, String> dataTypeMap = new HashMap<String, String>();
@@ -203,11 +204,10 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				entity.setDataTypeMap(dataTypeMap);
 				listColumnsDefinition.add(entity);
 				continue;
-			}*/
+			}
 			for(Map<String, String> map1 : listColumns){
 				if(entity.getName().equals(map1.get("COLUMN_NAME"))){
-					System.out.println(map1);
-					List<String> constraints = new ArrayList<String>();
+					constraints = new ArrayList<String>();
 					constraints.add(map1.get("NULLABLE"));
 					entity.setConstraints(constraints);
 					Map<String, String> dataTypeMap = new HashMap<String, String>();

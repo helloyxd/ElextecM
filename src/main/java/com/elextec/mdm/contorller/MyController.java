@@ -26,20 +26,27 @@ public class MyController {
 		return msg;
 	}
 
-	@GetMapping("getMdmConfig")
+	@GetMapping("config/getAll")
 	public Object getMdmConfig() {
 		VoResponse voRes= new VoResponse();
 		voRes.setData( mdmConfigMapper.findAll());
 		return voRes;
 	}
 	
-	@PostMapping("getMdmConfig")
+	@GetMapping("config/getMdmConfig")
+	public Object getMdmConfigByName(@RequestParam("configName") String configName) {
+		VoResponse voRes= new VoResponse();
+		voRes.setData( mdmConfigMapper.findByConfigName(configName));
+		return voRes;
+	}
+	
+	@PostMapping("config/getMdmConfig")
 	public Object mdmConfig(@RequestBody MdmConfig config){
 		mdmConfigMapper.insert(config);
 		return new VoResponse();
 	}
 	
-	@DeleteMapping("getMdmConfig")
+	@DeleteMapping("config/getMdmConfig")
 	public Object mdmConfig(@RequestParam("id") String id){
 		mdmConfigMapper.del(id);
 		return new VoResponse();

@@ -224,7 +224,7 @@ public class TableDDLController {
 		Map<String,Object> mapColumn = null;
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		for(ColumnDefinition column : table.getColumnDefinitions()){
-			if(column.getConstraints().contains("P")){
+			if(column.getName().toLowerCase().equals("id")){
 				continue;
 			}
 			mapColumn = new HashMap<String,Object>();

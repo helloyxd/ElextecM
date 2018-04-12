@@ -20,6 +20,7 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "type", column = "type"),
 		    @Result(property = "wsdlLocation", column = "wsdl_location"),
 		    @Result(property = "dburl", column = "dburl"),
+		    @Result(property = "remark", column = "remark"),
 		    @Result(property = "username", column = "user_name"),
 		    @Result(property = "password", column = "password"),
 		    @Result(property = "modelId", column = "model_id"),
@@ -29,6 +30,7 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "wsbinding", column = "wsbinding"),
 		    @Result(property = "bingNamespace", column = "bing_namespace"),
 		    @Result(property = "operationNamespace", column = "operation_namespace"),
+		    @Result(property = "isDataSource", column = "isData_source"),
 		    @Result(property = "status", column = "status"),
 		    @Result(property = "createTime", column = "create_time"),
 		    @Result(property = "creater", column = "creater")
@@ -50,6 +52,7 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "type", column = "type"),
 		    @Result(property = "wsdlLocation", column = "wsdl_location"),
 		    @Result(property = "dburl", column = "dburl"),
+		    @Result(property = "remark", column = "remark"),
 		    @Result(property = "username", column = "user_name"),
 		    @Result(property = "password", column = "password"),
 		    @Result(property = "modelId", column = "model_id"),
@@ -61,6 +64,7 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "operationNamespace", column = "operation_namespace"),
 		    @Result(property = "siParams", column = "id",
     			many = @Many(select = "com.elextec.mdm.mapper.ServiceInterfaceParamMapper.findBySIDefinedId") ),
+		    @Result(property = "isDataSource", column = "isData_source"),
 		    @Result(property = "status", column = "status"),
 		    @Result(property = "createTime", column = "create_time"),
 		    @Result(property = "creater", column = "creater")
