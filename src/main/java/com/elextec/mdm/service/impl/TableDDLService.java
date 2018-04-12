@@ -100,6 +100,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				for(String s : constraints){
 					switch(s){
 						case "N":
+						case "F":
 						case "P":
 							sb.append(" ").append(TableDDLMap.oracleColumnConstraintMap.get(s));
 							break;
@@ -161,7 +162,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		VoResponse voRes = new VoResponse();
 		String tableName = table.getTableName();
 		int count = 0;
-		count = tableDDLMapper.queryTable(tableName);
+		count = tableDDLMapper.queryTableName(tableName.toUpperCase());
 		if(count == 0){//数据表不存在情况
 			tableDefinitionMapper.del(table.getId());
 			return voRes;

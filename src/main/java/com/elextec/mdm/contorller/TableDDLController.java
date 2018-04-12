@@ -109,7 +109,12 @@ public class TableDDLController {
 		MdmModel mdmModel = mdmModelService.getById(table.getModelId());
 		if(mdmModel == null){
 			voRes.setNull(voRes);
-			voRes.setMessage("MDM模型为空");
+			voRes.setMessage("MDM模块错误");
+			return voRes;
+		}
+		if(mdmModel.getTableDefinitions()!=null && mdmModel.getTableDefinitions().size()>0){
+			voRes.setFail(voRes);
+			voRes.setMessage("MDM模块下已经存在主数据表");
 			return voRes;
 		}
 		if(voRes.getSuccess()){
@@ -139,7 +144,7 @@ public class TableDDLController {
 		
 		voRes = tableDDLService.dropTable(table);
 		if(voRes.getSuccess() && table.getIsMenu()){
-			if(!menuService.dropMDMenu((TableDefinition) voRes.getData())){
+			if(!menuService.dropMDMenu(table)){
 				voRes.setMessage(voRes.getMessage() + "<br>删除菜单失败");
 			}
 		}
