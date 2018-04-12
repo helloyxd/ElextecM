@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
@@ -65,7 +64,7 @@ public interface UserMapper {
 		statement="SELECT sys_guid() FROM dual")
     void insert(User user);
 
-    @Update("UPDATE mdm_user SET full_name=#{fullName},user_password=#{userPassword},"
+    @Update("UPDATE mdm_user SET user_name=#{userName},full_name=#{fullName},user_password=#{userPassword},"
 	    + "department_id=#{department.id,jdbcType=VARCHAR},status=#{status} WHERE id =#{id}")
     void update(User user);
 

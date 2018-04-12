@@ -1,3 +1,23 @@
+SELECT * FROM mdm_menu WHERE id='67E32BDA46DFD692E05013AC06887084'
+
+ INSERT INTO mdm_product(id,PRODUCT_NAME,PRODUCT_TYPE,PRODUCT_TEST1,PRODUCT_TEST3,PRODUCT_TEST5,PRODUCT_TEST6,
+ PRODUCT_TEST7,PRODUCT_TEST8,PRODUCT_TEST9,PRODUCT_TEST4) VALUES(sys_guid(),'1','1',
+ to_date('2018-01-01','yyyy-mm-dd'),'1','1','1','1','1','1',
+ to_timestamp('2013-12-12 23:23:23.112324233','yyyy-mm--dd hh24:mi:ss.ff')) 
+ 
+  INSERT INTO mdm_product(id,PRODUCT_NAME,PRODUCT_TYPE,PRODUCT_TEST1,PRODUCT_TEST3,PRODUCT_TEST5,PRODUCT_TEST6,
+ PRODUCT_TEST7,PRODUCT_TEST8,PRODUCT_TEST9) VALUES(sys_guid(),'1','1',
+ to_date('2018-01-01','yyyy-mm-dd'),'1','1','1','1','1','1') 
+select * from mdm_product
+delete from mdm_product
+alter table
+   mdm_product
+drop (PRODUCT_TEST1);
+ 
+select * from TaskDataRecord_Summary;
+select * from TaskDataRecord_Detail;
+SELECT * FROM mdm_config  ORDER BY create_time desc
+
 SELECT * FROM mdm_datapermission_defined;
 SELECT * FROM mdm_datapermission;
 SELECT * FROM Empoyeer;
@@ -6,6 +26,13 @@ delete from mdm_Employeer where age is null
 select * from MDM_TABLERELATION
 update MDM_TABLERELATION set table2='685C9755336AAA91E05013AC0688141C'
 
+
+update mdm_Employeer set age=1 where name='c'
+
+drop table mdm_product_detail
+DELETE FROM mdm_tabledefinition WHERE id = '697971E364082785E05013AC0688126C';
+DELETE FROM mdm_tabledefinition WHERE id = '6979A72D12C37CB4E05013AC06881469';
+DELETE FROM mdm_tabledefinition WHERE id = '6979980F81EBAD60E05013AC068813FA';
 SELECT * FROM TaskDataRecord_Summary
 
 SELECT name,age,post FROM Empoyeer WHERE 1=1
@@ -14,6 +41,12 @@ ALTER TABLE Employeer RENAME TO Empoyeer;
 select * from  mdm_table_mapper;
 delete from mdm_table_mapper
 
+drop table we;
+drop table test2;
+
+SELECT column_name,data_type,data_length,nullable,data_precision,data_scale
+			FROM user_tab_columns WHERE table_Name='MDM_USER'
+
 create table Employeer
 (
    name            varchar2(64),
@@ -21,6 +54,11 @@ create table Employeer
    post            varchar2(64)
    
 );
+
+CREATE TABLE test2(
+id varchar2(32) primary key,
+test2 VARCHAR2(32) NULL
+) 
 
 SELECT * FROM mdm_model WHERE mdm_model ='职员模块'
 SELECT * FROM mdm_datapermission_defined WHERE table_id = ''
@@ -33,7 +71,9 @@ insert into Employeer values('c',1,'ccc');
 insert into Employeer values('d',1,'ddd');
 insert into Employeer values('e',1,'eee');
 
+INSERT INTO mdm_Employeer(id,name) VALUES(sys_guid(),'kk');
 
+SELECT * FROM mdm_tabledefinition
 delete from mdm_datapermission_defined
 delete from mdm_datapermission
 
@@ -57,6 +97,12 @@ select * from MDM_ServiceInterface_Defined;
 select * from MDM_ServiceInterface_Param;
 select * from MDM_ServiceParam_FieldDefined;
 select * from MDM_ServiceParam_TableDefined;
+
+--select table_name from user_tables where table_name like 'MDM%';
+--select * from mdm_user where id='798D5F70C6434815A1A3194C48695EC4';
+--select * from user_tab_columns where Table_Name='MDM_PRODUCT';
+--select * from user_tab_comments where Table_Name='MDM_USER';
+--select * from user_col_comments where Table_Name='MDM_USER'; 
 
 
 update MDM_ServiceInterface_Defined set model_id='66F49B32E0229EFFE05013AC0688029C';

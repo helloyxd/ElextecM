@@ -89,6 +89,10 @@ public class TableDDLController {
 				voRes.setFail(voRes);
 				voRes.setMessage("列名"+obj.getName()+"为数据库关键字");
 				return voRes;
+			}else if(obj.getName().toLowerCase().equals("id")){
+				voRes.setFail(voRes);
+				voRes.setMessage("列名id会自动生成，作为自定义表主键");
+				return voRes;
 			}
 			//判断dataTypeMap
 			for(String key : obj.getDataTypeMap().keySet()){

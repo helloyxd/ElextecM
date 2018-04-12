@@ -23,8 +23,6 @@ import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.mapper.DataPermissionDefinedMapper;
 import com.elextec.mdm.mapper.DataPermissionMapper;
-import com.elextec.mdm.mapper.MdmModelMapper;
-import com.elextec.mdm.mapper.MenuMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
 import com.elextec.mdm.mapper.TableRelationMapper;
@@ -39,9 +37,6 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	private TableDDLMapper tableDDLMapper;
 	
 	@Autowired
-	private MdmModelMapper mdmModelMapper;
-	
-	@Autowired
 	private TableDefinitionMapper tableDefinitionMapper;
 	
 	@Autowired
@@ -52,9 +47,6 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	
 	@Autowired
 	private DataPermissionMapper dataPermissionMapper;
-	
-	@Autowired
-	private MenuMapper menuMapper;
 	
 	
 	@Override
@@ -74,6 +66,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		sb.append("CREATE TABLE ").append(table.getTableName()).append("(");//.append("(\n");
 		List<ColumnDefinition> list = table.getColumnDefinitions();
 		Iterator<ColumnDefinition> iter = list.iterator();
+		sb.append("id varchar2(32) primary key,");
 		while(iter.hasNext()){
 			ColumnDefinition obj = iter.next();
 			sb.append(obj.getName()).append(" ");
@@ -99,6 +92,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			if(constraints != null && constraints.size() > 0){
 				for(String s : constraints){
 					switch(s){
+						case "DAFAULT":
+						case "UNIQUE":
+						case "Y":
 						case "N":
 						case "F":
 						case "P":
@@ -196,7 +192,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			ColumnDefinition entity = new ColumnDefinition();
 			entity.setName(map.get("COLUMN_NAME"));
 			entity.setColumnComment(map.get("COMMENTS"));
-			if(map.get("COLUMN_NAME").equals("ID")){
+			/*if(map.get("COLUMN_NAME").equals("ID")){
 				List<String> constraints = new ArrayList<String>();
 				constraints.add("P");
 				entity.setConstraints(constraints);
@@ -207,7 +203,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				entity.setDataTypeMap(dataTypeMap);
 				listColumnsDefinition.add(entity);
 				continue;
-			}
+			}*/
 			for(Map<String, String> map1 : listColumns){
 				if(entity.getName().equals(map1.get("COLUMN_NAME"))){
 					System.out.println(map1);

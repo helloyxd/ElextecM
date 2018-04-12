@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.VoResult;
-import com.elextec.mdm.common.entity.constant.UserStatusEnum;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;

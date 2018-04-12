@@ -41,13 +41,6 @@ comment on column MDM_User.creater is '创建者';
 comment on column MDM_User.create_time is '创建时间';
 
 
---select table_name from user_tables where table_name like 'MDM%';
---select * from mdm_user where id='798D5F70C6434815A1A3194C48695EC4';
---select * from user_tab_columns where Table_Name='MDM_USER';
---select * from user_tab_comments where Table_Name='MDM_USER';
---select * from user_col_comments where Table_Name='MDM_USER'; 
-
-
 create table MDM_Department
 (
    id                   varchar2(32) primary key,
@@ -417,3 +410,22 @@ create table mdm_model_flow
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
 );
+alter table
+   mdm_model_flow
+add
+   (
+   	activiti_model_id	varchar2(64)
+   );
+
+create table MDM_config
+(
+   id                   varchar2(32) primary key,
+   config_name          varchar2(64),
+   config_value        	varchar2(64),
+   remark            	varchar2(64),
+   status               number(1) default 0,
+   creater              varchar2(64) not null,
+   create_time          TIMESTAMP
+);
+INSERT INTO MDM_config(id,config_name,config_value,remark,status,creater,create_time)
+	VALUES(sys_guid(),'Activiti-port','8990','',0,'sys',sysdate);
