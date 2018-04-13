@@ -21,5 +21,7 @@ public interface IServiceInterfaceDefinedService {
 	
 	ServiceInterfaceDefined getById(String id);
 	
+	public ServiceInterfaceDefined getQuery(String query);
+	
 	public Map<String, Object> getPage(ServiceInterfaceDefined entity, int page, int pageSize);
 }

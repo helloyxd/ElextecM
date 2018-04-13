@@ -37,6 +37,6 @@ public interface IDataMapService {
 	
 	public VoResponse getMdmTableMapById(MdmModel model, String bsId);
 	
-	public VoResponse getMdmDataMapById(MdmModel model, String bsId, String order);
+	public VoResponse getDataMapMdm(MdmModel model, String bsId, String order);
 	
 }

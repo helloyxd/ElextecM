@@ -135,6 +135,19 @@ public class DataMapController {
 			@RequestParam(value = "isSelect") boolean isSelect,
 			@RequestParam(value = "order", defaultValue = "1")String order) {
 		VoResponse voRes = new VoResponse();
+		MdmModel model = mdmModelService.getById(modelId);
+		if(model == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("mdm模块信息获取失败");
+			return voRes;
+		}
+		if(model.getTableDefinitions() == null || model.getTableDefinitions().size() == 0){
+			voRes.setNull(voRes);
+			voRes.setMessage("mdm模块下未定义数据模型");
+			return voRes;
+		}
+		TableDefinition table = model.getTableDefinitions().get(0);
+		tableDDLService.setColumnsDefinition(table);
 		
 		return voRes;
 	}

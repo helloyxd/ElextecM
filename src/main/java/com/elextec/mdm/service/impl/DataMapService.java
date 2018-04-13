@@ -426,7 +426,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 	}
 
 	@Override
-	public VoResponse getMdmDataMapById(MdmModel model, String bsId, String order) {
+	public VoResponse getDataMapMdm(MdmModel model, String bsId, String order) {
 		
 		return null;
 	}

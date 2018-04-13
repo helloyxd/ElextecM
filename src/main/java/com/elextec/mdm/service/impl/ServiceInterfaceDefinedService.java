@@ -15,10 +15,11 @@ import com.elextec.mdm.entity.ServiceInterfaceDefined;
 import com.elextec.mdm.mapper.MdmBsMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper;
+import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IServiceInterfaceDefinedService;
 
 @Service
-public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedService {
+public class ServiceInterfaceDefinedService extends BaseService implements IServiceInterfaceDefinedService {
 
 	@Autowired
 	private ServiceInterfaceDefinedMapper serviceInterfaceDefinedMapper;
@@ -99,7 +100,7 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 					return voRes;
 				}
 				if(entity.isDataSource()){
-					if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), 1).size() > 0){
+					if(serviceInterfaceDefinedMapper.findByModelIdAndIsDataSource(entity.getModelId(), 1).size() > 0){
 						voRes.setFail(voRes);
 						voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在主数据源");
 						return voRes;
@@ -112,13 +113,14 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 						voRes.setMessage("bsId参数错误");
 						return voRes;
 					}
-					if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), entity.getBsId()).size() > 0){
+					if(serviceInterfaceDefinedMapper.findByModelIdAndBsIdOnly(entity.getModelId(), entity.getBsId()).size() > 0){
 						voRes.setFail(voRes);
 						voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在业务系统" + bs.getBsName() +"的服务接口");
 						return voRes;
 					}
 				}
 			}
+			entity.setCreater(getUserName());
 			serviceInterfaceDefinedMapper.insert(entity);
 			
 		}else{
@@ -136,7 +138,7 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 					return voRes;
 				}
 				if(entity.isDataSource() && entity.getModelId().equals(oldEntity.getModelId())){
-					if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), 1).size() > 0){
+					if(serviceInterfaceDefinedMapper.findByModelIdAndIsDataSource(entity.getModelId(), 1).size() > 0){
 						voRes.setFail(voRes);
 						voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在主数据源");
 						return voRes;
@@ -150,7 +152,7 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 						return voRes;
 					}
 					if(!entity.getBsId().equals(oldEntity.getBsId())){
-						if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), entity.getBsId()).size() > 0){
+						if(serviceInterfaceDefinedMapper.findByModelIdAndBsIdOnly(entity.getModelId(), entity.getBsId()).size() > 0){
 							voRes.setFail(voRes);
 							voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在业务系统" + bs.getBsName() +"的服务接口");
 							return voRes;
@@ -161,6 +163,12 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 			serviceInterfaceDefinedMapper.update(entity);
 		}
 		return voRes;
+	}
+
+	@Override
+	public ServiceInterfaceDefined getQuery(String query) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

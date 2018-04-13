@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
@@ -14,7 +15,7 @@ import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.entity.MdmModel;
 
-public interface MdmModelMapper {
+public interface MdmModelMapper extends BaseMapper<MdmModel>{
 
 	@Insert("INSERT INTO mdm_model(id,mdm_model,status,creater,create_time)"
 		    + " VALUES(#{id}, #{mdmModel}, #{status}, #{creater}, sysdate)")
@@ -63,4 +64,5 @@ public interface MdmModelMapper {
 	@Select("SELECT * FROM mdm_model WHERE mdm_model = #{name}")
 	@ResultMap("modelMap")
 	List<MdmModel> findByName(String name);
+	
 }
