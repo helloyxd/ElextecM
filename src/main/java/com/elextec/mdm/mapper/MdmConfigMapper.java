@@ -25,7 +25,7 @@ public interface MdmConfigMapper {
 	void del(String id);
 	
 	@Select("SELECT * FROM mdm_config")
-    @Results(id = "mdmConfigMap",
+    @Results(id = "mapOnly",
     	value = { 
 	    @Result(id = true, property = "id", column = "id"),
 	    @Result(property = "configName", column = "config_name"),
@@ -38,6 +38,6 @@ public interface MdmConfigMapper {
 	List<MdmConfig> findAll();
 	
 	@Select("SELECT * FROM mdm_config WHERE config_name = #{configName} ORDER BY create_time desc")
-	@ResultMap("mdmConfigMap")
+	@ResultMap("mapOnly")
 	List<MdmConfig> findByConfigName(String configName);
 }

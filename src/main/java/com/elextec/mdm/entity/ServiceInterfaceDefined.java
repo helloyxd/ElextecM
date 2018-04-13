@@ -17,7 +17,9 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	private String username;
 	private String password;
 	private String modelId;//所属MDM模块
+	private MdmModel model;
 	private String bsId;//所属业务系统
+	private String bs;
 	private String operationType;//操作类型，0拉取，1提送
 	private String operation;//webservice的接口方法或者存储过程方法
 	private String wsbinding;//webservice binding
@@ -115,6 +117,18 @@ public class ServiceInterfaceDefined extends BasicEntity{
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public MdmModel getModel() {
+		return model;
+	}
+	public void setModel(MdmModel model) {
+		this.model = model;
+	}
+	public String getBs() {
+		return bs;
+	}
+	public void setBs(String bs) {
+		this.bs = bs;
 	}
 	
 	

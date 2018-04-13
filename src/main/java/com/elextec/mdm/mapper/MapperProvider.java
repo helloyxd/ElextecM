@@ -100,6 +100,20 @@ public class MapperProvider {
 		return sb.toString();
 	}
 	
+	public String findEntityByPage(Map<String, Object> map){
+		StringBuilder sb = new StringBuilder();
+		@SuppressWarnings("unchecked")
+		Map<String,String> queryParam = (Map<String, String>) map.get("queryParam");
+		PageQuery pageQuery = (PageQuery) map.get("page");
+		//sb.append("SELECT * FROM mdm_user WHERE 1=1");
+		sb.append("SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM ").append(pageQuery.getTableName()).append(" t WHERE 1=1");
+		sb.append(getQueryCondition(queryParam));
+		sb.append(" AND ROWNUM <= ").append(pageQuery.getPageRowSize()*pageQuery.getCurrentPage()).append(") tt WHERE tt.rn > ");
+		sb.append(pageQuery.getBeginIndex());
+		System.out.println(sb);
+		return sb.toString();
+	}
+	
 	public String findUserCount(Map<String, User> map){
 		StringBuilder sb = new StringBuilder();
 		User user = map.get("user");
@@ -108,6 +122,28 @@ public class MapperProvider {
 		System.out.println(sb);
 		return sb.toString();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public String findEntityCount(Map<String, Object> map){
+		StringBuilder sb = new StringBuilder();
+		Map<String,String> queryParam = (Map<String, String>) map.get("queryParam");
+		String tableName = (String) map.get("tableName");
+		sb.append("SELECT COUNT(*) FROM ").append(tableName).append(" WHERE 1=1");
+		sb.append(getQueryCondition(queryParam));
+		System.out.println(sb);
+		return sb.toString();
+	}
+	
+	public String getQueryCondition(Map<String,String> queryParam){
+		StringBuilder sb = new StringBuilder();
+		for(String key : queryParam.keySet()){
+			if(queryParam.get(key) != null && !queryParam.get(key).equals("")){
+				sb.append(" AND ").append(key).append(" LIKE '").append(queryParam.get(key)).append("'");
+			}
+		}
+		return sb.toString();
+	}
+	
 	
 	public String getUserCondition(User user){
 		StringBuilder sb = new StringBuilder();

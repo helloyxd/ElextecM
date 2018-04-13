@@ -10,6 +10,7 @@ public class PageQuery{
     private int pageRowSize;
     private int allPageCount;
     private String order; 
+    private String tableName;
     
     public PageQuery(){
     }
@@ -82,5 +83,13 @@ public class PageQuery{
 		System.out.println(page.getBeginIndex());
 		System.out.println(page.getPageRowSize());
 		
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 }

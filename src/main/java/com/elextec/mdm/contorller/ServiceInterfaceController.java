@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.ServiceInterfaceDefined;
+import com.elextec.mdm.entity.User;
 import com.elextec.mdm.service.IServiceInterfaceDefinedService;
 import com.elextec.mdm.service.IServiceInterfaceParamService;
 import com.elextec.mdm.service.IServiceParamFieldDefinedService;
@@ -32,6 +34,19 @@ public class ServiceInterfaceController {
 	public Object getAll() {
 		VoResponse voRes = new VoResponse();
 		voRes.setData(serviceInterfaceDefinedService.getAll());
+		return voRes;
+	}
+	
+	@GetMapping("getPage")
+	public Object getPage(@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+			@RequestParam(value = "bsId", required = false) String bsId,
+			@RequestParam(value = "modelId", required = false) String modelId) {
+		VoResponse voRes = new VoResponse();
+		ServiceInterfaceDefined entity = new ServiceInterfaceDefined();
+		entity.setBsId(bsId);
+		entity.setModelId(modelId);
+		voRes.setData(serviceInterfaceDefinedService.getPage(entity, page, pageSize));
 		return voRes;
 	}
 	

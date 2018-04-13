@@ -1,6 +1,7 @@
 package com.elextec.mdm.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Param;
@@ -8,10 +9,12 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 
+import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 
-public interface ServiceInterfaceDefinedMapper {
+public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfaceDefined>{
 
 	@Select("SELECT * FROM mdm_serviceInterface_defined")
     @Results(id = "serviceInterfaceDefinedMapOnly",
@@ -24,7 +27,11 @@ public interface ServiceInterfaceDefinedMapper {
 		    @Result(property = "username", column = "user_name"),
 		    @Result(property = "password", column = "password"),
 		    @Result(property = "modelId", column = "model_id"),
+		    @Result(property = "model", column = "model_id",
+	    		many = @Many(select = "com.elextec.mdm.mapper.MdmModelMapper.findByIdOnly")),
 		    @Result(property = "bsId", column = "bs_id"),
+		    @Result(property = "bs", column = "bs_id",
+    			many = @Many(select = "com.elextec.mdm.mapper.MdmBsMapper.findBsNameById")),
 		    @Result(property = "operationType", column = "operation_type"),
 		    @Result(property = "operation", column = "operation"),
 		    @Result(property = "wsbinding", column = "wsbinding"),
@@ -74,4 +81,9 @@ public interface ServiceInterfaceDefinedMapper {
 	@Select("SELECT * FROM mdm_serviceInterface_defined where model_id = #{modelId} AND bs_id = #{bsId}")
 	@ResultMap("serviceInterfaceDefinedMap")
 	ServiceInterfaceDefined findByModelIdAndBsId(@Param("modelId")String modelId, @Param("bsId")String bsId);
+	
+	@SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
+	@ResultMap("serviceInterfaceDefinedMapOnly")
+    List<ServiceInterfaceDefined> findByPage(@Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
+	
 }
