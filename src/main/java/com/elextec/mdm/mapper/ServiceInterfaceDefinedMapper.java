@@ -3,19 +3,44 @@ package com.elextec.mdm.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 
 public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfaceDefined>{
 
+	@Insert("INSERT INTO mdm_serviceInterface_defined(id,type,wsdl_location,dburl,remark,user_name,password,"
+			+ "model_id,bs_id,operation_type,operation,wsbinding,bing_namespace,operation_namespace,isData_source,status,creater,create_time)"
+		    + " VALUES(#{id}, #{type}, #{wsdlLocation,jdbcType=VARCHAR}, #{dburl,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{username}, #{password},"
+		    + "#{modelId,jdbcType=VARCHAR}, #{bsId,jdbcType=VARCHAR},#{operationType,jdbcType=VARCHAR},#{operation,jdbcType=VARCHAR}, #{wsbinding,jdbcType=VARCHAR},"
+		    + "#{bingNamespace,jdbcType=VARCHAR}, #{operationNamespace,jdbcType=VARCHAR}, #{isDataSource}, #{status}, #{creater}, sysdate)")
+    @SelectKey(before = true, keyProperty = "id",
+		resultType = String.class, statementType = StatementType.STATEMENT,
+		statement="SELECT sys_guid() FROM dual")
+    void insert(ServiceInterfaceDefined entity);
+	
+	@Update("UPDATE mdm_serviceInterface_defined SET type=#{type},wsdl_location=#{wsdlLocation},dburl=#{dburl},type=#{type},"
+			+ "remark=#{remark},user_name=#{username},password=#{password},model_id=#{modelId},bs_id=#{bsId},operation_type=#{operationType},"
+			+ "operation=#{operation},wsbinding=#{wsbinding},bing_namespace=#{bingNamespace},operation_namespace=#{operationNamespace},"
+			+ "isData_source=#{isDataSource},status=#{status} WHERE id =#{id}")
+	void update(ServiceInterfaceDefined entity);
+	
+	@Delete("DELETE FROM mdm_serviceInterface_defined WHERE id = #{id}")
+	void del(String id);
+	
+	
 	@Select("SELECT * FROM mdm_serviceInterface_defined")
     @Results(id = "serviceInterfaceDefinedMapOnly",
     	value = {
@@ -47,6 +72,10 @@ public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfa
 	@Select("SELECT * FROM mdm_serviceInterface_defined where model_id = #{modelId}")
 	@ResultMap("serviceInterfaceDefinedMapOnly")
 	List<ServiceInterfaceDefined> findByModelId(String modelId);
+	
+	@Select("SELECT * FROM mdm_serviceInterface_defined where model_id = #{modelId} AND isData_source = #{isDataSource}")
+	@ResultMap("serviceInterfaceDefinedMapOnly")
+	List<ServiceInterfaceDefined> findByModelId(String modelId, int isDataSource);
 	
 	@Select("SELECT * FROM mdm_serviceInterface_defined where bs_id = #{bsId}")
 	@ResultMap("serviceInterfaceDefinedMap")

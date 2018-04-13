@@ -3,6 +3,7 @@ package com.elextec.mdm.service;
 import java.util.List;
 import java.util.Map;
 
+import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 
 
@@ -10,7 +11,9 @@ public interface IServiceInterfaceDefinedService {
 
 	void add(ServiceInterfaceDefined entity);
 	
-	void del(String id);
+	VoResponse addOrUpdate(ServiceInterfaceDefined entity);
+	
+	VoResponse del(String id);
 	
 	void update(ServiceInterfaceDefined entity);
 	

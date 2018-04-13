@@ -2,13 +2,15 @@ package com.elextec.mdm.contorller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
-import com.elextec.mdm.entity.User;
 import com.elextec.mdm.service.IServiceInterfaceDefinedService;
 import com.elextec.mdm.service.IServiceInterfaceParamService;
 import com.elextec.mdm.service.IServiceParamFieldDefinedService;
@@ -50,10 +52,30 @@ public class ServiceInterfaceController {
 		return voRes;
 	}
 	
-	@GetMapping("getSIbyId")
-	public Object getServiceInterfaceDefinedbyId(@RequestParam("id") String siId) {
+	@PostMapping
+	public Object add(@RequestBody ServiceInterfaceDefined entity) {
 		VoResponse voRes = new VoResponse();
-		voRes.setData(serviceInterfaceDefinedService.getById(siId));
+		voRes = serviceInterfaceDefinedService.addOrUpdate(entity);
+		return voRes;
+	}
+
+	@PutMapping
+	public Object update(@RequestBody ServiceInterfaceDefined entity) {
+		VoResponse voRes = new VoResponse();
+		voRes = serviceInterfaceDefinedService.addOrUpdate(entity);
+		return voRes;
+	}
+	
+	public Object del(@RequestParam("id") String id) {
+		VoResponse voRes = new VoResponse();
+		voRes = serviceInterfaceDefinedService.del(id);
+		return voRes;
+	}
+	
+	@GetMapping
+	public Object getServiceInterfaceDefinedbyId(@RequestParam("id") String id) {
+		VoResponse voRes = new VoResponse();
+		voRes.setData(serviceInterfaceDefinedService.getById(id));
 		return voRes;
 	}
 
