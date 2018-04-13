@@ -56,6 +56,9 @@ public interface MdmBsMapper {
 	    @Result(property = "createTime", column = "create_time"),
 	    @Result(property = "creater", column = "creater") 
 	})
-	List<MdmBs> findById(String id);
+	MdmBs findById(String id);
 	
+	@Select("SELECT * FROM mdm_bs WHERE id = #{id}")
+	@ResultMap("bsMapOnly")
+	MdmBs findByIdOnly(String id);
 }

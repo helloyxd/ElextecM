@@ -111,6 +111,10 @@ public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfa
 	@ResultMap("serviceInterfaceDefinedMap")
 	ServiceInterfaceDefined findByModelIdAndBsId(@Param("modelId")String modelId, @Param("bsId")String bsId);
 	
+	@Select("SELECT * FROM mdm_serviceInterface_defined where model_id = #{modelId} AND bs_id = #{bsId}")
+	@ResultMap("serviceInterfaceDefinedMapOnly")
+	List<ServiceInterfaceDefined> findByModelId(@Param("modelId")String modelId, @Param("bsId")String bsId);
+	
 	@SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
 	@ResultMap("serviceInterfaceDefinedMapOnly")
     List<ServiceInterfaceDefined> findByPage(@Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);

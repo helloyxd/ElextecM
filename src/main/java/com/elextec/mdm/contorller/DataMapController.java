@@ -2,6 +2,7 @@ package com.elextec.mdm.contorller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -113,6 +114,38 @@ public class DataMapController {
 			tableDDLService.setColumnsDefinition(table);
 		}
 		voRes = dataMapService.getMdmTableMapById(model, bsId);
+		
+		return voRes;
+	}
+	
+	/**
+	 * 查询MDM模块下模型数据以及数据连线映射
+	 * @param modelId 模块ID
+	 * @param map 查询字段和查询值
+	 * @param page 第几页
+	 * @param pageSize 每页显示几条数据
+	 * @param isSelect 查询是否连线的数据
+	 * @param order 排序
+	 * @return
+	 */
+	@GetMapping("getDataMapMdm")
+	public Object getDataMapMdm(@RequestParam("modelId") String modelId,@RequestParam("map") Map<String,String> map,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+			@RequestParam(value = "isSelect") boolean isSelect,
+			@RequestParam(value = "order", defaultValue = "1")String order) {
+		VoResponse voRes = new VoResponse();
+		
+		return voRes;
+	}
+	
+	@GetMapping("getDataMapBs")
+	public Object getDataMapBs(@RequestParam("bsId") String bsId,@RequestParam("map") Map<String,String> map,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+			@RequestParam(value = "isSelect") boolean isSelect,
+			@RequestParam(value = "order", defaultValue = "1")String order) {
+		VoResponse voRes = new VoResponse();
 		
 		return voRes;
 	}

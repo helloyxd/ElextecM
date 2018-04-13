@@ -425,4 +425,10 @@ public class DataMapService extends BaseService implements IDataMapService{
 		return null;
 	}
 
+	@Override
+	public VoResponse getMdmDataMapById(MdmModel model, String bsId, String order) {
+		
+		return null;
+	}
+
 }

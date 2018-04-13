@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
+import com.elextec.mdm.mapper.MdmBsMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper;
 import com.elextec.mdm.service.IServiceInterfaceDefinedService;
@@ -23,6 +25,9 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 	
 	@Autowired
 	private MdmModelMapper mdmModelMapper;
+	
+	@Autowired
+	private MdmBsMapper mdmBsMapper;
 	
 	@Override
 	public void add(ServiceInterfaceDefined entity) {
@@ -85,21 +90,35 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 	@Override
 	public VoResponse addOrUpdate(ServiceInterfaceDefined entity) {
 		VoResponse voRes = new VoResponse();
-		if(entity.getModelId() != null && !entity.getModelId().equals("")){
-			MdmModel model = mdmModelMapper.findByIdOnly(entity.getModelId());
-			if(model == null){
-				voRes.setNull(voRes);
-				voRes.setMessage("modelId参数错误");
-				return voRes;
-			}
-			if(entity.isDataSource() &&  serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), 1).size() > 1){
-				voRes.setFail(voRes);
-				voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在主数据源");
-				return voRes;
-			}
-		}
 		if(entity.getId() == null || entity.getId().equals("")){
-			
+			if(entity.getModelId() != null && !entity.getModelId().equals("")){
+				MdmModel model = mdmModelMapper.findByIdOnly(entity.getModelId());
+				if(model == null){
+					voRes.setNull(voRes);
+					voRes.setMessage("modelId参数错误");
+					return voRes;
+				}
+				if(entity.isDataSource()){
+					if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), 1).size() > 0){
+						voRes.setFail(voRes);
+						voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在主数据源");
+						return voRes;
+					}
+				}
+				if(entity.getBsId() != null && !entity.getBsId().equals("")){
+					MdmBs bs = mdmBsMapper.findByIdOnly(entity.getBsId());
+					if(bs == null){
+						voRes.setNull(voRes);
+						voRes.setMessage("bsId参数错误");
+						return voRes;
+					}
+					if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), entity.getBsId()).size() > 0){
+						voRes.setFail(voRes);
+						voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在业务系统" + bs.getBsName() +"的服务接口");
+						return voRes;
+					}
+				}
+			}
 			serviceInterfaceDefinedMapper.insert(entity);
 			
 		}else{
@@ -108,6 +127,36 @@ public class ServiceInterfaceDefinedService implements IServiceInterfaceDefinedS
 				voRes.setNull(voRes);
 				voRes.setMessage("id参数错误");
 				return voRes;
+			}
+			if(entity.getModelId() != null && !entity.getModelId().equals("")){
+				MdmModel model = mdmModelMapper.findByIdOnly(entity.getModelId());
+				if(model == null){
+					voRes.setNull(voRes);
+					voRes.setMessage("modelId参数错误");
+					return voRes;
+				}
+				if(entity.isDataSource() && entity.getModelId().equals(oldEntity.getModelId())){
+					if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), 1).size() > 0){
+						voRes.setFail(voRes);
+						voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在主数据源");
+						return voRes;
+					}
+				}
+				if(entity.getBsId() != null && !entity.getBsId().equals("")){
+					MdmBs bs = mdmBsMapper.findByIdOnly(entity.getBsId());
+					if(bs == null){
+						voRes.setNull(voRes);
+						voRes.setMessage("bsId参数错误");
+						return voRes;
+					}
+					if(!entity.getBsId().equals(oldEntity.getBsId())){
+						if(serviceInterfaceDefinedMapper.findByModelId(entity.getModelId(), entity.getBsId()).size() > 0){
+							voRes.setFail(voRes);
+							voRes.setMessage("mdm模块" + model.getMdmModel() + "已经存在业务系统" + bs.getBsName() +"的服务接口");
+							return voRes;
+						}
+					}
+				}
 			}
 			serviceInterfaceDefinedMapper.update(entity);
 		}
