@@ -86,14 +86,14 @@ public class MdmService implements IMdmService {
 	@Override
 	public Map<String, Object> getPage(User user, int page, int pageSize){
 		Map<String, Object> map = new HashMap<String, Object>();
-		int count = userMapper.findCount(user);
+		int count =0;
 		PageQuery pageQuery = new PageQuery();
 		pageQuery.setAllCount(count);
 		pageQuery.setCurrentPage(page);
 		pageQuery.setPageRowSize(pageSize);
 		pageQuery.setOrder("user_name");
 		pageQuery.calcutePage(pageQuery);
-		List<User> list = userMapper.findUserByPage(user, pageQuery);
+		List<User> list = null;
 		map.put("total", count);
 		map.put("rows", list);
 		return map;

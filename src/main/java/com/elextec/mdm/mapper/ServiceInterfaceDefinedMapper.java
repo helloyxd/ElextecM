@@ -31,7 +31,7 @@ public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfa
 		statement="SELECT sys_guid() FROM dual")
     void insert(ServiceInterfaceDefined entity);
 	
-	@Update("UPDATE mdm_serviceInterface_defined SET type=#{type},wsdl_location=#{wsdlLocation},dburl=#{dburl},type=#{type},"
+	@Update("UPDATE mdm_serviceInterface_defined SET type=#{type},wsdl_location=#{wsdlLocation},dburl=#{dburl},"
 			+ "remark=#{remark},user_name=#{username},password=#{password},model_id=#{modelId},bs_id=#{bsId},operation_type=#{operationType},"
 			+ "operation=#{operation},wsbinding=#{wsbinding},bing_namespace=#{bingNamespace},operation_namespace=#{operationNamespace},"
 			+ "isData_source=#{isDataSource},status=#{status} WHERE id =#{id}")
@@ -56,7 +56,7 @@ public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfa
 	    		many = @Many(select = "com.elextec.mdm.mapper.MdmModelMapper.findByIdOnly")),
 		    @Result(property = "bsId", column = "bs_id"),
 		    @Result(property = "bs", column = "bs_id",
-    			many = @Many(select = "com.elextec.mdm.mapper.MdmBsMapper.findBsNameById")),
+    			many = @Many(select = "com.elextec.mdm.mapper.MdmBsMapper.findByIdOnly")),
 		    @Result(property = "operationType", column = "operation_type"),
 		    @Result(property = "operation", column = "operation"),
 		    @Result(property = "wsbinding", column = "wsbinding"),

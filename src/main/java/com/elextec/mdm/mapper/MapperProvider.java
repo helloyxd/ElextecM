@@ -84,22 +84,11 @@ public class MapperProvider {
 		return sb.toString();
 	}
 	
-	public String findUserByPage(Map<String, Object> map){
-		StringBuilder sb = new StringBuilder();
-		User user = (User) map.get("user");
-		PageQuery pageQuery = (PageQuery) map.get("page");
-		//sb.append("SELECT * FROM mdm_user WHERE 1=1");
-		sb.append("SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM mdm_user t WHERE 1=1");
-		sb.append(getUserCondition(user));
-		sb.append(" AND ROWNUM <= ").append(pageQuery.getPageRowSize()*pageQuery.getCurrentPage()).append(") tt WHERE tt.rn > ");
-		sb.append(pageQuery.getBeginIndex());
-		/*if(pageQuery.getOrder() != null)
-			sb.append(" ORDER BY ").append(pageQuery.getOrder());
-		sb.append(" LIMIT ").append(pageQuery.getBeginIndex()).append(",").append(pageQuery.getPageRowSize());*/
-		System.out.println(sb);
-		return sb.toString();
-	}
-	
+	/**
+	 * 分页查询
+	 * @param map
+	 * @return
+	 */
 	public String findEntityByPage(Map<String, Object> map){
 		StringBuilder sb = new StringBuilder();
 		@SuppressWarnings("unchecked")
@@ -110,22 +99,21 @@ public class MapperProvider {
 		sb.append(getQueryCondition(queryParam));
 		sb.append(" AND ROWNUM <= ").append(pageQuery.getPageRowSize()*pageQuery.getCurrentPage()).append(") tt WHERE tt.rn > ");
 		sb.append(pageQuery.getBeginIndex());
+		/*if(pageQuery.getOrder() != null)
+			sb.append(" ORDER BY ").append(pageQuery.getOrder());
+		sb.append(" LIMIT ").append(pageQuery.getBeginIndex()).append(",").append(pageQuery.getPageRowSize());*/
 		System.out.println(sb);
 		return sb.toString();
 	}
 	
-	public String findUserCount(Map<String, User> map){
-		StringBuilder sb = new StringBuilder();
-		User user = map.get("user");
-		sb.append("SELECT COUNT(*) FROM mdm_user WHERE 1=1");
-		sb.append(getUserCondition(user));
-		System.out.println(sb);
-		return sb.toString();
-	}
-	
-	@SuppressWarnings("unchecked")
+	/**
+	 * 查询表记录数
+	 * @param map
+	 * @return
+	 */
 	public String findEntityCount(Map<String, Object> map){
 		StringBuilder sb = new StringBuilder();
+		@SuppressWarnings("unchecked")
 		Map<String,String> queryParam = (Map<String, String>) map.get("queryParam");
 		String tableName = (String) map.get("tableName");
 		sb.append("SELECT COUNT(*) FROM ").append(tableName).append(" WHERE 1=1");
@@ -134,6 +122,11 @@ public class MapperProvider {
 		return sb.toString();
 	}
 	
+	/**
+	 * 拼接查询条件
+	 * @param queryParam
+	 * @return
+	 */
 	public String getQueryCondition(Map<String,String> queryParam){
 		StringBuilder sb = new StringBuilder();
 		for(String key : queryParam.keySet()){
@@ -141,16 +134,6 @@ public class MapperProvider {
 				sb.append(" AND ").append(key).append(" LIKE '").append(queryParam.get(key)).append("'");
 			}
 		}
-		return sb.toString();
-	}
-	
-	
-	public String getUserCondition(User user){
-		StringBuilder sb = new StringBuilder();
-		if(user.getUserName() != null && !user.getUserName().equals(""))
-			sb.append(" AND user_name LIKE '").append(user.getUserName()).append("'");
-		if(user.getFullName() != null)
-			sb.append(" AND full_name LIKE '").append(user.getUserName()).append("'");
 		return sb.toString();
 	}
 	
@@ -184,7 +167,6 @@ public class MapperProvider {
 		pageQuery.setOrder("user_name");
 		map.put("user", user);
 		map.put("page", pageQuery);
-		new MapperProvider().findUserByPage(map);
 		
 	}
 	

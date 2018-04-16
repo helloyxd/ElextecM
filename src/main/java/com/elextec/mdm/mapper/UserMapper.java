@@ -1,6 +1,7 @@
 package com.elextec.mdm.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -20,7 +21,7 @@ import org.apache.ibatis.mapping.StatementType;
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.User;
 
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User>{
 
 	@Select("SELECT * FROM mdm_user WHERE id = #{userId}")
 	@Results(id = "userMap", 
@@ -88,10 +89,7 @@ public interface UserMapper {
     @Delete("DELETE FROM mdm_user_role WHERE user_id=#{userId}")
     void delUserRoles(String userId);
 
-    @SelectProvider(type = MapperProvider.class, method = "findUserByPage")
-    @ResultMap("userMapOnly")
-    List<User> findUserByPage(@Param("user") User user, @Param("page") PageQuery pageQuery);
-
-    @SelectProvider(type = MapperProvider.class, method = "findUserCount")
-    int findCount(@Param("user") User user);
+    @SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
+	@ResultMap("userMapOnly")
+    List<User> findByPage(@Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
 }

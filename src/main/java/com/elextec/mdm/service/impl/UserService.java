@@ -97,14 +97,17 @@ public class UserService extends BaseService implements IUserService{
 	@Override
 	public Map<String, Object> getPage(User user, int page, int pageSize){
 		Map<String, Object> map = new HashMap<String, Object>();
-		int count = userMapper.findCount(user);
+		Map<String, String> queryParam = new HashMap<String, String>();
+		queryParam.put("user_name", user.getUserName());
 		PageQuery pageQuery = new PageQuery();
+		pageQuery.setTableName("mdm_user");
+		int count = userMapper.findCount(queryParam, pageQuery.getTableName());
 		pageQuery.setAllCount(count);
 		pageQuery.setCurrentPage(page);
 		pageQuery.setPageRowSize(pageSize);
 		pageQuery.setOrder("user_name");
 		pageQuery.calcutePage(pageQuery);
-		List<User> list = userMapper.findUserByPage(user, pageQuery);
+		List<User> list = userMapper.findByPage(queryParam, pageQuery);
 		map.put("total", count);
 		map.put("rows", list);
 		return map;

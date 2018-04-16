@@ -19,7 +19,7 @@ public interface BaseMapper<T> {
 	@SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
     List<T> findByPage(@Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
 	
-	@Select("SELECT id FROM ${tableName WHERE ${queryField} LIKE '%${queryParam}%'")
+	@Select("SELECT id FROM ${tableName} WHERE ${queryField} LIKE '%${queryParam}%'")
 	@ResultType(List.class)
 	List<T> queryByName(@Param("tableName") String tableName,@Param("queryField") String queryField, @Param("queryParam") String queryParam);
 }
