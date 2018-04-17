@@ -1,9 +1,11 @@
 package com.elextec.mdm.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmBs;
+import com.elextec.mdm.entity.MdmDataMap;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.MdmTableMap;
 import com.elextec.mdm.entity.TableDefinition;
@@ -37,6 +39,14 @@ public interface IDataMapService {
 	
 	public VoResponse getMdmTableMapById(MdmModel model, String bsId);
 	
-	public VoResponse getDataMapMdm(MdmModel model, String bsId, String order);
+	
+	Map<String, Object> getPage(String tableName, Map<String, String> queryParam, int page, int pageSize, String order);
+
+	List<MdmDataMap> getDataMapById(String modelId, String bsId);
+
+	Map<String, Object> getPage(String tableName, Map<String, String> queryParam, String modelId, String bsId, int page,
+			int pageSize, String order, boolean isSelect, boolean isMain);
+	
+	
 	
 }

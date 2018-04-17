@@ -1,14 +1,20 @@
 package com.elextec.mdm.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
+import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.MdmDataMap;
 
 public interface MdmDataMapMapper {
@@ -39,7 +45,7 @@ public interface MdmDataMapMapper {
 	})
 	List<MdmDataMap> findAll();
 	
-	@Select("SELECT * FROM mdm_data_mapper WHERE table_id = #{tableId}")
+	@Select("SELECT * FROM mdm_data_mapper WHERE model_id = #{modelId} AND bs_id = #{bsId}")
 	@Results(id = "mdmDataMap",
     	value = {
 		    @Result(id = true, property = "id", column = "id"),
@@ -53,5 +59,6 @@ public interface MdmDataMapMapper {
 		    @Result(property = "createTime", column = "create_time"),
 		    @Result(property = "creater", column = "creater")
 	})
-	List<MdmDataMap> findByTableId(String tableId);
+	List<MdmDataMap> findByMdmId(String modelId,String bsId);
+	
 }

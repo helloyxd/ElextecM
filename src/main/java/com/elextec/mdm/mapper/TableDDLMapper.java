@@ -8,8 +8,11 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
+
+import com.elextec.mdm.common.entity.PageQuery;
 
 public interface TableDDLMapper {
 	
@@ -88,4 +91,11 @@ public interface TableDDLMapper {
 		resultType = String.class, statementType = StatementType.STATEMENT,
 		statement="SELECT sys_guid() FROM dual")
 	void insert(Map<String,Object> map, @Param("tableName") String tableName);
+	
+	@SelectProvider(type = MapperProvider.class, method = "findEntityCount")
+    int findCount(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("tableName") String tableName);
+	
+	@SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
+	@ResultType(List.class)
+	List<Map<String,Object>> findByPage(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
 }

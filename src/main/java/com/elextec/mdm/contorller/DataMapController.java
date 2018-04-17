@@ -1,6 +1,7 @@
 package com.elextec.mdm.contorller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,11 +20,14 @@ import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.MdmTableMap;
+import com.elextec.mdm.entity.ServiceInterfaceDefined;
+import com.elextec.mdm.entity.ServiceInterfaceParam;
 import com.elextec.mdm.entity.ServiceParamFieldDefined;
 import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.service.IDataMapService;
 import com.elextec.mdm.service.IMdmModelService;
+import com.elextec.mdm.service.IServiceInterfaceDefinedService;
 import com.elextec.mdm.service.IServiceParamTableDefinedService;
 import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.vo.VoDataMap;
@@ -44,6 +48,9 @@ public class DataMapController {
 	
 	@Autowired
 	private IMdmModelService mdmModelService;
+	
+	@Autowired
+	private IServiceInterfaceDefinedService serviceInterfaceDefinedService;
 	
 	@PostMapping
 	public Object add(@RequestBody List<VoDataMap> dataMaps) {
@@ -129,26 +136,66 @@ public class DataMapController {
 	 * @return
 	 */
 	@GetMapping("getDataMapMdm")
-	public Object getDataMapMdm(@RequestParam("modelId") String modelId,@RequestParam("map") Map<String,String> map,
-			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
-			@RequestParam(value = "isSelect") boolean isSelect,
-			@RequestParam(value = "order", defaultValue = "1")String order) {
+	public Object getDataMapMdm(@RequestParam("modelId") String modelId,@RequestParam(value = "bsId",required=false) String bsId,
+			@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+			@RequestParam(value = "isSelect") boolean isSelect, @RequestParam(value = "order", defaultValue = "1")String order) {
 		VoResponse voRes = new VoResponse();
-		MdmModel model = mdmModelService.getById(modelId);
-		if(model == null){
-			voRes.setNull(voRes);
-			voRes.setMessage("mdm模块信息获取失败");
-			return voRes;
+		Map<String, Object>  map = new HashMap<String, Object>();
+		MdmModel model = null;
+		if(modelId != null && !modelId.equals("")){
+			model = mdmModelService.getById(modelId);
+			if(model == null){
+				voRes.setNull(voRes);
+				voRes.setMessage("mdm模块信息获取失败");
+				return voRes;
+			}
+			if(model.getTableDefinitions() == null || model.getTableDefinitions().size() == 0){
+				voRes.setNull(voRes);
+				voRes.setMessage("mdm模块下未定义表模型");
+				return voRes;
+			}
+			for(TableDefinition table : model.getTableDefinitions()){
+				tableDDLService.setColumnsDefinition(table);
+			}
+			map.put("mdmtable", model.getTableDefinitions());
+			String tableName = model.getTableDefinitions().get(0).getTableName();
+			Map<String, String> queryParam = new HashMap<String, String>();
+			Map<String, Object> mapmdm = null;
+			if (bsId != null && !bsId.equals("")) {
+				mapmdm = dataMapService.getPage(tableName, queryParam, modelId, bsId, page, pageSize, order, isSelect, true);
+			}else{
+				mapmdm = dataMapService.getPage(tableName, queryParam, page, pageSize, order);
+			}
+			map.put("mdmdata", mapmdm);
 		}
-		if(model.getTableDefinitions() == null || model.getTableDefinitions().size() == 0){
-			voRes.setNull(voRes);
-			voRes.setMessage("mdm模块下未定义数据模型");
-			return voRes;
-		}
-		TableDefinition table = model.getTableDefinitions().get(0);
-		tableDDLService.setColumnsDefinition(table);
 		
+		MdmBs bs = null;
+		ServiceInterfaceParam siParam = null;
+		if (bsId != null && !bsId.equals("")) {
+			bs = mdmModelService.getBsByIdOnly(bsId);
+			if(bs == null){
+				voRes.setNull(voRes);
+				voRes.setMessage("业务系统信息获取失败");
+				return voRes;
+			}
+			siParam = serviceInterfaceDefinedService.getSiTable(modelId, bsId);
+			if (siParam == null) {
+				voRes.setNull(voRes);
+				voRes.setMessage("mdm模型" + model.getMdmModel() + "获取业务系统数据表失败");
+				return voRes;
+			}
+			map.put("bstable", siParam.getsParamTableDefineds());
+			String tableName = siParam.getsParamTableDefineds().get(0).getTableName();
+			Map<String, Object> mapbs = null;
+			Map<String, String> queryParam = new HashMap<String, String>();
+			if(modelId != null && !modelId.equals("")){
+				mapbs = dataMapService.getPage(tableName, queryParam, modelId, bsId, page, pageSize, order, isSelect, false);
+			}else{
+				mapbs = dataMapService.getPage(tableName, queryParam, page, pageSize, order);
+			}
+			map.put("bsdata", mapbs);
+		}
+		voRes.setData(map);
 		return voRes;
 	}
 	

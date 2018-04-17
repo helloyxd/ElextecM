@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.common.entity.constant.SIParamEnum;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
+import com.elextec.mdm.entity.ServiceInterfaceParam;
+import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.mapper.MdmBsMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper;
@@ -170,7 +173,25 @@ public class ServiceInterfaceDefinedService extends BaseService implements IServ
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public ServiceInterfaceDefined getById(String modelId, String bsId) {
+		ServiceInterfaceDefined entity = serviceInterfaceDefinedMapper.findByModelIdAndBsId(modelId, bsId);
+		return entity;
+	}
 	
-	
+	@Override
+	public ServiceInterfaceParam getSiTable(String modelId, String bsId){
+		ServiceInterfaceDefined entity = getById(modelId, bsId);
+		if(entity == null){
+			return null;
+		}
+		for(ServiceInterfaceParam siParam : entity.getSiParams()){
+			if(siParam.getIoType().equals(SIParamEnum.paramOut)){
+				return siParam;
+			}
+		}
+		return null;
+	}
 
 }

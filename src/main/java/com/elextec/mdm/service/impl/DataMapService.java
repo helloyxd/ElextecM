@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.DataMapEnum;
 import com.elextec.mdm.common.entity.constant.SIParamEnum;
@@ -15,6 +16,7 @@ import com.elextec.mdm.common.entity.constant.TaskDataRecordStateEnum;
 import com.elextec.mdm.common.entity.constant.TaskTypeEnum;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmBs;
+import com.elextec.mdm.entity.MdmDataMap;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.MdmTableMap;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
@@ -424,11 +426,78 @@ public class DataMapService extends BaseService implements IDataMapService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	/**
+	 * 获取自定义table的有没有连线的数据
+	 * @param tableName 自定义表名
+	 * @param queryParam 查询条件
+	 * @param modelId
+	 * @param bsId
+	 * @param page
+	 * @param pageSize
+	 * @param order
+	 * @param isSelect 是否连线
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> getPage(String tableName, Map<String, String> queryParam,String modelId,String bsId, int page, int pageSize, String order,boolean isSelect, boolean isMain) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		StringBuilder conditions = new StringBuilder();
+		List<MdmDataMap> listdata = null;
+		if(isSelect){
+			listdata = dataMapMapper.findByMdmId(modelId, bsId);
+			conditions.append(" AND id IN(select mdm_data_id from MDM_DATA_MAPPER where model_id='");
+			conditions.append(modelId).append("'").append(" AND bs_id='").append(bsId).append("')");
+		}else{
+			conditions.append(" AND id NOT IN(select mdm_data_id from MDM_DATA_MAPPER where model_id='");
+			conditions.append(modelId).append("'").append(" AND bs_id='").append(bsId).append("')");
+		}
+		PageQuery pageQuery = new PageQuery();
+		pageQuery.setTableName(tableName);
+		int count = tableDDLMapper.findCount(conditions.toString(), queryParam, pageQuery.getTableName());
+		pageQuery.setAllCount(count);
+		pageQuery.setCurrentPage(page);
+		pageQuery.setPageRowSize(pageSize);
+		pageQuery.setOrder("create_time");
+		pageQuery.calcutePage(pageQuery);
+		List<Map<String,Object>>  list = tableDDLMapper.findByPage(conditions.toString(),queryParam, pageQuery);
+		if(listdata != null && listdata.size() > 0){
+			if(isMain){
+				for(MdmDataMap dataMap : listdata){
+					for(Map<String,Object> data : list){
+						if(dataMap.getMdmDataId().equals(data.get("ID"))){
+							data.put("targetId", dataMap.getBsDataId());
+						}
+					}
+				}
+			}
+		}
+		map.put("total", count);
+		map.put("rows", list);
+		return map;
+	}
+	
+	@Override
+	public Map<String, Object> getPage(String tableName, Map<String, String> queryParam, int page, int pageSize, String order) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		PageQuery pageQuery = new PageQuery();
+		pageQuery.setTableName(tableName);
+		int count = tableDDLMapper.findCount(null, queryParam, pageQuery.getTableName());
+		pageQuery.setAllCount(count);
+		pageQuery.setCurrentPage(page);
+		pageQuery.setPageRowSize(pageSize);
+		pageQuery.setOrder("create_time");
+		pageQuery.calcutePage(pageQuery);
+		List<Map<String,Object>>  list = tableDDLMapper.findByPage(null, queryParam, pageQuery);
+		map.put("total", count);
+		map.put("rows", list);
+		return map;
+	}
 
 	@Override
-	public VoResponse getDataMapMdm(MdmModel model, String bsId, String order) {
-		
-		return null;
+	public List<MdmDataMap> getDataMapById(String modelId,String bsId) {
+		List<MdmDataMap> list = dataMapMapper.findByMdmId(modelId, bsId);
+		return list;
 	}
 
 }

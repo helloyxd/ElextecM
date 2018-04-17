@@ -34,5 +34,7 @@ public interface IMdmModelService {
 	MdmBs getBsById(String id);
 	
 	MdmModel getByName(String name);
+
+	MdmBs getBsByIdOnly(String id);
 	
 }

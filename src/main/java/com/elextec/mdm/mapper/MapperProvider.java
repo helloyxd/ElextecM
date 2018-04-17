@@ -91,11 +91,15 @@ public class MapperProvider {
 	 */
 	public String findEntityByPage(Map<String, Object> map){
 		StringBuilder sb = new StringBuilder();
+		
 		@SuppressWarnings("unchecked")
 		Map<String,String> queryParam = (Map<String, String>) map.get("queryParam");
 		PageQuery pageQuery = (PageQuery) map.get("page");
 		//sb.append("SELECT * FROM mdm_user WHERE 1=1");
 		sb.append("SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM ").append(pageQuery.getTableName()).append(" t WHERE 1=1");
+		if(map.get("conditions") != null){
+			sb.append(" ").append(map.get("conditions"));
+		}
 		sb.append(getQueryCondition(queryParam));
 		sb.append(" AND ROWNUM <= ").append(pageQuery.getPageRowSize()*pageQuery.getCurrentPage()).append(") tt WHERE tt.rn > ");
 		sb.append(pageQuery.getBeginIndex());
@@ -117,6 +121,9 @@ public class MapperProvider {
 		Map<String,String> queryParam = (Map<String, String>) map.get("queryParam");
 		String tableName = (String) map.get("tableName");
 		sb.append("SELECT COUNT(*) FROM ").append(tableName).append(" WHERE 1=1");
+		if(map.get("conditions") != null){
+			sb.append(" ").append(map.get("conditions"));
+		}
 		sb.append(getQueryCondition(queryParam));
 		System.out.println(sb);
 		return sb.toString();
