@@ -196,9 +196,9 @@ public class BpmFileService implements IBpmFileService{
 		VoResponse voResponse = new VoResponse();
 		voResponse.setSuccess(true);
 		voResponse.setCode(1);
-		RepositoryService repositoryService = engine
+		/*RepositoryService repositoryService = engine
   	            .getRepositoryService();
-		repositoryService.deleteDeployment(processId);
+		repositoryService.deleteDeployment(processId);*/
 		modelFlowService.delByActivitiId(processId);
 		return voResponse;
 		
