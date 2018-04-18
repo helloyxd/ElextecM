@@ -74,4 +74,8 @@ public interface MdmTableMapMapper {
 	
 	@Delete("DELETE FROM mdm_table_mapper WHERE bs_table_id = '${bstableId}' AND mdm_table_id = '${mdmtableId}'")
 	void delByTableId(@Param("bstableId")String bstableId, @Param("mdmtableId")String mdmtableId);
+	
+	@Select("SELECT * FROM mdm_table_mapper WHERE bs_table_id = #{bstableId} AND mdm_table_id = #{mdmtableId} AND (mdm_field_id = #{field} OR bs_field_id = #{field})")
+    @ResultMap("mdmTableMapOnly")
+	MdmTableMap findByTableIdAndField(@Param("bstableId")String bstableId, @Param("mdmtableId")String mdmtableId, @Param("field")String field);
 }

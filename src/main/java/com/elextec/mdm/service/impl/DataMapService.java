@@ -1,6 +1,7 @@
 package com.elextec.mdm.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import com.elextec.mdm.mapper.MdmDataMapMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.MdmTableMapMapper;
 import com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper;
+import com.elextec.mdm.mapper.ServiceParamFieldDefinedMapper;
+import com.elextec.mdm.mapper.ServiceParamTableDefinedMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TaskDataRecordDetailMapper;
 import com.elextec.mdm.mapper.TaskDataRecordSummaryMapper;
@@ -53,6 +56,12 @@ public class DataMapService extends BaseService implements IDataMapService{
 	private ServiceInterfaceDefinedMapper serviceInterfaceDefinedMapper;
 	
 	@Autowired
+	private ServiceParamTableDefinedMapper serviceParamTableDefinedMapper;
+	
+	@Autowired
+	private ServiceParamFieldDefinedMapper serviceParamFieldDefinedMapper;
+	
+	@Autowired
 	private TaskDataRecordSummaryMapper taskDataRecordSummaryMapper;
 	
 	@Autowired
@@ -62,15 +71,53 @@ public class DataMapService extends BaseService implements IDataMapService{
 	private MdmModelMapper mdmModelMapper;
 	
 	@Override
-	public void save(MdmTableMap tableMap) {
+	public VoResponse save(VoDataMap dataMap) {
+		VoResponse voRes = new VoResponse();
+		MdmTableMap tableMap = new MdmTableMap();
 		tableMap.setCreater(getUserName());
-		tableMapMapper.insert(tableMap);
+		tableMap.setMdmTableId(dataMap.getMdmTableId());
+		tableMap.setBsTableId(dataMap.getBsTableId());
+		String sourceId = dataMap.getLineData().get(0).getSourceId();
+		MdmTableMap entity = tableMapMapper.findByTableIdAndField(dataMap.getBsTableId(), dataMap.getMdmTableId(), sourceId);
+		if(entity != null){
+			if(entity.getMdmFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.bsSource)){
+				entity.setBsIoType(DataMapEnum.allSource);
+			}else if(entity.getBsFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.mdmSource)){
+				entity.setBsIoType(DataMapEnum.allSource);
+			}else{
+				return voRes;
+			}
+			tableMapMapper.update(entity);
+		}else{
+			//判断是mdm到bs字段还是相反
+			ServiceParamFieldDefined spField = serviceParamFieldDefinedMapper.findById(sourceId);
+			if(spField == null){
+				tableMap.setBsIoType(DataMapEnum.mdmSource);
+			}else{
+				tableMap.setBsIoType(DataMapEnum.bsSource);
+			}
+			tableMapMapper.insert(tableMap);
+		}
+		return voRes;
 	}
 
 	@Override
-	public VoResponse del(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public VoResponse del(VoDataMap dataMap) {
+		VoResponse voRes = new VoResponse();
+		String sourceId =  dataMap.getLineData().get(0).getSourceId();
+		//String targetId =  dataMap.getLineData().get(0).getTargetId();
+		MdmTableMap entity = tableMapMapper.findByTableIdAndField(dataMap.getBsTableId(), dataMap.getMdmTableId(), sourceId);
+		if(entity.equals(DataMapEnum.allSource)){
+			if(sourceId.equals(entity.getMdmFieldId())){
+				entity.setBsIoType(DataMapEnum.bsSource);
+			}else{
+				entity.setBsIoType(DataMapEnum.mdmSource);
+			}
+			tableMapMapper.update(entity);
+		}else{
+			tableMapMapper.del(entity.getId());
+		}
+		return voRes;
 	}
 
 	@Override
@@ -445,7 +492,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 		StringBuilder conditions = new StringBuilder();
 		List<MdmDataMap> listdata = null;
 		if(isSelect){
-			listdata = dataMapMapper.findByMdmId(modelId, bsId);
+			listdata = dataMapMapper.findByMdmIdAndBsId(modelId, bsId);
 			conditions.append(" AND id IN(select mdm_data_id from MDM_DATA_MAPPER where model_id='");
 			conditions.append(modelId).append("'").append(" AND bs_id='").append(bsId).append("')");
 		}else{
@@ -496,8 +543,43 @@ public class DataMapService extends BaseService implements IDataMapService{
 
 	@Override
 	public List<MdmDataMap> getDataMapById(String modelId,String bsId) {
-		List<MdmDataMap> list = dataMapMapper.findByMdmId(modelId, bsId);
+		List<MdmDataMap> list = dataMapMapper.findByMdmIdAndBsId(modelId, bsId);
 		return list;
+	}
+
+	@Override
+	public VoResponse saveAll(List<MdmDataMap> list) {
+		VoResponse voRes = new VoResponse();
+		String username = getUserName();
+		//dataMapMapper.delByModelIdAndBsId(modelId, bsId);
+		MdmDataMap e = null;
+		for(MdmDataMap entity : list){
+			e = dataMapMapper.findByMdmId(entity);
+			if(e != null){
+				java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
+				e.setBsDataId(entity.getBsDataId());
+				e.setModifier(username);
+				e.setModifierTime(date);
+				dataMapMapper.update(e);
+			}else{
+				entity.setCreater(username);
+				dataMapMapper.insert(entity);
+			}
+		}
+		return voRes;
+	}
+
+	@Override
+	public VoResponse delAll(List<MdmDataMap> list) {
+		VoResponse voRes = new VoResponse();
+		MdmDataMap e = null;
+		for(MdmDataMap entity : list){
+			e = dataMapMapper.findByMdmId(entity);
+			if(e != null){
+				dataMapMapper.del(e.getId());
+			}
+		}
+		return voRes;
 	}
 
 }

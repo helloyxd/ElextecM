@@ -29,4 +29,6 @@ public interface IServiceInterfaceDefinedService {
 	public Map<String, Object> getPage(ServiceInterfaceDefined entity, int page, int pageSize);
 
 	ServiceInterfaceParam getSiTable(String modelId, String bsId);
+	
+	ServiceInterfaceDefined getSiDefinedByTableId(String bsTableId);
 }

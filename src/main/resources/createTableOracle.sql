@@ -274,6 +274,20 @@ create table MDM_Data_Mapper
    modifier             varchar2(64) not null,
    modifier_time        TIMESTAMP
 );
+alter table
+   MDM_Data_Mapper
+modify
+   (
+   modifier varchar2(64) null
+   );
+   
+
+alter table
+   MDM_Data_Mapper
+add
+   (
+  status               number(1) default 0
+   );
 
 create table MDM_Table_Mapper
 (
@@ -301,7 +315,7 @@ create table MDM_ServiceInterface_Defined
    operation			varchar2(32),
    wsbinding			varchar2(32),
    bing_namespace		varchar2(128),
-   operation_namespace	varchar2(128),   
+   operation_namespace	varchar2(128),
    status               number(1) default 0,
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
@@ -313,6 +327,19 @@ add
    (
    bs_id	varchar2(32)
    );
+   
+alter table
+   MDM_ServiceInterface_Defined
+add
+   (
+   isData_source   number(1) default 0
+   );
+alter table
+   MDM_ServiceInterface_Defined
+add
+   (
+   remark varchar2(128)
+   );   
 
 create table ServiceInterface_Param
 (

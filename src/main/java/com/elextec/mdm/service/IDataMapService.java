@@ -15,9 +15,9 @@ public interface IDataMapService {
 	
 	public VoResponse saveAll(List<MdmTableMap> list, List<VoDataMap> dataMaps);
 
-	public void save(MdmTableMap tableMap);
+	public VoResponse save(VoDataMap dataMap);
 	
-	public VoResponse del(String id);
+	public VoResponse del(VoDataMap dataMap);
 	
 	public VoResponse update(MdmTableMap tableMap);
 	
@@ -48,5 +48,7 @@ public interface IDataMapService {
 			int pageSize, String order, boolean isSelect, boolean isMain);
 	
 	
+	public VoResponse saveAll(List<MdmDataMap> list);
 	
+	public VoResponse delAll(List<MdmDataMap> list);
 }

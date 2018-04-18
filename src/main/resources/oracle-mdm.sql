@@ -1,3 +1,38 @@
+
+select * from  MDM_DATA_MAPPER
+
+select * from MDM_SERVICEINTERFACE_DEFINED where id=(select service_defined_id from MDM_SERVICEINTERFACE_PARAM where table_id='12345678900a')
+select * from MDM_SERVICEINTERFACE_PARAM where table_id='12345678900a'
+select * from MDM_SERVICEPARAM_TABLEDEFINED where id='12345678900a'
+
+SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM mdm_product t WHERE 1=1
+AND id not in(select mdm_data_id from MDM_DATA_MAPPER where model_id='685C5712DE52F807E05013AC068810F4' AND bs_id='648C7F180F35DD05E05013AC06882D5A') 
+AND ROWNUM <= 20) tt WHERE tt.rn > 0 
+
+SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM mdm_user t WHERE 1=1 AND user_name LIKE '%admin%' AND ROWNUM <= 20) tt WHERE tt.rn > 0 
+
+SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM mdm_Employeer t WHERE 1=1 
+	AND id not in(select mdm_data_id from MDM_DATA_MAPPER where model_id='' and bs_id='') 
+	AND ROWNUM <= 20) tt WHERE tt.rn > 0 
+
+	select * from MDM_SERVICEPARAM_FIELDDEFINED
+	update MDM_SERVICEPARAM_FIELDDEFINED set field_name='AGE' WHERE field_name='age';
+update MDM_SERVICEPARAM_FIELDDEFINED set field_name='POST' WHERE field_name='post';
+	select * from MDM_SERVICEPARAM_TABLEDEFINED 
+	update MDM_SERVICEPARAM_TABLEDEFINED set table_name='Empoyeer'
+	update Empoyeer set id=sys_guid()
+
+select * from mdm_Employeer where id in(select mdm_data_id from MDM_DATA_MAPPER where model_id='' and bs_id='')
+
+select * from Empoyeer where id in(select bs_data_id from MDM_DATA_MAPPER where model_id='' and bs_id='')
+
+alter table
+   Empoyeer
+add(id varchar2(32) );
+
+
+SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM mdm_serviceInterface_defined t WHERE 1=1 AND ROWNUM <= 19) tt WHERE tt.rn > 0
+
 SELECT * FROM mdm_menu WHERE id='67E32BDA46DFD692E05013AC06887084'
 
  INSERT INTO mdm_product(id,PRODUCT_NAME,PRODUCT_TYPE,PRODUCT_TEST1,PRODUCT_TEST3,PRODUCT_TEST5,PRODUCT_TEST6,

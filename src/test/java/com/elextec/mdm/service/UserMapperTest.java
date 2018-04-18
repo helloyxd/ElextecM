@@ -251,7 +251,7 @@ public class UserMapperTest {
     	ObjectMapper mapper = new ObjectMapper();
     	User user = new User();
     	user.setUserName("%admin%");
-    	int count = userMapper.findCount(user);
+    	int count = 0;
     	System.out.println(count);
 		PageQuery pageQuery = new PageQuery();
 		pageQuery.setAllCount(count);
@@ -260,7 +260,7 @@ public class UserMapperTest {
 		pageQuery.setOrder("user_name");
 		pageQuery.calcutePage(pageQuery);
 		System.out.println(mapper.writeValueAsString(pageQuery));
-		List<User> list = userMapper.findUserByPage(user, pageQuery);
+		List<User> list = null;
     	System.out.println(mapper.writeValueAsString(list));
     }
     

@@ -194,4 +194,10 @@ public class ServiceInterfaceDefinedService extends BaseService implements IServ
 		return null;
 	}
 
+	@Override
+	public ServiceInterfaceDefined getSiDefinedByTableId(String bsTableId) {
+		ServiceInterfaceDefined siDefined = serviceInterfaceDefinedMapper.findByTableId(bsTableId);
+		return siDefined;
+	}
+
 }

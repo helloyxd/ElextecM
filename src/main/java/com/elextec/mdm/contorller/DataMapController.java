@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.common.entity.constant.DataMapEnum;
 import com.elextec.mdm.entity.ColumnDefinition;
 import com.elextec.mdm.entity.MdmBs;
+import com.elextec.mdm.entity.MdmDataMap;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.MdmTableMap;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
@@ -52,8 +54,30 @@ public class DataMapController {
 	@Autowired
 	private IServiceInterfaceDefinedService serviceInterfaceDefinedService;
 	
+	@DeleteMapping
+	public Object del(@RequestBody List<VoDataMap> dataMaps) {
+		VoResponse voRes = null;
+		if(dataMaps != null && dataMaps.size() > 0){
+			for(VoDataMap dataMap : dataMaps){
+				voRes = dataMapService.del(dataMap);
+			}
+		}
+		return voRes;
+	}
+	
 	@PostMapping
 	public Object add(@RequestBody List<VoDataMap> dataMaps) {
+		VoResponse voRes = null;
+		if(dataMaps != null && dataMaps.size() > 0){
+			for(VoDataMap dataMap : dataMaps){
+				voRes = dataMapService.save(dataMap);
+			}
+		}
+		return voRes;
+	}
+	
+	@PostMapping("saveAll")
+	public Object addAll(@RequestBody List<VoDataMap> dataMaps) {
 		List<MdmTableMap> list = new ArrayList<MdmTableMap>();
 		if(dataMaps != null && dataMaps.size() > 0){
 			for(VoDataMap dataMap : dataMaps){
@@ -199,14 +223,59 @@ public class DataMapController {
 		return voRes;
 	}
 	
-	@GetMapping("getDataMapBs")
-	public Object getDataMapBs(@RequestParam("bsId") String bsId,@RequestParam("map") Map<String,String> map,
-			@RequestParam(value = "page", defaultValue = "1") int page,
-			@RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
-			@RequestParam(value = "isSelect") boolean isSelect,
-			@RequestParam(value = "order", defaultValue = "1")String order) {
+	@PostMapping("saveDataMapMdm")
+	public Object addDataMapMdm(@RequestBody List<VoDataMap> dataMaps) {
 		VoResponse voRes = new VoResponse();
-		
+		if(dataMaps != null && dataMaps.size() > 0){
+			String modelId = null;
+			String bsId = null;
+			List<MdmDataMap> list = null;
+			MdmDataMap entity = null;
+			for(VoDataMap dataMap : dataMaps){
+				TableDefinition table = tableDDLService.getById(dataMap.getMdmTableId());
+				modelId = table.getModelId();
+				ServiceInterfaceDefined siDefined = serviceInterfaceDefinedService.getSiDefinedByTableId(dataMap.getBsTableId());
+				bsId = siDefined.getBsId();
+				list = new ArrayList<MdmDataMap>();
+				for(VoLineData data : dataMap.getLineData()){
+					entity = new MdmDataMap();
+					entity.setModelId(modelId);
+					entity.setBsId(bsId);
+					entity.setMdmDataId(data.getSourceId());
+					entity.setBsDataId(data.getTargetId());
+					list.add(entity);
+				}
+				voRes = dataMapService.saveAll(list);
+			}
+		}
+		return voRes;
+	}
+	
+	@DeleteMapping("delDataMapMdm")
+	public Object delDataMapMdm(@RequestBody List<VoDataMap> dataMaps) {
+		VoResponse voRes = new VoResponse();
+		if(dataMaps != null && dataMaps.size() > 0){
+			String modelId = null;
+			String bsId = null;
+			List<MdmDataMap> list = null;
+			MdmDataMap entity = null;
+			for(VoDataMap dataMap : dataMaps){
+				TableDefinition table = tableDDLService.getById(dataMap.getMdmTableId());
+				modelId = table.getModelId();
+				ServiceInterfaceDefined siDefined = serviceInterfaceDefinedService.getSiDefinedByTableId(dataMap.getBsTableId());
+				bsId = siDefined.getBsId();
+				list = new ArrayList<MdmDataMap>();
+				for(VoLineData data : dataMap.getLineData()){
+					entity = new MdmDataMap();
+					entity.setModelId(modelId);
+					entity.setBsId(bsId);
+					entity.setMdmDataId(data.getSourceId());
+					entity.setBsDataId(data.getTargetId());
+					list.add(entity);
+				}
+				voRes = dataMapService.delAll(list);
+			}
+		}
 		return voRes;
 	}
 	

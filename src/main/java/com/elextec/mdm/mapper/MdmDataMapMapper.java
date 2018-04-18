@@ -1,32 +1,30 @@
 package com.elextec.mdm.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 
-import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.MdmDataMap;
 
 public interface MdmDataMapMapper {
 
 	@Insert("INSERT INTO mdm_data_mapper(id,mdm_data_id,bs_data_id,model_id,bs_id,modifier,modifier_time,status,creater,create_time)"
-		    + " VALUES(sys_guid(),#{mdmDataId},#{bsDataId},#{modelId},#{bsId},#{modifier},#{modifierTime},#{status},#{creater},sysdate)")
+		    + " VALUES(sys_guid(),#{mdmDataId},#{bsDataId},#{modelId},#{bsId},#{modifier,jdbcType=VARCHAR},#{modifierTime,jdbcType=TIMESTAMP},#{status},#{creater},sysdate)")
 	void insert(MdmDataMap entity);
 	
 	@Delete("DELETE FROM mdm_data_mapper WHERE id = #{id}")
 	void del(String id);
 	
-	@Update("UPDATE mdm_data_mapper SET bs_io_type=#{bsIoType} WHERE id =#{id}")
+	@Delete("DELETE FROM mdm_data_mapper WHERE model_id = #{modelId} AND bs_id = #{bsId}")
+	void delByModelIdAndBsId(String modelId,String bsId);
+	
+	@Update("UPDATE mdm_data_mapper SET bs_data_id=#{bsDataId},modifier=#{modifier,jdbcType=VARCHAR},modifier_time=#{modifierTime,jdbcType=TIMESTAMP} WHERE id =#{id}")
 	void update(MdmDataMap entity);
 	
 	@Select("SELECT * FROM mdm_data_mapper")
@@ -59,6 +57,9 @@ public interface MdmDataMapMapper {
 		    @Result(property = "createTime", column = "create_time"),
 		    @Result(property = "creater", column = "creater")
 	})
-	List<MdmDataMap> findByMdmId(String modelId,String bsId);
+	List<MdmDataMap> findByMdmIdAndBsId(String modelId,String bsId);
 	
+	@Select("SELECT * FROM mdm_data_mapper WHERE model_id = #{modelId} AND bs_id = #{bsId} AND mdm_data_id=#{mdmDataId}")
+	@ResultMap("mdmDataMapOnly")
+	MdmDataMap findByMdmId(MdmDataMap entity);
 }
