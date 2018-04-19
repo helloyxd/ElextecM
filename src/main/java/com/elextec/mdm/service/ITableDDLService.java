@@ -12,6 +12,8 @@ public interface ITableDDLService {
 	
 	public VoResponse createTable(TableDefinition table);
 	
+	public VoResponse updateTable(TableDefinition table);
+	
 	public VoResponse dropTable(TableDefinition table);
 	
 	public VoResponse alterTable(TableDefinition table);

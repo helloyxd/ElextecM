@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.entity.TableDefinition;
@@ -27,6 +28,9 @@ public interface TableDefinitionMapper {
 		resultType = String.class, statementType = StatementType.STATEMENT,
 		statement="SELECT sys_guid() FROM dual")
 	void insert(TableDefinition table);
+	
+	@Update("UPDATE mdm_tabledefinition SET table_name=#{tableName},table_label=#{tableLabel},model_id=#{modelId} WHERE id=#{id}")
+	void update(TableDefinition table);
 	
 	@Delete("DELETE FROM mdm_tabledefinition WHERE id = #{id}")
 	void del(String id);

@@ -23,6 +23,7 @@ import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TableRelation;
 import com.elextec.mdm.mapper.DataPermissionDefinedMapper;
 import com.elextec.mdm.mapper.DataPermissionMapper;
+import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.TableDDLMapper;
 import com.elextec.mdm.mapper.TableDefinitionMapper;
 import com.elextec.mdm.mapper.TableRelationMapper;
@@ -47,6 +48,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	
 	@Autowired
 	private DataPermissionMapper dataPermissionMapper;
+	
+	@Autowired
+	private MdmModelMapper mdmModelMapper;
 	
 	
 	@Override
@@ -151,7 +155,135 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		return voRes;
 	}
 	
+	@Override
+	@Transactional
+	public VoResponse updateTable(TableDefinition table) {
+		VoResponse voRes = new VoResponse();
+		TableDefinition oldtable = tableDefinitionMapper.findById(table.getId());
+		StringBuilder sb = null;
+		if(table.getTableName()!=null && !table.getTableName().equals("")){
+			if( !oldtable.getTableName().equals(table.getTableName())){
+				sb = new StringBuilder();
+				sb.append("ALTER TABLE ").append(oldtable.getTableName()).append(" RENAME TO").append(table.getTableName());
+				oldtable.setTableName(table.getTableName());
+			}
+		} 
+		if(table.getTableLabel() != null && !table.getTableLabel().equals("")){
+			if( !oldtable.getTableLabel().equals(table.getTableLabel())){
+				oldtable.setTableLabel(table.getTableLabel());
+			}
+		}
+		if(table.getModelId()!=null && !table.getModelId().equals("")){
+			if( !oldtable.getModelId().equals(table.getModelId())){
+				MdmModel model = mdmModelMapper.findById(table.getModelId());
+				if(model == null){
+					voRes.setNull(voRes);
+					voRes.setMessage("更新模块错误");
+					return voRes;
+				}
+				if(model.getTableDefinitions()!=null && model.getTableDefinitions().size() > 0){
+					voRes.setFail(voRes);
+					voRes.setMessage(model.getMdmModel()+"已经存在自定义表");
+					return voRes;
+				}
+				oldtable.setModelId(table.getModelId());
+			}
+		}
+		try{
+			tableDDLMapper.alterTable(sb.toString());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			voRes.setFail(voRes);
+			voRes.setMessage(ex.getMessage());
+			return voRes;
+		}
+		tableDefinitionMapper.update(oldtable);
+		List<ColumnDefinition> list = table.getColumnDefinitions();
+		if(list != null && list.size() > 0){
+			String tableName = oldtable.getTableName().toUpperCase();
+			String columnName = null;
+			List<Map<String, String>>  comments = tableDDLMapper.getColumnCommentsDefine(tableName);
+			List<Map<String, String>> columns = tableDDLMapper.getTableColumnsDefine(tableName);
+			StringBuilder sb2 = new StringBuilder();
+			sb2.append("ALTER TABLE ").append(tableName).append(" MODIFY (");
+			StringBuilder sb3 = new StringBuilder();
+			sb3.append("ALTER TABLE ").append(tableName).append(" ADD (");
+			StringBuilder sbComment  = new StringBuilder();
+			sbComment.append("BEGIN ");
+			boolean flag = false;
+			boolean result = false;
+			for(ColumnDefinition column : list){
+				columnName = column.getName().toUpperCase();
+				
+				for(Map<String, String> map : columns){
+					if(map.get("COLUMN_NAME").equals(columnName)){
+						flag = true;
+						result = true;
+						setAlterColumn(sb2, column);
+					}
+				}
+				
+				for(Map<String, String> map : comments){
+					if(map.get("COLUMN_NAME").equals(columnName)){
+						if(column.getColumnComment() != null){
+							if(!column.getColumnComment().equals(map.get("COMMENTS"))){
+								sb = new StringBuilder();
+								sb.append("COMMENT ON COLUMN ").append(tableName).append(".");
+								sb.append(columnName).append(" IS ").append(column.getColumnComment());
+								tableDDLMapper.alterTable(sb.toString());
+							}
+						}
+					}
+				}
+				
+				if(!flag){//add
+					setAlterColumn(sb3, column);
+					sbComment.append("EXECUTE IMMEDIATE 'COMMENT ON COLUMN ").append(tableName).append(".").append(columnName);
+					sbComment.append(" IS ''").append(column.getColumnComment()).append("''';");
+					flag = false;
+				}
+			}
+			try{
+				sb2.deleteCharAt(sb2.length() - 1);
+				tableDDLMapper.alterTable(sb2.toString());
+			}catch(Exception ex){
+				ex.printStackTrace();
+				voRes.setFail(voRes);
+				voRes.setMessage(ex.getMessage());
+				return voRes;
+			}
+			try{
+				sb3.deleteCharAt(sb3.length() - 1);
+				tableDDLMapper.alterTable(sb3.toString());
+			}catch(Exception ex){
+				ex.printStackTrace();
+				voRes.setFail(voRes);
+				voRes.setMessage(ex.getMessage());
+				return voRes;
+			}
+		}
+		return voRes;
+	}
 	
+	private void setAlterColumn(StringBuilder sb,ColumnDefinition column){
+		switch(column.getDataType()){
+			case "CHAR":
+			case "VARCHAR2":
+			case "DECIMAL":
+			case "NUMBER":
+				sb.append(column.getName()).append(" ").append(column.getDataType()).append("(").append(column.getDataTypeLength()).append(") ");
+				break;
+			default:
+				sb.append(column.getName()).append(" ").append(column.getDataType()).append(" ");
+				break;
+		}
+		for(String s : column.getConstraints()){
+			if(s.equals("N") || s.equals("Y")){
+				sb.append(TableDDLMap.oracleColumnConstraintMap.get(s));
+			}
+		}
+		sb.append(",");
+	}
 	
 	@Override
 	public VoResponse dropTable(TableDefinition table) {

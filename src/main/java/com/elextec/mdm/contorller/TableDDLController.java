@@ -136,6 +136,36 @@ public class TableDDLController {
 		return voRes;
 	}
 	
+	@PutMapping
+	public VoResponse update(@RequestBody TableDefinition table){
+		VoResponse voRes = validateTable(table);
+		
+		MdmModel mdmModel = mdmModelService.getById(table.getModelId());
+		if(mdmModel == null){
+			voRes.setNull(voRes);
+			voRes.setMessage("MDM模块错误");
+			return voRes;
+		}
+		if(mdmModel.getTableDefinitions()!=null && mdmModel.getTableDefinitions().size()>0){
+			voRes.setFail(voRes);
+			voRes.setMessage("MDM模块下已经存在主数据表");
+			return voRes;
+		}
+		if(voRes.getSuccess()){
+			voRes = tableDDLService.createTable(table);
+			if(voRes.getSuccess()){
+				if(table.getIsMenu()){
+					//System.out.println(table.getTableName());
+					//System.out.println(table.getTableLabel());
+					if(!menuService.createMDMenu(mdmModel.getMdmModel(), table.getTableLabel())){
+						voRes.setMessage(voRes.getMessage() + "<br>创建菜单失败");
+					}
+				}
+			}
+		}
+		return voRes;
+	}
+	
 	@DeleteMapping
 	public Object del(@RequestParam("id") String id){
 		VoResponse voRes = new VoResponse();
