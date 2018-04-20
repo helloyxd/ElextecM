@@ -204,22 +204,23 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			String columnName = null;
 			List<Map<String, String>>  comments = tableDDLMapper.getColumnCommentsDefine(tableName);
 			List<Map<String, String>> columns = tableDDLMapper.getTableColumnsDefine(tableName);
-			StringBuilder sb2 = new StringBuilder();
-			sb2.append("ALTER TABLE ").append(tableName).append(" MODIFY (");
-			StringBuilder sb3 = new StringBuilder();
-			sb3.append("ALTER TABLE ").append(tableName).append(" ADD (");
+			StringBuilder sbUpdate = null;
+			StringBuilder sbAdd = null;
 			StringBuilder sbComment  = new StringBuilder();
 			sbComment.append("BEGIN ");
 			boolean flag = false;
-			boolean result = false;
+			boolean flagComment = false;
 			for(ColumnDefinition column : list){
 				columnName = column.getName().toUpperCase();
 				
 				for(Map<String, String> map : columns){
 					if(map.get("COLUMN_NAME").equals(columnName)){
 						flag = true;
-						result = true;
-						setAlterColumn(sb2, column);
+						if(sbUpdate == null){
+							sbUpdate = new StringBuilder();
+							sbUpdate.append("ALTER TABLE ").append(tableName).append(" MODIFY (");
+						}
+						setAlterColumn(sbUpdate, column);
 					}
 				}
 				
@@ -227,25 +228,32 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 					if(map.get("COLUMN_NAME").equals(columnName)){
 						if(column.getColumnComment() != null){
 							if(!column.getColumnComment().equals(map.get("COMMENTS"))){
-								sb = new StringBuilder();
-								sb.append("COMMENT ON COLUMN ").append(tableName).append(".");
-								sb.append(columnName).append(" IS ").append(column.getColumnComment());
-								tableDDLMapper.alterTable(sb.toString());
+								sbComment.append("EXECUTE IMMEDIATE 'COMMENT ON COLUMN ").append(tableName).append(".").append(columnName);
+								sbComment.append(" IS ''").append(column.getColumnComment()).append("''';");
+								flagComment = true;
 							}
 						}
 					}
 				}
 				
 				if(!flag){//add
-					setAlterColumn(sb3, column);
+					if(sbAdd == null){
+						sbAdd = new StringBuilder();
+						sbAdd.append("ALTER TABLE ").append(tableName).append(" ADD (");
+					}
+					setAlterColumn(sbAdd, column);
 					sbComment.append("EXECUTE IMMEDIATE 'COMMENT ON COLUMN ").append(tableName).append(".").append(columnName);
 					sbComment.append(" IS ''").append(column.getColumnComment()).append("''';");
+					flagComment = true;
 					flag = false;
 				}
 			}
 			try{
-				sb2.deleteCharAt(sb2.length() - 1);
-				tableDDLMapper.alterTable(sb2.toString());
+				if(sbUpdate != null){
+					sbUpdate.deleteCharAt(sbUpdate.length() - 1);
+					sbUpdate.append(")");
+					tableDDLMapper.alterTable(sbUpdate.toString());
+				}
 			}catch(Exception ex){
 				ex.printStackTrace();
 				voRes.setFail(voRes);
@@ -253,8 +261,22 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				return voRes;
 			}
 			try{
-				sb3.deleteCharAt(sb3.length() - 1);
-				tableDDLMapper.alterTable(sb3.toString());
+				if(sbAdd != null){
+					sbAdd.append(")");
+					sbAdd.deleteCharAt(sbAdd.length() - 1);
+					tableDDLMapper.alterTable(sbAdd.toString());
+				}
+			}catch(Exception ex){
+				ex.printStackTrace();
+				voRes.setFail(voRes);
+				voRes.setMessage(ex.getMessage());
+				return voRes;
+			}
+			try{
+				if(flagComment){
+					sbComment.append(" END;");
+					tableDDLMapper.alterTable(sbComment.toString());
+				}
 			}catch(Exception ex){
 				ex.printStackTrace();
 				voRes.setFail(voRes);
