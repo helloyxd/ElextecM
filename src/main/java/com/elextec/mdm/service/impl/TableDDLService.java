@@ -164,7 +164,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		if(table.getTableName()!=null && !table.getTableName().equals("")){
 			if( !oldtable.getTableName().equals(table.getTableName())){
 				sb = new StringBuilder();
-				sb.append("ALTER TABLE ").append(oldtable.getTableName()).append(" RENAME TO").append(table.getTableName());
+				sb.append("ALTER TABLE ").append(oldtable.getTableName()).append(" RENAME TO ").append(table.getTableName());
 				oldtable.setTableName(table.getTableName());
 			}
 		} 
@@ -190,7 +190,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			}
 		}
 		try{
-			tableDDLMapper.alterTable(sb.toString());
+			if(sb != null){
+				tableDDLMapper.alterTable(sb.toString());
+			}
 		}catch(Exception ex){
 			ex.printStackTrace();
 			voRes.setFail(voRes);
@@ -220,7 +222,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 							sbUpdate = new StringBuilder();
 							sbUpdate.append("ALTER TABLE ").append(tableName).append(" MODIFY (");
 						}
-						setAlterColumn(sbUpdate, column);
+						setAlterColumn(sbUpdate, column, map.get("NULLABLE"));
 					}
 				}
 				
@@ -241,7 +243,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 						sbAdd = new StringBuilder();
 						sbAdd.append("ALTER TABLE ").append(tableName).append(" ADD (");
 					}
-					setAlterColumn(sbAdd, column);
+					setAlterColumn(sbAdd, column, null);
 					sbComment.append("EXECUTE IMMEDIATE 'COMMENT ON COLUMN ").append(tableName).append(".").append(columnName);
 					sbComment.append(" IS ''").append(column.getColumnComment()).append("''';");
 					flagComment = true;
@@ -287,7 +289,7 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		return voRes;
 	}
 	
-	private void setAlterColumn(StringBuilder sb,ColumnDefinition column){
+	private void setAlterColumn(StringBuilder sb,ColumnDefinition column,String nullable){
 		switch(column.getDataType()){
 			case "CHAR":
 			case "VARCHAR2":
@@ -300,8 +302,15 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 				break;
 		}
 		for(String s : column.getConstraints()){
-			if(s.equals("N") || s.equals("Y")){
-				sb.append(TableDDLMap.oracleColumnConstraintMap.get(s));
+			if(nullable == null){
+				sb.append(" ").append(TableDDLMap.oracleColumnConstraintMap.get(s));
+			}else{
+				if(s.equals("N") && !s.equals(nullable)){
+					sb.append(" ").append(TableDDLMap.oracleColumnConstraintMap.get(s));
+				}
+				if(s.equals("Y") && !s.equals(nullable)){
+					sb.append(" ").append(TableDDLMap.oracleColumnConstraintMap.get(s));
+				}
 			}
 		}
 		sb.append(",");

@@ -456,3 +456,28 @@ create table MDM_config
 );
 INSERT INTO MDM_config(id,config_name,config_value,remark,status,creater,create_time)
 	VALUES(sys_guid(),'Activiti-port','8990','',0,'sys',sysdate);
+
+create table test_emp
+(
+   personid             varchar2(32) primary key,
+   code          		varchar2(64),
+   name        			varchar2(64),
+   sex            		varchar2(64),
+   birthdate            varchar2(64),
+   officephone          varchar2(64),
+   mobile         		varchar2(64),
+   email        		varchar2(64),
+   isturnover           varchar2(64),
+   post              	varchar2(64),
+   level_          		varchar2(64),
+   personclassid        varchar2(64),
+   orgnizationid        varchar2(64),
+   departmentid         varchar2(64),
+   ts             		varchar2(64),
+   ds         			varchar2(64)
+);
+
+drop table test_emp
+
+
+	

@@ -1,4 +1,10 @@
 
+select * from user_col_comments where table_name = 'MDM_EMPLOYEER';
+comment on column MDM_EMPLOYEER.ID is '这是一个ID';
+
+SELECT column_name,data_type,data_length,nullable FROM user_tab_columns  where table_name = 'MDM_EMPLOYEER';
+SELECT column_name,data_type,data_length,nullable FROM user_tab_columns  where table_name LIKE 'MDM_%';
+
 select * from  MDM_DATA_MAPPER
 
 select * from MDM_SERVICEINTERFACE_DEFINED where id=(select service_defined_id from MDM_SERVICEINTERFACE_PARAM where table_id='12345678900a')
