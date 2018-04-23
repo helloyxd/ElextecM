@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.Menu;
-import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.IMenuService;
 
 @RestController
@@ -23,9 +22,6 @@ public class MenuController {
 
 	@Autowired
 	private IMenuService menuService;
-	
-	@Autowired
-	private IMdmModelService mdmModelService;
 	
 	@GetMapping
 	public Object getMenus(@RequestParam("level") String level) {
