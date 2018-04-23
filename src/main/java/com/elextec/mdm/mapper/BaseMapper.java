@@ -14,10 +14,10 @@ import com.elextec.mdm.common.entity.PageQuery;
 public interface BaseMapper<T> {
 
 	@SelectProvider(type = MapperProvider.class, method = "findEntityCount")
-    int findCount(@Param("queryParam") Map<String,String> map, @Param("tableName") String tableName);
+    int findCount(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("tableName") String tableName);
 	
 	@SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
-    List<T> findByPage(@Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
+    List<T> findByPage(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
 	
 	@Select("SELECT id FROM ${tableName} WHERE ${queryField} LIKE '%${queryParam}%'")
 	@ResultType(List.class)

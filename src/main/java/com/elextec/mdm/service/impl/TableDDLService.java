@@ -460,9 +460,30 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 	}
 	
 	public VoResponse alterTable(TableDefinition table) {
-		String alterTable = "";
-		tableDDLMapper.alterTable(alterTable);
-		return null;
+		VoResponse voRes = new VoResponse();
+		
+		if(table.getId() == null || table.getId().equals("")) {
+			voRes.setNull(voRes);
+			voRes.setMessage("tableId未获取");
+		}else {
+			TableDefinition tableold = tableDefinitionMapper.findById(table.getId());
+			if(tableold == null) {
+				voRes.setNull(voRes);
+				voRes.setMessage("table获取异常");
+			}else {
+				StringBuilder alterTable = new StringBuilder();
+				alterTable.append("ALTER TABLE ").append(tableold.getTableName()).append(" DROP ");
+				alterTable.append("(").append(table.getColumnDefinitions().get(0).getName()).append(")");
+				try{
+					tableDDLMapper.alterTable(alterTable.toString());
+				}catch(Exception ex){
+					ex.printStackTrace();
+					voRes.setFail(voRes);
+					voRes.setMessage(ex.getMessage());
+				}
+			}
+		}
+		return voRes;
 	}
 	
 	@Override

@@ -101,13 +101,13 @@ public class UserService extends BaseService implements IUserService{
 		queryParam.put("user_name", user.getUserName());
 		PageQuery pageQuery = new PageQuery();
 		pageQuery.setTableName("mdm_user");
-		int count = userMapper.findCount(queryParam, pageQuery.getTableName());
+		int count = userMapper.findCount("", queryParam, pageQuery.getTableName());
 		pageQuery.setAllCount(count);
 		pageQuery.setCurrentPage(page);
 		pageQuery.setPageRowSize(pageSize);
 		pageQuery.setOrder("user_name");
 		pageQuery.calcutePage(pageQuery);
-		List<User> list = userMapper.findByPage(queryParam, pageQuery);
+		List<User> list = userMapper.findByPage("", queryParam, pageQuery);
 		map.put("total", count);
 		map.put("rows", list);
 		return map;

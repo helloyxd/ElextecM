@@ -19,7 +19,7 @@ import org.apache.ibatis.mapping.StatementType;
 import com.elextec.mdm.common.entity.PageQuery;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 
-public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfaceDefined>{
+public interface ServiceInterfaceDefinedMapper {
 
 	@Insert("INSERT INTO mdm_serviceInterface_defined(id,type,wsdl_location,dburl,remark,user_name,password,"
 			+ "model_id,bs_id,operation_type,operation,wsbinding,bing_namespace,operation_namespace,isData_source,status,creater,create_time)"
@@ -115,9 +115,12 @@ public interface ServiceInterfaceDefinedMapper extends BaseMapper<ServiceInterfa
 	@ResultMap("serviceInterfaceDefinedMapOnly")
 	List<ServiceInterfaceDefined> findByModelIdAndBsIdOnly(@Param("modelId")String modelId, @Param("bsId")String bsId);
 	
+	@SelectProvider(type = MapperProvider.class, method = "findEntityCount")
+    int findCount(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("tableName") String tableName);
+	
 	@SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
 	@ResultMap("serviceInterfaceDefinedMapOnly")
-    List<ServiceInterfaceDefined> findByPage(@Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
+    List<ServiceInterfaceDefined> findByPage(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
 	
 	@Select("SELECT * FROM mdm_serviceInterface_defined WHERE id=(SELECT service_defined_id from mdm_serviceInterface_param WHERE table_id=#{bsTableId})")
 	@ResultMap("serviceInterfaceDefinedMapOnly")

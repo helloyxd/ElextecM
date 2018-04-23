@@ -97,6 +97,7 @@ public class MapperProvider {
 		PageQuery pageQuery = (PageQuery) map.get("page");
 		//sb.append("SELECT * FROM mdm_user WHERE 1=1");
 		sb.append("SELECT * FROM (SELECT ROWNUM AS rn, t.* FROM ").append(pageQuery.getTableName()).append(" t WHERE 1=1");
+		System.out.println(map.get("conditions") );
 		if(map.get("conditions") != null){
 			sb.append(" ").append(map.get("conditions"));
 		}

@@ -14,7 +14,7 @@ import org.apache.ibatis.mapping.StatementType;
 
 import com.elextec.mdm.entity.MdmModel;
 
-public interface MdmModelMapper extends BaseMapper<MdmModel>{
+public interface MdmModelMapper{
 
 	@Insert("INSERT INTO mdm_model(id,mdm_model,status,creater,create_time)"
 		    + " VALUES(#{id}, #{mdmModel}, #{status}, #{creater}, sysdate)")

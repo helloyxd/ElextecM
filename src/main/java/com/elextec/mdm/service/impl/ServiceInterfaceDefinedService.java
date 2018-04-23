@@ -79,13 +79,13 @@ public class ServiceInterfaceDefinedService extends BaseService implements IServ
 		queryParam.put("bs_id", entity.getBsId());
 		PageQuery pageQuery = new PageQuery();
 		pageQuery.setTableName("mdm_serviceInterface_defined");
-		int count = serviceInterfaceDefinedMapper.findCount(queryParam, pageQuery.getTableName());
+		int count = serviceInterfaceDefinedMapper.findCount("", queryParam, pageQuery.getTableName());
 		pageQuery.setAllCount(count);
 		pageQuery.setCurrentPage(page);
 		pageQuery.setPageRowSize(pageSize);
 		pageQuery.setOrder("create_time");
 		pageQuery.calcutePage(pageQuery);
-		List<ServiceInterfaceDefined> list = serviceInterfaceDefinedMapper.findByPage(queryParam, pageQuery);
+		List<ServiceInterfaceDefined> list = serviceInterfaceDefinedMapper.findByPage("", queryParam, pageQuery);
 		map.put("total", count);
 		map.put("rows", list);
 		return map;

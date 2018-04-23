@@ -145,6 +145,12 @@ public class TableDDLController {
 		return voRes;
 	}
 	
+	@DeleteMapping("delColumn")
+	public Object delColumn(@RequestBody TableDefinition table){
+		VoResponse voRes = tableDDLService.alterTable(table);
+		return voRes;
+	}
+	
 	@DeleteMapping
 	public Object del(@RequestParam("id") String id){
 		VoResponse voRes = new VoResponse();
