@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.elextec.mdm.common.entity.VoResponse;
+import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 import com.elextec.mdm.entity.ServiceInterfaceParam;
 
@@ -31,4 +32,6 @@ public interface IServiceInterfaceDefinedService {
 	ServiceInterfaceParam getSiTable(String modelId, String bsId);
 	
 	ServiceInterfaceDefined getSiDefinedByTableId(String bsTableId);
+	
+	List<MdmBs> getBsByModel(String modelId);
 }

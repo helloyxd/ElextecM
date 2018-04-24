@@ -1,5 +1,6 @@
 package com.elextec.mdm.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 import com.elextec.mdm.entity.ServiceInterfaceParam;
-import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.mapper.MdmBsMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.ServiceInterfaceDefinedMapper;
@@ -198,6 +198,18 @@ public class ServiceInterfaceDefinedService extends BaseService implements IServ
 	public ServiceInterfaceDefined getSiDefinedByTableId(String bsTableId) {
 		ServiceInterfaceDefined siDefined = serviceInterfaceDefinedMapper.findByTableId(bsTableId);
 		return siDefined;
+	}
+
+	@Override
+	public List<MdmBs> getBsByModel(String modelId) {
+		List<ServiceInterfaceDefined> list = serviceInterfaceDefinedMapper.findByModelId(modelId);
+		List<MdmBs> listbs = new ArrayList<MdmBs>();
+		MdmBs bs = null;
+		for(ServiceInterfaceDefined defined : list) {
+			bs = defined.getBs();
+			listbs.add(bs);
+		}
+		return listbs;
 	}
 
 }

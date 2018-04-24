@@ -22,6 +22,7 @@ import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmDataMap;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.MdmTableMap;
+import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 import com.elextec.mdm.entity.ServiceInterfaceParam;
 import com.elextec.mdm.entity.ServiceParamFieldDefined;
@@ -29,6 +30,7 @@ import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.service.IDataMapService;
 import com.elextec.mdm.service.IMdmModelService;
+import com.elextec.mdm.service.IMenuService;
 import com.elextec.mdm.service.IServiceInterfaceDefinedService;
 import com.elextec.mdm.service.IServiceParamTableDefinedService;
 import com.elextec.mdm.service.ITableDDLService;
@@ -53,6 +55,9 @@ public class DataMapController {
 	
 	@Autowired
 	private IServiceInterfaceDefinedService serviceInterfaceDefinedService;
+	
+	@Autowired
+	private IMenuService menuService;
 	
 	@DeleteMapping
 	public Object del(@RequestBody List<VoDataMap> dataMaps) {
@@ -283,15 +288,27 @@ public class DataMapController {
 	public Object sync(@RequestParam("modelId") String modelId, @RequestParam("bsId") String bsId) {
 		MdmModel model = mdmModelService.getById(modelId);
 		MdmBs bs = mdmModelService.getBsById(bsId);
-		List<MdmTableMap> list = dataMapService.getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-		return dataMapService.syncToMdm(model, bs, list, "");
+		return dataMapService.syncToMdm(model, bs, "");
+	}
+	
+	@PostMapping("syncToMdm")
+	public Object syncToMdm(@RequestParam("menuId") String menuId) {
+		VoResponse voRes = new VoResponse();
+		Menu menu = menuService.getMenuById(menuId);
+		if(menu != null) {
+			MdmModel model = mdmModelService.getByName(menu.getMenuName());
+			voRes = dataMapService.syncToMdm(model.getId(),"");
+		}else {
+			voRes.setNull(voRes);
+			voRes.setMessage("参数错误");
+		}
+		return voRes;
 	}
 	
 	@PutMapping("send")
 	public Object send(@RequestParam("modelId") String modelId, @RequestParam("bsId") String bsId) {
 		MdmModel model = mdmModelService.getById(modelId);
 		MdmBs bs = mdmModelService.getBsById(bsId);
-		List<MdmTableMap> list = dataMapService.getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-		return dataMapService.syncToMdm(model, bs, list, "");
+		return dataMapService.syncToMdm(model, bs, "");
 	}
 }

@@ -1,7 +1,6 @@
 package com.elextec.mdm.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,7 @@ import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.entity.TaskDataRecordDetail;
 import com.elextec.mdm.entity.TaskDataRecordSummary;
+import com.elextec.mdm.mapper.MdmBsMapper;
 import com.elextec.mdm.mapper.MdmDataMapMapper;
 import com.elextec.mdm.mapper.MdmModelMapper;
 import com.elextec.mdm.mapper.MdmTableMapMapper;
@@ -69,6 +69,34 @@ public class DataMapService extends BaseService implements IDataMapService{
 	
 	@Autowired
 	private MdmModelMapper mdmModelMapper;
+	
+	@Autowired
+	private MdmBsMapper mdmBsMapper;
+	
+	public void serviceExecute(MdmModel model, MdmBs bs, String processId){
+        //在这里开启线程，执行操作
+        ThreadExample te = new ThreadExample(model, bs, processId);
+        te.start();
+    }
+	
+	//内部类
+    private class ThreadExample extends Thread{
+    	private MdmModel model;
+    	private MdmBs bs;
+    	private String processId;
+    	
+		public ThreadExample(MdmModel model, MdmBs bs, String processId){
+            //也可以在构造函数中传入参数
+        	this.model = model;
+        	this.bs = bs;
+        	this.processId = processId;
+        }
+        public void run(){
+            //这里为线程的操作
+            //就可以使用注入之后Bean了
+        	syncToMdm(model, bs, processId);
+        }
+    }
 	
 	@Override
 	public VoResponse save(VoDataMap dataMap) {
@@ -146,7 +174,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 	}
 
 	@Override
-	public VoResponse syncToMdm(MdmModel model, MdmBs bs, List<MdmTableMap> list, String processId) {
+	public VoResponse syncToMdm(MdmModel model, MdmBs bs, String processId) {
 		VoResponse voRes = new VoResponse();
 		List<TableDefinition> mdmtables = model.getTableDefinitions();
 		//模块下获取自定义表
@@ -270,7 +298,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 	}
 	
 	@Override
-	public VoResponse send(MdmModel model, MdmBs bs, List<MdmTableMap> list, String processId) {
+	public VoResponse send(MdmModel model, MdmBs bs, String processId) {
 		VoResponse voRes = new VoResponse();
 		List<TableDefinition> mdmtables = model.getTableDefinitions();
 		//模块下获取自定义表
@@ -433,12 +461,11 @@ public class DataMapService extends BaseService implements IDataMapService{
 			voRes.setMessage("mdm模块获取失败");
 			return voRes;
 		}
-		List<MdmBs> listBs = model.getMdmBses();
-		List<MdmTableMap> listMap = null;
-		
-		for(MdmBs bs : listBs){
-			listMap = getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-			voRes.setMessage(voRes.getMessage() + syncToMdm(model, bs, listMap, processId).getMessage());
+		List<ServiceInterfaceDefined> list = serviceInterfaceDefinedMapper.findByModelId(modelId);
+		//List<MdmBs> listBs = model.getMdmBses();
+		for(ServiceInterfaceDefined defined : list){
+			MdmBs bs = mdmBsMapper.findById(defined.getBsId());
+			serviceExecute(model, bs, processId);
 		}
 		return voRes;
 	}
@@ -452,12 +479,13 @@ public class DataMapService extends BaseService implements IDataMapService{
 			voRes.setMessage("mdm模块获取失败");
 			return voRes;
 		}
+		
 		List<MdmBs> listBs = model.getMdmBses();
 		List<MdmTableMap> listMap = null;
 		
 		for(MdmBs bs : listBs){
 			listMap = getById(model.getTableDefinitions().get(0).getId(), bs.getSiDefineds().get(0).getSiParams().get(0).getsParamTableDefineds().get(0).getId());
-			voRes.setMessage(voRes.getMessage() + send(model, bs, listMap, processId).getMessage());
+			voRes.setMessage(voRes.getMessage() + send(model, bs, processId).getMessage());
 		}
 		return voRes;
 	}

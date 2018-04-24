@@ -23,9 +23,9 @@ public interface IDataMapService {
 	
 	public List<MdmTableMap> getById(String modelid, String bsid);
 	
-	public VoResponse syncToMdm(MdmModel model, MdmBs bs, List<MdmTableMap> list, String processId);
+	public VoResponse syncToMdm(MdmModel model, MdmBs bs, String processId);
 	
-	public VoResponse send(MdmModel model, MdmBs bs, List<MdmTableMap> list, String processId);
+	public VoResponse send(MdmModel model, MdmBs bs, String processId);
 	
 	public VoResponse syncToMdm(String modelId, String processId);
 	
