@@ -23,6 +23,7 @@ import com.elextec.mdm.entity.MdmDataMap;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.MdmTableMap;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.ModelFlow;
 import com.elextec.mdm.entity.ServiceInterfaceDefined;
 import com.elextec.mdm.entity.ServiceInterfaceParam;
 import com.elextec.mdm.entity.ServiceParamFieldDefined;
@@ -34,6 +35,7 @@ import com.elextec.mdm.service.IMenuService;
 import com.elextec.mdm.service.IServiceInterfaceDefinedService;
 import com.elextec.mdm.service.IServiceParamTableDefinedService;
 import com.elextec.mdm.service.ITableDDLService;
+import com.elextec.mdm.service.impl.ModelFlowService;
 import com.elextec.mdm.vo.VoDataMap;
 import com.elextec.mdm.vo.VoLineData;
 
@@ -58,6 +60,9 @@ public class DataMapController {
 	
 	@Autowired
 	private IMenuService menuService;
+	
+	@Autowired
+	private ModelFlowService modelFlowService;
 	
 	@DeleteMapping
 	public Object del(@RequestBody List<VoDataMap> dataMaps) {
@@ -284,20 +289,22 @@ public class DataMapController {
 		return voRes;
 	}
 	
-	@PutMapping("sync")
-	public Object sync(@RequestParam("modelId") String modelId, @RequestParam("bsId") String bsId) {
-		MdmModel model = mdmModelService.getById(modelId);
-		MdmBs bs = mdmModelService.getBsById(bsId);
-		return dataMapService.syncToMdm(model, bs, "");
-	}
-	
-	@PostMapping("syncToMdm")
+	@PostMapping("sync")
 	public Object syncToMdm(@RequestParam("menuId") String menuId) {
 		VoResponse voRes = new VoResponse();
 		Menu menu = menuService.getMenuById(menuId);
 		if(menu != null) {
 			MdmModel model = mdmModelService.getByName(menu.getMenuName());
-			voRes = dataMapService.syncToMdm(model.getId(),"");
+			voRes = modelFlowService.getByModelId(model.getId());
+			@SuppressWarnings("unchecked")
+			List<ModelFlow>  list = (List<ModelFlow>) voRes.getData();
+			if(list.size() == 0) {
+				voRes.setNull(voRes);
+				voRes.setMessage(model.getMdmModel() + "未创建流程信息");
+			}else {
+				voRes = dataMapService.syncToMdm(model.getId(),list.get(0).getActivitiId());
+			}
+			
 		}else {
 			voRes.setNull(voRes);
 			voRes.setMessage("参数错误");

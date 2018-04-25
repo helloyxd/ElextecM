@@ -39,6 +39,7 @@ import com.elextec.mdm.mapper.TaskDataRecordSummaryMapper;
 import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IDataMapService;
 import com.elextec.mdm.vo.VoDataMap;
+import com.elextec.mdm.vo.VoLineData;
 
 @Service
 public class DataMapService extends BaseService implements IDataMapService{
@@ -105,26 +106,36 @@ public class DataMapService extends BaseService implements IDataMapService{
 		tableMap.setCreater(getUserName());
 		tableMap.setMdmTableId(dataMap.getMdmTableId());
 		tableMap.setBsTableId(dataMap.getBsTableId());
-		String sourceId = dataMap.getLineData().get(0).getSourceId();
-		MdmTableMap entity = tableMapMapper.findByTableIdAndField(dataMap.getBsTableId(), dataMap.getMdmTableId(), sourceId);
-		if(entity != null){
-			if(entity.getMdmFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.bsSource)){
-				entity.setBsIoType(DataMapEnum.allSource);
-			}else if(entity.getBsFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.mdmSource)){
-				entity.setBsIoType(DataMapEnum.allSource);
+		String sourceId = null;
+		String targetId = null;
+		MdmTableMap entity = null;
+		for(VoLineData linedata : dataMap.getLineData()) {
+			sourceId = linedata.getSourceId();
+			targetId = linedata.getTargetId();
+			entity = tableMapMapper.findByTableIdAndField(dataMap.getBsTableId(), dataMap.getMdmTableId(), sourceId);
+			if(entity != null){
+				if(entity.getMdmFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.bsSource)){
+					entity.setBsIoType(DataMapEnum.allSource);
+				}else if(entity.getBsFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.mdmSource)){
+					entity.setBsIoType(DataMapEnum.allSource);
+				}else{
+					return voRes;
+				}
+				tableMapMapper.update(entity);
 			}else{
-				return voRes;
+				//判断是mdm到bs字段还是相反
+				ServiceParamFieldDefined spField = serviceParamFieldDefinedMapper.findById(sourceId);
+				if(spField == null){//sourceId 是 mdm
+					tableMap.setBsIoType(DataMapEnum.mdmSource);
+					tableMap.setMdmFieldId(sourceId);
+					tableMap.setBsFieldId(targetId);
+				}else{//sourceId 是bs
+					tableMap.setBsIoType(DataMapEnum.bsSource);
+					tableMap.setMdmFieldId(targetId);
+					tableMap.setBsFieldId(sourceId);
+				}
+				tableMapMapper.insert(tableMap);
 			}
-			tableMapMapper.update(entity);
-		}else{
-			//判断是mdm到bs字段还是相反
-			ServiceParamFieldDefined spField = serviceParamFieldDefinedMapper.findById(sourceId);
-			if(spField == null){
-				tableMap.setBsIoType(DataMapEnum.mdmSource);
-			}else{
-				tableMap.setBsIoType(DataMapEnum.bsSource);
-			}
-			tableMapMapper.insert(tableMap);
 		}
 		return voRes;
 	}
@@ -135,7 +146,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 		String sourceId =  dataMap.getLineData().get(0).getSourceId();
 		//String targetId =  dataMap.getLineData().get(0).getTargetId();
 		MdmTableMap entity = tableMapMapper.findByTableIdAndField(dataMap.getBsTableId(), dataMap.getMdmTableId(), sourceId);
-		if(entity.equals(DataMapEnum.allSource)){
+		if(entity.getBsIoType().equals(DataMapEnum.allSource)){
 			if(sourceId.equals(entity.getMdmFieldId())){
 				entity.setBsIoType(DataMapEnum.bsSource);
 			}else{
