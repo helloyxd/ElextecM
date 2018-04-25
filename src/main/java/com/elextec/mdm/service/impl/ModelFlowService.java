@@ -73,4 +73,10 @@ public class ModelFlowService implements IModelFlowService {
 		return voRes;
 	}
 
+	@Override
+	public ModelFlow getByModelAndType(String id, String type) {
+		ModelFlow entity = modelFlowMapper.findByModelIdAndType(id, type);
+		return entity;
+	}
+
 }

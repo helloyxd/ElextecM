@@ -114,11 +114,17 @@ public class DataMapService extends BaseService implements IDataMapService{
 			targetId = linedata.getTargetId();
 			entity = tableMapMapper.findByTableIdAndField(dataMap.getBsTableId(), dataMap.getMdmTableId(), sourceId);
 			if(entity != null){
-				if(entity.getMdmFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.bsSource)){
+				if(entity.getMdmFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.bsSource) 
+						&& entity.getBsFieldId().equals(targetId)){
+					
 					entity.setBsIoType(DataMapEnum.allSource);
-				}else if(entity.getBsFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.mdmSource)){
+				}else if(entity.getBsFieldId().equals(sourceId) && entity.getBsIoType().equals(DataMapEnum.mdmSource) 
+						&& entity.getMdmFieldId().equals(targetId)){
+					
 					entity.setBsIoType(DataMapEnum.allSource);
-				}else{
+				}else {
+					voRes.setFail(voRes);
+					voRes.setMessage("参数错误");
 					return voRes;
 				}
 				tableMapMapper.update(entity);

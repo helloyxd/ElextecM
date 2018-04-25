@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -295,14 +294,12 @@ public class DataMapController {
 		Menu menu = menuService.getMenuById(menuId);
 		if(menu != null) {
 			MdmModel model = mdmModelService.getByName(menu.getMenuName());
-			voRes = modelFlowService.getByModelId(model.getId());
-			@SuppressWarnings("unchecked")
-			List<ModelFlow>  list = (List<ModelFlow>) voRes.getData();
-			if(list.size() == 0) {
+			ModelFlow entity = modelFlowService.getByModelAndType(model.getId(), "0");
+			if(entity == null) {
 				voRes.setNull(voRes);
 				voRes.setMessage(model.getMdmModel() + "未创建流程信息");
 			}else {
-				voRes = dataMapService.syncToMdm(model.getId(),list.get(0).getActivitiId());
+				voRes = dataMapService.syncToMdm(model.getId(),entity.getActivitiId());
 			}
 			
 		}else {
@@ -312,10 +309,24 @@ public class DataMapController {
 		return voRes;
 	}
 	
-	@PutMapping("send")
-	public Object send(@RequestParam("modelId") String modelId, @RequestParam("bsId") String bsId) {
-		MdmModel model = mdmModelService.getById(modelId);
-		MdmBs bs = mdmModelService.getBsById(bsId);
-		return dataMapService.syncToMdm(model, bs, "");
+	@PostMapping("send")
+	public Object send(@RequestParam("menuId") String menuId) {
+		VoResponse voRes = new VoResponse();
+		Menu menu = menuService.getMenuById(menuId);
+		if(menu != null) {
+			MdmModel model = mdmModelService.getByName(menu.getMenuName());
+			ModelFlow entity = modelFlowService.getByModelAndType(model.getId(), "1");
+			if(entity == null) {
+				voRes.setNull(voRes);
+				voRes.setMessage(model.getMdmModel() + "未创建流程信息");
+			}else {
+				voRes = dataMapService.syncToMdm(model.getId(),entity.getActivitiId());
+			}
+			
+		}else {
+			voRes.setNull(voRes);
+			voRes.setMessage("参数错误");
+		}
+		return voRes;
 	}
 }

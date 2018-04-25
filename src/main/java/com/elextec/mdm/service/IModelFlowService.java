@@ -14,6 +14,8 @@ public interface IModelFlowService {
 	
 	VoResponse getByModelId(String id);
 	
+	ModelFlow getByModelAndType(String id, String type);
+	
 	ModelFlow getModelFlowByActivitiId(String id);
 	 
 	VoResponse getByActivitiId(String id);
