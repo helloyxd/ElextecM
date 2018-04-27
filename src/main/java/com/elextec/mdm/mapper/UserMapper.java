@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Many;
-import org.apache.ibatis.annotations.One;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
@@ -33,8 +32,7 @@ public interface UserMapper {
 	    @Result(property = "status", column = "status"),
 	    @Result(property = "createTime", column = "create_time"), 
 	    @Result(property = "creater", column = "creater"),
-	    @Result(property = "department", column = "department_id",
-	    	one = @One(select = "com.elextec.mdm.mapper.DepartmentMapper.findDepartmentById") ),
+	    @Result(property = "dpartmentId", column = "department_id"), 
 	    @Result(property = "roles", column = "id",
 	    	many = @Many(select = "com.elextec.mdm.mapper.RoleMapper.findRolesByUserId") ) 
 	})
@@ -66,7 +64,7 @@ public interface UserMapper {
     void insert(User user);
 
     @Update("UPDATE mdm_user SET user_name=#{userName},full_name=#{fullName},user_password=#{userPassword},"
-	    + "department_id=#{department.id,jdbcType=VARCHAR},status=#{status} WHERE id =#{id}")
+	    + "department_id=#{dpartmentId,jdbcType=VARCHAR},status=#{status} WHERE id =#{id}")
     void update(User user);
 
     @Delete("DELETE FROM mdm_user WHERE id =#{id}")
@@ -93,6 +91,6 @@ public interface UserMapper {
     int findCount(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("tableName") String tableName);
     
     @SelectProvider(type = MapperProvider.class, method = "findEntityByPage")
-	@ResultMap("userMapOnly")
+	@ResultMap("userMap")
     List<User> findByPage(@Param("conditions")String conditions, @Param("queryParam") Map<String,String> map, @Param("page") PageQuery pageQuery);
 }

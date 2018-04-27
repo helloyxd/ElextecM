@@ -144,7 +144,11 @@ public class UserService extends BaseService implements IUserService{
 				return voRes;
 			}
 		}
+		
 		userMapper.update(user);
+		List<User> users = new ArrayList<User>();
+		users.add(user);
+		updateUserRole(users);
 		return voRes;
 	}
 	

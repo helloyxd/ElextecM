@@ -1,6 +1,7 @@
 package com.elextec.mdm.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,16 +58,17 @@ public class TaskDataService implements ITaskDataService{
 					vo.setCount(Integer.parseInt(mapsync.get("COUNT").toString()));
 				}
 			}
-			List<VoMain> children = new ArrayList<VoMain>();
+			Map<String ,Integer> children = new HashMap<String ,Integer>();
 			for(MdmBs bs : bses) {
-				VoMain child = new VoMain();
-				child.setName(bs.getBsName());
+				
+				int count = 0;
 				for(Map<String,Object> mapsend : sends) {
 					if(model.getId().equals(mapsend.get("MODEL")) && bs.getId().equals(mapsend.get("BS"))) {
-						child.setCount(Integer.parseInt(mapsend.get("COUNT").toString()));
+						count = Integer.parseInt(mapsend.get("COUNT").toString());
 					}
 				}
-				children.add(child);
+				children.put(bs.getBsName(), count);
+				
 			}
 			vo.setChildren(children);
 			list.add(vo);

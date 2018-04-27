@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.contorller.UserController;
 import com.elextec.mdm.entity.Menu;
+import com.elextec.mdm.entity.Role;
 import com.elextec.mdm.entity.User;
 
 /**
@@ -69,7 +70,6 @@ public class LoginFilter implements Filter{
 			if(token == null) {
 				res.setStatus(200);
 				PrintWriter writer = response.getWriter();
-				
 				writer.write(JSON.toJSON(voRes).toString());
 				return;
 			}
@@ -78,7 +78,6 @@ public class LoginFilter implements Filter{
 				//res.setStatus(401);
 				res.setStatus(200);
 				PrintWriter writer = response.getWriter();
-				
 				writer.write(JSON.toJSON(voRes).toString());
 				return;
 			}
@@ -94,6 +93,14 @@ public class LoginFilter implements Filter{
 		}else if(user.getUserName().equals("admin")){
 			
 		}else{
+			for(Role role : user.getRoles()) {
+				//System.out.println(role.getRoleName());
+				if(role.getRoleName().equals("admin")) {
+					chain.doFilter(request, response);
+					return;
+				}
+			}
+			
 			List<Menu> menus = user.getMenus();
 			
 			boolean flag = false;
