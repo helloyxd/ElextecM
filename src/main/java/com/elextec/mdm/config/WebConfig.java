@@ -11,6 +11,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -81,14 +82,28 @@ public class WebConfig {
         corsConfiguration.addAllowedMethod("*"); // 3 设置访问源请求方法
         return corsConfiguration;
     }
+	
+	@Bean  
+    public FilterRegistrationBean<CorsFilter> corsFilter() {  
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();  
+        CorsConfiguration config = new CorsConfiguration();  
+        config.setAllowCredentials(true);  
+        config.addAllowedOrigin(CorsConfiguration.ALL);  
+        config.addAllowedHeader(CorsConfiguration.ALL);  
+        config.addAllowedMethod(CorsConfiguration.ALL);  
+        source.registerCorsConfiguration("/**", config);  
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(source));  
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);  
+        return bean;  
+    }  
 
     
-	@Bean
+	/*@Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", buildConfig()); // 4 对接口配置跨域设置
         return new CorsFilter(source);
-    }
+    }*/
 
 	
 }

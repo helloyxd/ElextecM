@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.elextec.mdm.contorller.UserController;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.User;
 
@@ -40,8 +41,10 @@ public class LoginFilter implements Filter{
 		HttpServletResponse res = (HttpServletResponse) response;
 		String url = req.getRequestURI();
 		String method = req.getMethod();
+		
 		logger.debug(method + "-" + url);
-		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws","/mdm/"};
+		//“/mdm”
+		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
 			if (url.indexOf(notFilterDirValue) != -1) {
@@ -49,12 +52,30 @@ public class LoginFilter implements Filter{
 				return;
 			}
 		}
-		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("mdm_user");
+		//HttpSession session = req.getSession();
+		HttpSession session = null;
+		User user = null;
+		session = req.getSession();
+		if(session != null) {
+			user = (User) session.getAttribute("mdm_user");
+		}
+		if(user == null) {
+			String token = req.getHeader("token");
+			if(token == null) {
+				res.setStatus(401);
+				return;
+			}
+			session = UserController.sessionMap.get(token);
+			if(session == null) {
+				res.setStatus(401);
+				return;
+			}
+			user = (User) session.getAttribute("mdm_user");
+		}
 		if (user == null){
 			res.setStatus(401);
 			return;
-		}else if(user.getUserName().equals("admin0")){
+		}else if(user.getUserName().equals("admin")){
 			
 		}else{
 			List<Menu> menus = user.getMenus();

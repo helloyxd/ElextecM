@@ -1,6 +1,7 @@
 package com.elextec.mdm.contorller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,28 +31,32 @@ import com.elextec.mdm.service.IUserService;
 @RequestMapping("/mdm/user")
 public class UserController{
 
+	public static HashMap<String,String> userMap = new HashMap<String,String>();
+	
+	public static HashMap<String, HttpSession> sessionMap = new HashMap<String,HttpSession>();
+	
 	@Autowired
 	private IUserService userService;
 	
-	@PostMapping
-	public Object add(@RequestBody User user) {
-		VoResponse voRes = new VoResponse();
-		if(("").equals(user.getUserName())){
-			voRes.setNull(voRes);
-			voRes.setMessage("用户名不能为空");
-		}else if(("").equals(user.getUserPassword())){
-			voRes.setNull(voRes);
-			voRes.setMessage("密码不能为空");
-		}else{
-			VoResult vor = userService.add(user);
-			if(!vor.getResult()){
-				voRes.setFail(voRes);
-			}
-			voRes.setMessage(vor.getMsg());
-		}
-		return voRes;
-	}
-	
+	//使session失效,并移除map
+    public void destroyed(String username) {
+        String sessionid = userMap.get(username);
+        if(sessionid != null) {
+        	HttpSession session = sessionMap.get(sessionid);
+        	if(session != null) {
+        		session.invalidate();
+        		sessionMap.remove(sessionid);
+        	}
+            userMap.remove(username);
+        }
+    }
+
+    //将session信息存入map
+    public void created(String username, HttpSession session) {
+        userMap.put(username, session.getId());
+        sessionMap.put(session.getId(), session);
+    }
+
 	@PostMapping("/signIn")
 	public Object signIn(@RequestBody User user, @RequestParam(required=false, defaultValue="false") Boolean isMarked,
 			HttpServletRequest request, HttpServletResponse response){
@@ -63,6 +68,10 @@ public class UserController{
 			user.setSessionId(sessionId);
 			user.setUserPassword("");
 			session.setAttribute("mdm_user", user);
+			//保存session到map
+			destroyed(user.getUserName());
+			created(user.getUserName(), session);
+			
 			Cookie[] cookies = request.getCookies();
 			if(isMarked){
 				boolean flag = false;
@@ -128,6 +137,25 @@ public class UserController{
 		if(user != null){
 			session.removeAttribute("mdm_user");
 			session.removeAttribute("mdm_right");
+		}
+		return voRes;
+	}
+	
+	@PostMapping
+	public Object add(@RequestBody User user) {
+		VoResponse voRes = new VoResponse();
+		if(("").equals(user.getUserName())){
+			voRes.setNull(voRes);
+			voRes.setMessage("用户名不能为空");
+		}else if(("").equals(user.getUserPassword())){
+			voRes.setNull(voRes);
+			voRes.setMessage("密码不能为空");
+		}else{
+			VoResult vor = userService.add(user);
+			if(!vor.getResult()){
+				voRes.setFail(voRes);
+			}
+			voRes.setMessage(vor.getMsg());
 		}
 		return voRes;
 	}

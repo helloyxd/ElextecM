@@ -529,6 +529,7 @@ public class DataMapService extends BaseService implements IDataMapService{
 	 * @param pageSize
 	 * @param order
 	 * @param isSelect 是否连线
+	 * @param isMain 是否主数据
 	 * @return
 	 */
 	@Override
@@ -536,12 +537,20 @@ public class DataMapService extends BaseService implements IDataMapService{
 		Map<String, Object> map = new HashMap<String, Object>();
 		StringBuilder conditions = new StringBuilder();
 		List<MdmDataMap> listdata = null;
+		String field = null;
+		if(isMain){
+			field = "mdm_data_id";
+		}else {
+			field = "bs_data_id";
+		}
 		if(isSelect){
 			listdata = dataMapMapper.findByMdmIdAndBsId(modelId, bsId);
-			conditions.append(" AND id IN(select mdm_data_id from MDM_DATA_MAPPER where model_id='");
+			conditions.append(" AND id IN(select ").append(field).append(" from MDM_DATA_MAPPER where model_id='");
+			//conditions.append(" AND id IN(select mdm_data_id from MDM_DATA_MAPPER where model_id='");
 			conditions.append(modelId).append("'").append(" AND bs_id='").append(bsId).append("')");
 		}else{
-			conditions.append(" AND id NOT IN(select mdm_data_id from MDM_DATA_MAPPER where model_id='");
+			conditions.append(" AND id NOT IN(select ").append(field).append(" from MDM_DATA_MAPPER where model_id='");
+			//conditions.append(" AND id NOT IN(select mdm_data_id from MDM_DATA_MAPPER where model_id='");
 			conditions.append(modelId).append("'").append(" AND bs_id='").append(bsId).append("')");
 		}
 		PageQuery pageQuery = new PageQuery();

@@ -102,8 +102,9 @@ public class RoleService extends BaseService implements IRoleService {
 	public VoResponse updateRoleMenu(Role role) {
 		VoResponse voRes = new VoResponse();
 		roleMapper.delRoleMenus(role.getId());
-		List<Menu> list = convertMenus(role.getMenus());
-		role.setMenus(list);
+		//List<Menu> list = convertMenus(role.getMenus());
+		//List<Menu> list = role.getMenus();
+		//role.setMenus(list);
 		roleMapper.addRoleMenus(role);
 		return voRes;
 	}

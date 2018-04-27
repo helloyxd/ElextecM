@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
@@ -57,7 +58,7 @@ public interface MdmDataMapMapper {
 		    @Result(property = "createTime", column = "create_time"),
 		    @Result(property = "creater", column = "creater")
 	})
-	List<MdmDataMap> findByMdmIdAndBsId(String modelId,String bsId);
+	List<MdmDataMap> findByMdmIdAndBsId(@Param("modelId")String modelId,@Param("bsId")String bsId);
 	
 	@Select("SELECT * FROM mdm_data_mapper WHERE model_id = #{modelId} AND bs_id = #{bsId} AND mdm_data_id=#{mdmDataId}")
 	@ResultMap("mdmDataMapOnly")

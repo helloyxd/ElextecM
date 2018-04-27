@@ -139,7 +139,7 @@ public class MapperProvider {
 		StringBuilder sb = new StringBuilder();
 		for(String key : queryParam.keySet()){
 			if(queryParam.get(key) != null && !queryParam.get(key).equals("")){
-				sb.append(" AND ").append(key).append(" LIKE '").append(queryParam.get(key)).append("'");
+				sb.append(" AND ").append(key).append(" LIKE '%").append(queryParam.get(key)).append("%'");
 			}
 		}
 		return sb.toString();

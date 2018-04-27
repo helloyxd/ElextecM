@@ -171,7 +171,11 @@ public class UserService extends BaseService implements IUserService{
 	
 	@Override
 	public List<Menu> getCurrentUserMenus(){
-		List<Menu> list =  getUserMenuById(getUserId());
+		String userId = getUserId();
+		if(userId == null) {
+			return null;
+		}
+		List<Menu> list =  getUserMenuById(userId);
 		setMenu(list, null);
 		return list;
 	}
