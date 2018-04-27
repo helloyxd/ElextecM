@@ -320,7 +320,7 @@ public class DataMapController {
 				voRes.setNull(voRes);
 				voRes.setMessage(model.getMdmModel() + "未创建流程信息");
 			}else {
-				voRes = dataMapService.syncToMdm(model.getId(),entity.getActivitiId());
+				voRes = dataMapService.send(model.getId(),entity.getActivitiId());
 			}
 			
 		}else {

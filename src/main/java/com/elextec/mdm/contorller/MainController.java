@@ -16,6 +16,9 @@
 
 package com.elextec.mdm.contorller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,9 +35,14 @@ public class MainController {
 	private ITaskDataService taskDataService;
 	
 	@GetMapping
-	public Object get() {
-		VoResponse voRes = taskDataService.getMainData();
+	public Object getStatus() {
+		VoResponse voRes = new VoResponse();
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("main1", taskDataService.getMainData());
+		map.put("main2", taskDataService.getMainCount());
+		voRes.setData(map);
 		return voRes;
 	}
+	
 
 }

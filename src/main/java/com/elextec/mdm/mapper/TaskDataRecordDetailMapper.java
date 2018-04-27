@@ -1,11 +1,14 @@
 package com.elextec.mdm.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -60,4 +63,12 @@ public interface TaskDataRecordDetailMapper {
 	@Select("SELECT * FROM taskdatarecord_detail WHERE flow_id = #{flowId}")
     @ResultMap("taskDataRecordDetailMap")
 	List<TaskDataRecordDetail> findByflowId(String flowId);
+	
+	@Select("select model_id model,count(*) count from TaskDataRecord_Detail where TASK_TYPE=1 group by model_id")
+	@ResultType(List.class)
+	List<Map<String,Object>> findSyncCount();
+	
+	@Select("select model_id model,system_id bs,count(*) count from TaskDataRecord_Detail where TASK_TYPE=0 group by model_id,system_id ")
+	@ResultType(List.class)
+	List<Map<String,Object>> findSendCount();
 }

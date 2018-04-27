@@ -1,6 +1,7 @@
 package com.elextec.mdm.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
+import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.contorller.UserController;
 import com.elextec.mdm.entity.Menu;
 import com.elextec.mdm.entity.User;
@@ -36,7 +39,9 @@ public class LoginFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-
+		VoResponse voRes = new VoResponse();
+		voRes.setNull(voRes);
+		voRes.setCode(401);
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String url = req.getRequestURI();
@@ -62,18 +67,29 @@ public class LoginFilter implements Filter{
 		if(user == null) {
 			String token = req.getHeader("token");
 			if(token == null) {
-				res.setStatus(401);
+				res.setStatus(200);
+				PrintWriter writer = response.getWriter();
+				
+				writer.write(JSON.toJSON(voRes).toString());
 				return;
 			}
 			session = UserController.sessionMap.get(token);
 			if(session == null) {
-				res.setStatus(401);
+				//res.setStatus(401);
+				res.setStatus(200);
+				PrintWriter writer = response.getWriter();
+				
+				writer.write(JSON.toJSON(voRes).toString());
 				return;
 			}
 			user = (User) session.getAttribute("mdm_user");
 		}
 		if (user == null){
 			res.setStatus(401);
+			res.setStatus(200);
+			PrintWriter writer = response.getWriter();
+			
+			writer.write(JSON.toJSON(voRes).toString());
 			return;
 		}else if(user.getUserName().equals("admin")){
 			
