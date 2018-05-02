@@ -48,9 +48,10 @@ public class LoginFilter implements Filter{
 		String url = req.getRequestURI();
 		String method = req.getMethod();
 		
-		logger.debug(method + "-" + url);
+		//logger.debug(method + "-" + url);
+		System.out.println(method + "-" + url);
 		//“/mdm”
-		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws"};
+		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws","/mdm/model","/mdm/flow"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
 			if (url.indexOf(notFilterDirValue) != -1) {

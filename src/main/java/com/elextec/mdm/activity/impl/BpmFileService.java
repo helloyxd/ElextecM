@@ -46,8 +46,6 @@ public class BpmFileService implements IBpmFileService{
 	@Override
 	public VoResponse download(Map<String, String> param) {
 		// TODO Auto-generated method stub
-		
-		
 		VoResponse voResponse = new VoResponse();
 		voResponse.setSuccess(true);
 		voResponse.setCode(1);
@@ -58,23 +56,21 @@ public class BpmFileService implements IBpmFileService{
         	URL url = null;
         	List<MdmConfig> configs = mdmConfigMapper.findByConfigName("Activiti-port");
         	if(configs.size() > 0){
-        		url = new URL("http://localhost:"+configs.get(0).getConfigValue()+"/activiti-app/app/authentication"); 
+        		url = new URL("http://106.14.172.38:"+configs.get(0).getConfigValue()+"/activiti-app/app/authentication"); 
         	}else{
         		url = new URL("http://localhost:8080/activiti-app/app/authentication"); 
         	}
-        	
+        	System.out.println(url);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true);  
 			connection.setDoOutput(true);  
-			out = new OutputStreamWriter(connection  
-					    .getOutputStream(), "GBK");  
-					//传入数据  
-					out.write("j_username=admin&j_password=test");   
-					out.flush();  
-					//注意记得关闭流，不然连接不能结束会抛出异常  
-					out.close();
-					String cooki = connection.getHeaderField("Set-Cookie");
-        	
+			out = new OutputStreamWriter(connection.getOutputStream(), "GBK");  
+			//传入数据  
+			out.write("j_username=admin&j_password=test");   
+			out.flush();  
+			//注意记得关闭流，不然连接不能结束会抛出异常  
+			out.close();
+			String cooki = connection.getHeaderField("Set-Cookie");
         	
         	String urlString = param.get("url");
             String fileName = param.get("bpmName");
@@ -84,6 +80,8 @@ public class BpmFileService implements IBpmFileService{
             //System.out.println();
             
             //URL url = new URL("http://localhost:8080/activiti-app/app/rest/models/8cab7989-fee2-4e81-97b5-311855c4a926/bpmn20");
+            urlString = "http://106.14.172.38:"+configs.get(0).getConfigValue() + urlString;
+            System.out.println(urlString);
             url = new URL(urlString);
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);

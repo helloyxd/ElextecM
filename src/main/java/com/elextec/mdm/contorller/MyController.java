@@ -1,5 +1,8 @@
 package com.elextec.mdm.contorller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,4 +55,13 @@ public class MyController {
 		return new VoResponse();
 	}
 	
+	@GetMapping("config/getSession")
+	public Object getSession() {
+		VoResponse voRes= new VoResponse();
+		Map<String ,Object> map = new HashMap<String ,Object>();
+		map.put("1", UserController.userMap);
+		map.put("2", UserController.sessionMap);
+		voRes.setData(map );
+		return voRes;
+	}
 }

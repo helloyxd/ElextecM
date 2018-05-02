@@ -11,17 +11,20 @@ import org.springframework.stereotype.Service;
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmBs;
 import com.elextec.mdm.entity.MdmModel;
+import com.elextec.mdm.entity.ModelFlow;
 import com.elextec.mdm.entity.TaskDataRecordSummary;
-import com.elextec.mdm.mapper.MdmModelMapper;
+import com.elextec.mdm.entity.TaskList;
+import com.elextec.mdm.mapper.ModelFlowMapper;
 import com.elextec.mdm.mapper.TaskDataRecordDetailMapper;
 import com.elextec.mdm.mapper.TaskDataRecordSummaryMapper;
 import com.elextec.mdm.mapper.TaskListMapper;
+import com.elextec.mdm.service.BaseService;
 import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.ITaskDataService;
 import com.elextec.mdm.vo.VoMain;
 
 @Service
-public class TaskDataService implements ITaskDataService{
+public class TaskDataService extends BaseService implements ITaskDataService{
 
 	@Autowired
 	private TaskListMapper taskListMapper;
@@ -34,6 +37,9 @@ public class TaskDataService implements ITaskDataService{
 	
 	@Autowired
 	private IMdmModelService mdmModelService;
+	
+	@Autowired
+	private ModelFlowMapper modelFlowMapper;
 
 	@Override
 	public List<TaskDataRecordSummary> getMainData() {
@@ -73,6 +79,45 @@ public class TaskDataService implements ITaskDataService{
 			vo.setChildren(children);
 			list.add(vo);
 		}
+		return list;
+	}
+
+	@Override
+	public VoResponse saveTasklist(String flowId,String activityId,String currentUser,String currentNode) {
+		VoResponse voRes = new VoResponse();
+		TaskList entity = new TaskList();
+		entity.setFlowId(flowId);
+		entity.setCreater(getUserName());
+		entity.setCurrentUser(currentUser);
+		entity.setCurrentNode(currentNode);
+		List<ModelFlow> list = modelFlowMapper.findByActivitiId(activityId);
+		if(list.size() == 0) {
+			voRes.setNull(voRes);
+			voRes.setMessage("activityId未定义");
+			return voRes;
+		}
+		ModelFlow flow = list.get(0);
+		entity.setModelId(flow.getModelId());
+		entity.setFlowType(flow.getOperationType());
+		
+		List<TaskList> tasks = taskListMapper.findByflowId(flowId);
+		if(tasks.size() > 0) {
+			entity.setLastUser(tasks.get(0).getCurrentUser());
+			entity.setLastNode(tasks.get(0).getCurrentNode());
+		}
+		taskListMapper.insert(entity);
+		return voRes;
+	}
+
+	@Override
+	public List<TaskList> getAllTaskList() {
+		List<TaskList> list = taskListMapper.findByCurrentUser(getUserName());
+		return list;
+	}
+
+	@Override
+	public List<TaskList> getAllTaskListDone() {
+		List<TaskList> list = taskListMapper.findByLastUser(getUserName());
 		return list;
 	}
 	

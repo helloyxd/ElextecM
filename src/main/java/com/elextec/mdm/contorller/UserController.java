@@ -39,13 +39,17 @@ public class UserController{
 	private IUserService userService;
 	
 	//使session失效,并移除map
-    public void destroyed(String username) {
+    public void destroyed(String username){
         String sessionid = userMap.get(username);
         if(sessionid != null) {
         	HttpSession session = sessionMap.get(sessionid);
         	if(session != null) {
-        		session.invalidate();
-        		sessionMap.remove(sessionid);
+        		try {
+        			session.invalidate();
+            		sessionMap.remove(sessionid);
+        		}catch (Exception e) {
+					e.printStackTrace();
+				}
         	}
             userMap.remove(username);
         }
@@ -62,14 +66,15 @@ public class UserController{
 			HttpServletRequest request, HttpServletResponse response){
 		VoResponse voRes = userService.signIn(user.getUserName(), user.getUserPassword());
 		if(voRes.getSuccess()){
+			//保存session到map
+			destroyed(user.getUserName());
+			
 			user = (User) voRes.getData();
 			HttpSession session = request.getSession();
 			String sessionId = session.getId();
 			user.setSessionId(sessionId);
 			user.setUserPassword("");
 			session.setAttribute("mdm_user", user);
-			//保存session到map
-			destroyed(user.getUserName());
 			created(user.getUserName(), session);
 			
 			Cookie[] cookies = request.getCookies();

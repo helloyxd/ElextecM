@@ -44,5 +44,17 @@ public class MainController {
 		return voRes;
 	}
 	
-
+	@GetMapping("taskList")
+	public Object getTaskList() {
+		VoResponse voRes = new VoResponse();
+		voRes.setData(taskDataService.getAllTaskList());
+		return voRes;
+	}
+	
+	@GetMapping("taskListDone")
+	public Object getTaskListDone() {
+		VoResponse voRes = new VoResponse();
+		voRes.setData(taskDataService.getAllTaskListDone());
+		return voRes;
+	}
 }
