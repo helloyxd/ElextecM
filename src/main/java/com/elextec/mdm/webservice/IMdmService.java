@@ -4,32 +4,21 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import com.elextec.mdm.common.entity.VoResponse;
-import com.elextec.mdm.common.entity.VoResult;
-import com.elextec.mdm.entity.User;
 
-@WebService
+@WebService(name="IMdmWebService")
 public interface IMdmService {
 	
 	@WebMethod
-	public VoResult add(User user);
+	public List<String> getModels();
 	
 	@WebMethod
-	public VoResponse signIn(String userName, String pwd);
+    public String excute(@WebParam(name="param") String s);
 	
 	@WebMethod
-	public List<User> getAll();
-	
-	public Map<String, Object> getPage(User user, int page, int pageSize);
-	
-	public VoResponse del(String userId);
-	
-	public VoResponse update(User user);
-	
-	public VoResponse updateUserRole(User user);
-	
-	public User getById(String userId);
+	public VoResponse postDefinedData(String model, Map<String,String> map);
 	
 }

@@ -51,7 +51,7 @@ public class LoginFilter implements Filter{
 		//logger.debug(method + "-" + url);
 		System.out.println(method + "-" + url);
 		//“/mdm”
-		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws","/mdm/model","/mdm/flow"};
+		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
 			if (url.indexOf(notFilterDirValue) != -1) {

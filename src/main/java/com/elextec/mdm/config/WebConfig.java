@@ -70,7 +70,7 @@ public class WebConfig {
 	@Bean
 	public Endpoint endpoint() {
 		EndpointImpl endpoint = new EndpointImpl(springBus(), iMdmService());
-		endpoint.publish("/user");
+		endpoint.publish("/mdmService");
 		return endpoint;
 	}
 	
