@@ -13,9 +13,13 @@ public interface ITaskDataService {
 	
 	public List<VoMain> getMainCount();
 	
-	public VoResponse saveTasklist(String flowId,String activityId,String currentUser,String currentNode);
+	public VoResponse saveTasklist(String taskId, String flowId,String activityId,String currentUser,String currentNode);
+	
+	public VoResponse updateTasklist(TaskList task ,String currentUser,String currentNode);
 	
 	public List<TaskList> getAllTaskList();
 	
 	public List<TaskList> getAllTaskListDone();
+	
+	public List<TaskList> getByTaskId(String taskId);
 }

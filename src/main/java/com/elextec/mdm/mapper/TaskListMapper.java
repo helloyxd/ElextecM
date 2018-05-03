@@ -1,14 +1,12 @@
 package com.elextec.mdm.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -17,7 +15,8 @@ import com.elextec.mdm.entity.TaskList;
 
 public interface TaskListMapper {
 
-	@Insert("INSERT INTO tasklist VALUES(sys_guid(),#{flowId},#{flowType},#{dataId,jdbcType=VARCHAR},#{bsId,jdbcType=VARCHAR},#{modelId},"
+	@Insert("INSERT INTO tasklist(id,task_id,flow_id,flow_type,data_id,bs_id,model_id,remark,current_user,last_user,current_node,last_node,status,creater,create_time) "
+			+ "VALUES(sys_guid(),#{taskId},#{flowId},#{flowType},#{dataId,jdbcType=VARCHAR},#{bsId,jdbcType=VARCHAR},#{modelId},"
 			+ "#{remark,jdbcType=VARCHAR},#{currentUser},#{lastUser,jdbcType=VARCHAR},#{currentNode},#{lastNode,jdbcType=VARCHAR},#{status},#{creater},sysdate)")
 	void insert(TaskList entity);
 	
@@ -31,6 +30,7 @@ public interface TaskListMapper {
     @Results(id = "tasklistMapOnly",
     	value = {
 	    @Result(id = true, property = "id", column = "id"),
+	    @Result(property = "taskId", column = "task_id"),
 	    @Result(property = "flowId", column = "flow_id"),
 	    @Result(property = "flowType", column = "flow_type"),
 	    @Result(property = "dataId", column = "data_id"),
@@ -81,4 +81,8 @@ public interface TaskListMapper {
 	@Select("SELECT * FROM tasklist WHERE last_user = #{lastUser} order by create_time desc")
     @ResultMap("tasklistMap")
 	List<TaskList> findByLastUser(String lastUser);
+	
+	@Select("SELECT * FROM tasklist WHERE task_id = #{taskId} order by create_time desc")
+    @ResultMap("tasklistMap")
+	List<TaskList> findByTaskId(String taskId);
 }

@@ -83,9 +83,10 @@ public class TaskDataService extends BaseService implements ITaskDataService{
 	}
 
 	@Override
-	public VoResponse saveTasklist(String flowId,String activityId,String currentUser,String currentNode) {
+	public VoResponse saveTasklist(String taskId, String flowId,String activityId,String currentUser,String currentNode) {
 		VoResponse voRes = new VoResponse();
 		TaskList entity = new TaskList();
+		entity.setTaskId(taskId);
 		entity.setFlowId(flowId);
 		entity.setCreater(getUserName());
 		entity.setCurrentUser(currentUser);
@@ -108,6 +109,26 @@ public class TaskDataService extends BaseService implements ITaskDataService{
 		taskListMapper.insert(entity);
 		return voRes;
 	}
+	
+	@Override
+	public VoResponse updateTasklist(TaskList task ,String currentUser,String currentNode) {
+		VoResponse voRes = new VoResponse();
+		TaskList entity = new TaskList();
+		entity.setTaskId(task.getTaskId());
+		entity.setFlowId(task.getFlowId());
+		entity.setCreater(getUserName());
+		entity.setCurrentUser(currentUser);
+		entity.setCurrentNode(currentNode);
+		entity.setModelId(task.getModelId());
+		entity.setFlowType(task.getFlowType());
+		List<TaskList> tasks = taskListMapper.findByflowId(task.getFlowId());
+		if(tasks.size() > 0) {
+			entity.setLastUser(tasks.get(0).getCurrentUser());
+			entity.setLastNode(tasks.get(0).getCurrentNode());
+		}
+		taskListMapper.insert(entity);
+		return voRes;
+	}
 
 	@Override
 	public List<TaskList> getAllTaskList() {
@@ -118,6 +139,12 @@ public class TaskDataService extends BaseService implements ITaskDataService{
 	@Override
 	public List<TaskList> getAllTaskListDone() {
 		List<TaskList> list = taskListMapper.findByLastUser(getUserName());
+		return list;
+	}
+
+	@Override
+	public List<TaskList> getByTaskId(String taskId) {
+		List<TaskList> list = taskListMapper.findByTaskId(taskId);
 		return list;
 	}
 	

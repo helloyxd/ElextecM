@@ -4,6 +4,7 @@ import com.elextec.mdm.common.entity.BasicEntity;
 
 public class TaskList extends BasicEntity {
 
+	private String taskId;//taskID
 	private String flowId;//流程ID
 	private String flowType;//流程类型，0; MDM推动到业务系统，1
 	private String dataId;//数据ID
@@ -74,6 +75,12 @@ public class TaskList extends BasicEntity {
 	}
 	public void setLastNode(String lastNode) {
 		this.lastNode = lastNode;
+	}
+	public String getTaskId() {
+		return taskId;
+	}
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 	
 }

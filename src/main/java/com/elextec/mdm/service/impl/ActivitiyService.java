@@ -24,8 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.elextec.mdm.entity.ModelFlow;
+import com.elextec.mdm.entity.TaskList;
 import com.elextec.mdm.service.IActivitiService;
 import com.elextec.mdm.service.IModelFlowService;
+import com.elextec.mdm.service.ITaskDataService;
 @Service
 public class ActivitiyService implements IActivitiService{
 	@Autowired
@@ -37,6 +39,8 @@ public class ActivitiyService implements IActivitiService{
 	@Autowired
 	IModelFlowService modelFlowService;
 	
+	private ITaskDataService taskDataService;
+	
 
 	
 	//开始流程，根据传入的modelId,启动流程
@@ -44,7 +48,11 @@ public class ActivitiyService implements IActivitiService{
 		List<ModelFlow> modelFlowList = (List<ModelFlow>) modelFlowService.getByModelId(modelId);
 		if(modelFlowList.size()>0) {
 			String processId = modelFlowList.get(0).getActivitiId();
-			this.startProcess(processId);
+			ProcessInstance process = this.startProcess(processId);
+			List<Task> taskList = getAllActiveTasks();
+			for(Task task:taskList) {
+				taskDataService.saveTasklist(task.getId(), process.getActivityId(), processId, task.getOwner(), task.getName());
+			}
 		}
 	}
 	
@@ -72,7 +80,9 @@ public class ActivitiyService implements IActivitiService{
 		List<Task> taskList = taskService.createTaskQuery().active().list();
 		if(taskList!=null && taskList.size()>0) {
 			for(Task task:taskList) {
+				List<TaskList> mytasks = taskDataService.getByTaskId(task.getId());
 				taskService.complete(task.getId());
+				taskDataService.updateTasklist(mytasks.get(0), task.getOwner(), task.getName());
 			}
 		}
 	}
