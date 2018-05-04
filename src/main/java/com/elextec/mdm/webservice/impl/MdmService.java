@@ -11,7 +11,7 @@ import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmModel;
 import com.elextec.mdm.entity.TableDefinition;
 import com.elextec.mdm.mapper.MdmModelMapper;
-import com.elextec.mdm.service.impl.TableDDLService;
+import com.elextec.mdm.service.ITableDDLService;
 import com.elextec.mdm.webservice.IMdmService;
 
 //@WebService(serviceName="MdmService", endpointInterface = "com.elextec.mdm.webservice.IMdmService")
@@ -21,7 +21,7 @@ public class MdmService implements IMdmService {
 	private MdmModelMapper mdmModelMapper;
 	
 	@Autowired
-	private TableDDLService tableDDLService;
+	private ITableDDLService tableDDLService;
 	
 	public List<String> getModels() {
 		List<String> list = new ArrayList<String>();

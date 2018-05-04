@@ -10,8 +10,8 @@ import com.elextec.mdm.entity.User;
 
 public class BaseService {
 
-	//@Autowired
-	//private HttpSession session;
+	@Autowired
+	private HttpSession session;
 	
 	@Autowired
 	private HttpServletRequest request;
@@ -27,7 +27,7 @@ public class BaseService {
 	
 	private HttpSession getSession(HttpServletRequest request){
 		String token = request.getHeader("token");
-		HttpSession session = null;
+		//HttpSession session = null;
 		if(token != null) {
 			session = UserController.sessionMap.get(token);
 		}
@@ -36,7 +36,7 @@ public class BaseService {
 
 	public String getUserName(){
 		String username = "auto";
-		HttpSession session = getSession(request);
+		session = getSession(request);
 		Object obj = session.getAttribute("mdm_user");
 		if(obj != null){
 			username = ((User)obj).getUserName();
@@ -45,7 +45,7 @@ public class BaseService {
 	}
 	
 	public String getUserId(){
-		HttpSession session = getSession(request);
+		session = getSession(request);
 		Object obj = session.getAttribute("mdm_user");
 		String userId = null;
 		//userId = "64365789BCA1ECF1E05013AC0688161E";

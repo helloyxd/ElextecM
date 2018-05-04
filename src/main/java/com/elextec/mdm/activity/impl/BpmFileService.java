@@ -89,20 +89,21 @@ public class BpmFileService implements IBpmFileService{
             connection.getInputStream();
             
             bufferedInputStream = new BufferedInputStream(connection.getInputStream());
-            
-            String realPath = this.getClass().getResource("/")+"processes/"+fileName+".bpmn20.xml";
+            String realPath = this.getClass().getResource("/").getPath()+"processes/"+fileName+".bpmn20.xml";
+            System.out.println(realPath.substring(0,realPath.lastIndexOf("/")));
             File file = new File(realPath.substring(0,realPath.lastIndexOf("/")));
             if(!file.exists()){
-            	file.mkdirs();
+            	boolean f = file.mkdirs();
+            	System.out.println(f);
             }
+            System.out.println(realPath);
             fout=new FileOutputStream(realPath);
             byte[]  bytes = new byte[1024];
-            
-            while(bufferedInputStream.read(bytes)!=-1){
-            	fout.write(bytes);
+            int readIndex;
+            while((readIndex = bufferedInputStream.read(bytes,0,bytes.length))!=-1){
+            	fout.write(bytes,0,readIndex);
             	fout.flush();
             }
-            
             fout.flush();
             
             RepositoryService repositoryService = engine
@@ -207,7 +208,13 @@ public class BpmFileService implements IBpmFileService{
 	}
 	
 	public static void main(String[] arg0) {
-		//getFlowModelJson();
+		//String realPath = "D:/test";
+		String realPath = "file:/D:/test1";
+		File file = new File(realPath);
+        if(!file.exists()){
+        	boolean f = file.mkdirs();
+        	System.out.println(f);
+        }
     }
 	
 	
