@@ -44,10 +44,10 @@ public class ActivitiyService implements IActivitiService{
 
 	
 	//开始流程，根据传入的modelId,启动流程
-	public void startProcessByModel(String modelId) {
-		List<ModelFlow> modelFlowList = (List<ModelFlow>) modelFlowService.getByModelId(modelId);
-		if(modelFlowList.size()>0) {
-			String processId = modelFlowList.get(0).getActivitiId();
+	public void startProcessByModel(String modelId,String type) {
+		ModelFlow modelFlow = modelFlowService.getByModelAndType(modelId, type);
+		if(modelFlow != null) {
+			String processId = modelFlow.getActivitiId();
 			ProcessInstance process = this.startProcess(processId);
 			List<Task> taskList = getAllActiveTasks();
 			for(Task task:taskList) {

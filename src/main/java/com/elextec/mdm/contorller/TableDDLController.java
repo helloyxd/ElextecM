@@ -76,33 +76,35 @@ public class TableDDLController {
 			return voRes;
 		}
 		List<ColumnDefinition> list = table.getColumnDefinitions();
-		for(ColumnDefinition obj : list){
-			if(obj.getName() == null || obj.getName().equals("")){
-				voRes.setNull(voRes);
-				voRes.setMessage("列名不能为空");
-				return voRes;
-			}else if(!StringUtil.validateTableName(obj.getName())){
-				voRes.setFail(voRes);
-				voRes.setMessage("列名只允许字母开头，允许30字节，允许字母数字下划线");
-				return voRes;
-			}else if(StringUtil.validateTableNameKeyWord(obj.getName())){
-				voRes.setFail(voRes);
-				voRes.setMessage("列名"+obj.getName()+"为数据库关键字");
-				return voRes;
-			}else if(obj.getName().toLowerCase().equals("id")){
-				voRes.setFail(voRes);
-				voRes.setMessage("列名id会自动生成，作为自定义表主键");
-				return voRes;
-			}
-			//判断dataTypeMap
-			for(String key : obj.getDataTypeMap().keySet()){
-				if(TableDDLMap.oracleDataTypeMap.get(key) == null){
+		if(list != null) {
+			for(ColumnDefinition obj : list){
+				if(obj.getName() == null || obj.getName().equals("")){
 					voRes.setNull(voRes);
-					voRes.setMessage(obj.getName() + " 数据类型异常");
+					voRes.setMessage("列名不能为空");
+					return voRes;
+				}else if(!StringUtil.validateTableName(obj.getName())){
+					voRes.setFail(voRes);
+					voRes.setMessage("列名只允许字母开头，允许30字节，允许字母数字下划线");
+					return voRes;
+				}else if(StringUtil.validateTableNameKeyWord(obj.getName())){
+					voRes.setFail(voRes);
+					voRes.setMessage("列名"+obj.getName()+"为数据库关键字");
+					return voRes;
+				}else if(obj.getName().toLowerCase().equals("id")){
+					voRes.setFail(voRes);
+					voRes.setMessage("列名id会自动生成，作为自定义表主键");
 					return voRes;
 				}
+				//判断dataTypeMap
+				for(String key : obj.getDataTypeMap().keySet()){
+					if(TableDDLMap.oracleDataTypeMap.get(key) == null){
+						voRes.setNull(voRes);
+						voRes.setMessage(obj.getName() + " 数据类型异常");
+						return voRes;
+					}
+				}
+				//判断constraints
 			}
-			//判断constraints
 		}
 		return voRes;
 	}

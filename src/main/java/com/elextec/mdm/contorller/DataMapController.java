@@ -28,6 +28,7 @@ import com.elextec.mdm.entity.ServiceInterfaceParam;
 import com.elextec.mdm.entity.ServiceParamFieldDefined;
 import com.elextec.mdm.entity.ServiceParamTableDefined;
 import com.elextec.mdm.entity.TableDefinition;
+import com.elextec.mdm.service.IActivitiService;
 import com.elextec.mdm.service.IDataMapService;
 import com.elextec.mdm.service.IMdmModelService;
 import com.elextec.mdm.service.IMenuService;
@@ -62,6 +63,9 @@ public class DataMapController {
 	
 	@Autowired
 	private ModelFlowService modelFlowService;
+	
+	@Autowired
+	private IActivitiService activitiyService;
 	
 	@DeleteMapping
 	public Object del(@RequestBody List<VoDataMap> dataMaps) {
@@ -299,7 +303,8 @@ public class DataMapController {
 				voRes.setNull(voRes);
 				voRes.setMessage(model.getMdmModel() + "未创建流程信息");
 			}else {
-				voRes = dataMapService.syncToMdm(model.getId(),entity.getActivitiId());
+				activitiyService.startProcessByModel(model.getId(), "0");
+				//voRes = dataMapService.syncToMdm(model.getId(),entity.getActivitiId());
 			}
 			
 		}else {
@@ -320,7 +325,8 @@ public class DataMapController {
 				voRes.setNull(voRes);
 				voRes.setMessage(model.getMdmModel() + "未创建流程信息");
 			}else {
-				voRes = dataMapService.send(model.getId(),entity.getActivitiId());
+				activitiyService.startProcessByModel(model.getId(), "1");
+				//voRes = dataMapService.send(model.getId(),entity.getActivitiId());
 			}
 			
 		}else {

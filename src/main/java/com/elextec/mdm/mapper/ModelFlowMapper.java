@@ -64,7 +64,7 @@ public interface ModelFlowMapper {
 	})	
 	ModelFlow findById(String id);
 	
-	@Select("SELECT * FROM mdm_model_flow where model_id = #{modelId} AND operation_type = #{operationType}")
+	@Select("SELECT * FROM mdm_model_flow where model_id = #{modelId} AND operation_type = #{operationType} AND status=0")
 	@ResultMap("modelFlowMap")
 	ModelFlow findByModelIdAndType(@Param("modelId")String modelId, @Param("operationType")String operationType);
 }
