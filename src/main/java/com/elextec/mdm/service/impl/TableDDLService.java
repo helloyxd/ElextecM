@@ -351,9 +351,11 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 		String dataLength = null;
 		List<ColumnDefinition> listColumnsDefinition = new ArrayList<ColumnDefinition>();
 		List<String> constraints = null;
+		int index = 0;
 		for(Map<String, String> map : list){
 			System.out.println(map);
 			ColumnDefinition entity = new ColumnDefinition();
+			entity.setIndex(++index);
 			entity.setName(map.get("COLUMN_NAME"));
 			entity.setColumnComment(map.get("COMMENTS"));
 			if(map.get("COLUMN_NAME").equals("ID")){

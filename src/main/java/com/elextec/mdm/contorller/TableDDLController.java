@@ -118,11 +118,14 @@ public class TableDDLController {
 			voRes.setMessage("MDM模块错误");
 			return voRes;
 		}
-		if(mdmModel.getTableDefinitions()!=null && mdmModel.getTableDefinitions().size()>0){
-			voRes.setFail(voRes);
-			voRes.setMessage("MDM模块下已经存在主数据表");
-			return voRes;
+		if(table.getIsMenu()) {
+			if(mdmModel.getTableDefinitions()!=null && mdmModel.getTableDefinitions().size()>0){
+				voRes.setFail(voRes);
+				voRes.setMessage("MDM模块下已经存在主数据表");
+				return voRes;
+			}
 		}
+		
 		if(voRes.getSuccess()){
 			voRes = tableDDLService.createTable(table);
 			if(voRes.getSuccess()){

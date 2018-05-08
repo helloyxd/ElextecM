@@ -35,7 +35,7 @@ public interface TableDefinitionMapper {
 	@Delete("DELETE FROM mdm_tabledefinition WHERE id = #{id}")
 	void del(String id);
 	
-	@Select("SELECT * FROM mdm_tabledefinition WHERE isMenu = 1")
+	@Select("SELECT * FROM mdm_tabledefinition WHERE isMenu = 1  order by create_time desc")
     @Results(id = "tableDefinitionMap",
     	value = { 
 	    @Result(id = true, property = "id", column = "id"),

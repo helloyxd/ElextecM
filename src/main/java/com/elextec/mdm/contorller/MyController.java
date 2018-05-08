@@ -1,7 +1,11 @@
 package com.elextec.mdm.contorller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elextec.mdm.common.entity.VoResponse;
 import com.elextec.mdm.entity.MdmConfig;
+import com.elextec.mdm.entity.User;
 import com.elextec.mdm.mapper.MdmConfigMapper;
 
 @RestController
@@ -58,10 +63,17 @@ public class MyController {
 	@GetMapping("config/getSession")
 	public Object getSession() {
 		VoResponse voRes= new VoResponse();
-		Map<String ,Object> map = new HashMap<String ,Object>();
-		map.put("1", UserController.userMap);
-		map.put("2", UserController.sessionMap);
-		voRes.setData(map );
+		List<Map<String ,Object>> list = new ArrayList<Map<String ,Object>>();
+		for(String key : UserController.userMap.keySet()){
+			Map<String ,Object> map = new HashMap<String ,Object>();
+			map.put("userName", key);
+			map.put("sessionId", UserController.userMap.get(key));
+			HttpSession session = UserController.sessionMap.get(UserController.userMap.get(key));
+			User user = (User) session.getAttribute("mdm_user");
+			map.put("user", user);
+			list.add(map);
+		}
+		voRes.setData(list);
 		return voRes;
 	}
 }

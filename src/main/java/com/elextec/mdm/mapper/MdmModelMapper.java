@@ -41,7 +41,7 @@ public interface MdmModelMapper{
 	})
 	List<MdmModel> findAllInfo();
 	
-	@Select("SELECT * FROM mdm_model")
+	@Select("SELECT * FROM mdm_model order by create_time desc")
 	@Results(id = "modelMapOnly",
 	value = { 
 	    @Result(id = true, property = "id", column = "id"),

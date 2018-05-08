@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class ColumnDefinition {
 
+	private int index;
 	private String name;//数据库字段名称
 	private String columnComment;//字段中文名称
 	private Map<String, String> dataTypeMap;//字段数据类型
@@ -54,6 +55,12 @@ public class ColumnDefinition {
 	}
 	public void setDataTypeLength(String dataTypeLength) {
 		this.dataTypeLength = dataTypeLength;
+	}
+	public int getIndex() {
+		return index;
+	}
+	public void setIndex(int index) {
+		this.index = index;
 	}
 	
 }
