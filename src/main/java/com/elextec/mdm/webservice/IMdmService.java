@@ -16,6 +16,9 @@ public interface IMdmService {
 	public List<String> getModels();
 	
 	@WebMethod
+	public List<Object> getTables(String model);
+	
+	@WebMethod
     public String excute(@WebParam(name="param") String s);
 	
 	@WebMethod

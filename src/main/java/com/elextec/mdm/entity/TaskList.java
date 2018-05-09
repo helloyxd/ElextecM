@@ -10,6 +10,7 @@ public class TaskList extends BasicEntity {
 	private String dataId;//数据ID
 	private String bsId;
 	private String modelId;
+	private MdmModel model;
 	private String remark;
 	private String currentUser;
 	private String lastUser;
@@ -81,6 +82,12 @@ public class TaskList extends BasicEntity {
 	}
 	public void setTaskId(String taskId) {
 		this.taskId = taskId;
+	}
+	public MdmModel getModel() {
+		return model;
+	}
+	public void setModel(MdmModel model) {
+		this.model = model;
 	}
 	
 }

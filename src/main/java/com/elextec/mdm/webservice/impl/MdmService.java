@@ -33,7 +33,12 @@ public class MdmService implements IMdmService {
 		}
 		return list;
 	}
-
+	
+	@Override
+	public List<Object> getTables(String model) {
+		
+		return null;
+	}
 	
     public String excute(String param)
     {
@@ -48,5 +53,8 @@ public class MdmService implements IMdmService {
 		VoResponse voRes = tableDDLService.postDefinedData(table, map);
 		return voRes;
 	}
+
+
+	
 
 }

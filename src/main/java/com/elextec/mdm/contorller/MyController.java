@@ -70,7 +70,7 @@ public class MyController {
 			map.put("sessionId", UserController.userMap.get(key));
 			HttpSession session = UserController.sessionMap.get(UserController.userMap.get(key));
 			User user = (User) session.getAttribute("mdm_user");
-			map.put("user", user);
+			map.put("user", user.getUserName());
 			list.add(map);
 		}
 		voRes.setData(list);

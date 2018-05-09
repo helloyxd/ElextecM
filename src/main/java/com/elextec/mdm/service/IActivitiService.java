@@ -13,6 +13,5 @@ public interface IActivitiService {
 	public ProcessInstance startProcess(String processId);
 	public List<Task> getTasks(String assignee);
 	public void completeTasks(String taskId);
-	public List<Task> getAllActiveTasks();
 	public void completeAllTasks();
 }

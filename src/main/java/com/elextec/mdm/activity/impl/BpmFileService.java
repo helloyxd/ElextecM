@@ -29,6 +29,7 @@ import com.elextec.mdm.entity.MdmConfig;
 import com.elextec.mdm.entity.ModelFlow;
 import com.elextec.mdm.mapper.MdmConfigMapper;
 import com.elextec.mdm.mapper.MdmDataMapMapper;
+import com.elextec.mdm.mapper.ModelFlowMapper;
 import com.elextec.mdm.service.IModelFlowService;
 
 @Service
@@ -39,6 +40,9 @@ public class BpmFileService implements IBpmFileService{
 	
 	@Autowired
 	IModelFlowService modelFlowService;
+	
+	@Autowired
+	ModelFlowMapper modelFlowMapper;
 	
 	@Autowired
 	private MdmConfigMapper mdmConfigMapper;
@@ -172,15 +176,25 @@ public class BpmFileService implements IBpmFileService{
 	
 	public VoResponse saveBpm(Map<String, String> param) {
 		VoResponse voResponse = new VoResponse();
-		voResponse.setSuccess(true);
-		voResponse.setCode(1);
-		ModelFlow modelFlow = new ModelFlow();
-		modelFlow.setStatus(0);
-		String processId = param.get("processId");
+		String processId = param.get("processId");//
 		String modelId = param.get("modelId");
 		String operateType = param.get("operateType");
 		String activitiModelId = param.get("activitiModelId");
 		String creater = param.get("creater");
+		
+		if(modelFlowMapper.findByActivitiId(processId).size() > 0) {
+			voResponse.setFail(voResponse);
+			voResponse.setMessage("流程模版标识已经存在");
+			return voResponse;
+		}
+		if(modelFlowMapper.findByModelIdAndType(modelId, operateType) != null) {
+			voResponse.setFail(voResponse);
+			voResponse.setMessage("该模块下已经存在流程");
+			return voResponse;
+		}
+		
+		ModelFlow modelFlow = new ModelFlow();
+		modelFlow.setStatus(0);
 		modelFlow.setModelId(modelId);
 		modelFlow.setOperationType(operateType);
 		modelFlow.setActivitiId(processId);

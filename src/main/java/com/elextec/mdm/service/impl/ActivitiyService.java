@@ -39,6 +39,7 @@ public class ActivitiyService implements IActivitiService{
 	@Autowired
 	IModelFlowService modelFlowService;
 	
+	@Autowired
 	private ITaskDataService taskDataService;
 	
 
@@ -49,9 +50,9 @@ public class ActivitiyService implements IActivitiService{
 		if(modelFlow != null) {
 			String processId = modelFlow.getActivitiId();
 			ProcessInstance process = this.startProcess(processId);
-			List<Task> taskList = getAllActiveTasks();
+			List<Task> taskList = getAllActiveTasks(process.getId());
 			for(Task task:taskList) {
-				taskDataService.saveTasklist(task.getId(), process.getActivityId(), processId, task.getOwner(), task.getName());
+				taskDataService.saveTasklist(task.getId(), process.getId(), processId, task.getAssignee(), task.getName());
 			}
 		}
 	}
@@ -72,8 +73,8 @@ public class ActivitiyService implements IActivitiService{
 	}
 	
 	
-	public List<Task> getAllActiveTasks() {
-		return taskService.createTaskQuery().active().list();
+	public List<Task> getAllActiveTasks(String processId) {
+		return taskService.createTaskQuery().processInstanceId(processId).active().list();
 	}
 	
 	public void completeAllTasks() {
@@ -92,5 +93,6 @@ public class ActivitiyService implements IActivitiService{
 	public void completeTasks(String taskId) {
 		taskService.complete(taskId);
 	}
+
 
 }
