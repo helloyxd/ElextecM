@@ -52,7 +52,7 @@ public class ModelServiceTest {
 	public void test() throws Exception {
 		
 		ObjectMapper mapper = new ObjectMapper();
-		System.out.println(mapper.writeValueAsString(mdmModelMapper.queryByName("mdm_model", "mdm_model", "模块")));
+		//System.out.println(mapper.writeValueAsString(mdmModelMapper.queryByName("mdm_model", "mdm_model", "模块")));
 		
 	}
 }
