@@ -78,26 +78,16 @@ public class UserMapperTest {
     
     @Test
     public void addUser() throws Exception {
-    	/*for(int i=0;i<100;i++){
+    	for(int i=0;i<100;i++){
     		User user = new User();
-        	user.setUserName("admin" + i);
+        	user.setUserName("test" + i);
         	user.setUserPassword("123");
         	//user.setFullName("auto add");
         	user.setStatus(UserStatusEnum.UserStatusNormal);
         	user.setCreater("SYS");
         	userMapper.insert(user);
-    	}*/
+    	}
     	
-    	User user = new User();
-    	user.setUserName("XXX");
-    	user.setUserPassword("123");
-    	//user.setFullName("auto add");
-    	Department department = new Department();
-    	department.setId("1111");
-    	//user.setDepartment(department);
-    	user.setStatus(UserStatusEnum.UserStatusNormal);
-    	user.setCreater("SYS");
-    	userMapper.insert(user);
     }
     
     @Test

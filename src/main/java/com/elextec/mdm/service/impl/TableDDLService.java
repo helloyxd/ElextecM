@@ -247,8 +247,9 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 					sbComment.append("EXECUTE IMMEDIATE 'COMMENT ON COLUMN ").append(tableName).append(".").append(columnName);
 					sbComment.append(" IS ''").append(column.getColumnComment()).append("''';");
 					flagComment = true;
-					flag = false;
+					
 				}
+				flag = false;
 			}
 			try{
 				if(sbUpdate != null){
@@ -264,8 +265,8 @@ public class TableDDLService extends BaseService implements ITableDDLService {
 			}
 			try{
 				if(sbAdd != null){
-					sbAdd.append(")");
 					sbAdd.deleteCharAt(sbAdd.length() - 1);
+					sbAdd.append(")");
 					tableDDLMapper.alterTable(sbAdd.toString());
 				}
 			}catch(Exception ex){
