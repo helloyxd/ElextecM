@@ -71,7 +71,8 @@ public class UserController{
 			
 			user = (User) voRes.getData();
 			HttpSession session = request.getSession();
-			session.setMaxInactiveInterval(-1);
+			//session.setMaxInactiveInterval(-1);
+			session.setMaxInactiveInterval(30*60);
 			String sessionId = session.getId();
 			user.setSessionId(sessionId);
 			user.setUserPassword("");

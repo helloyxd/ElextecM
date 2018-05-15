@@ -75,15 +75,17 @@ public class LoginFilter implements Filter{
 				return;
 			}
 			session = UserController.sessionMap.get(token);
-			if(session == null) {
+			if(session == null || session.getAttribute("mdm_user") == null) {
 				//res.setStatus(401);
 				res.setStatus(200);
 				PrintWriter writer = response.getWriter();
 				writer.write(JSON.toJSON(voRes).toString());
 				return;
 			}
+			
 			user = (User) session.getAttribute("mdm_user");
 		}
+		session.setMaxInactiveInterval(30*60);
 		if (user == null){
 			res.setStatus(401);
 			res.setStatus(200);
