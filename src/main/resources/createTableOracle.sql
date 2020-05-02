@@ -1,3 +1,16 @@
+delete from MDM_MODEL;
+select * from MDM_TABLEDEFINITION
+delete from MDM_TABLEDEFINITION;
+drop table mdm_Employeer;
+drop table test1;
+drop table test2;
+drop table mdm_product;
+drop table mdm_product_detail;
+delete from MDM_TABLERELATION;
+select * from MDM_MENU where MENU_URL='mdm'
+delete from MDM_MENU where MENU_URL='mdm'
+select * from MDM_SERVICEINTERFACE_DEFINED
+
 DROP TABLE MDM_BASICDATA;
 DROP TABLE MDM_BS;
 DROP TABLE MDM_BS_MODEL;
@@ -397,6 +410,13 @@ create table TaskList
    creater				varchar2(64) not null,
    create_time			TIMESTAMP
 );
+
+alter table
+   TaskList
+add
+   (
+   task_id	varchar2(64)
+   );
 
 create table TaskDataRecord_Summary
 (

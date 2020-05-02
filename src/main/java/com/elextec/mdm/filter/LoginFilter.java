@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -30,7 +31,7 @@ import com.elextec.mdm.entity.User;
  */
 public class LoginFilter implements Filter{
 
-	private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);   
+	private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class); 
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -51,7 +52,7 @@ public class LoginFilter implements Filter{
 		//logger.debug(method + "-" + url);
 		System.out.println(method + "-" + url);
 		//“/mdm”
-		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws","/mdm/model","mdm/flow"};
+		String[] notFilterDirs = {"/mdm/user/signIn","/mdm/ws","/mdm/model","mdm/flow","/mdm/user/getUser"};
 		for (int i = 0; i < notFilterDirs.length; i++) {
 			String notFilterDirValue = notFilterDirs[i];
 			if (url.indexOf(notFilterDirValue) != -1) {

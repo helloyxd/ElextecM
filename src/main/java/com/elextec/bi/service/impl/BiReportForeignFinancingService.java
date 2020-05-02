@@ -9,7 +9,8 @@ import com.elextec.bi.entity.BiUser;
 import com.elextec.bi.mapper.BiForeignFinancingMapper;
 import com.elextec.bi.service.BiBaseService;
 import com.elextec.bi.service.IBiReportForeignFinancingService;
-import com.mysql.jdbc.StringUtils;
+import com.mysql.cj.util.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

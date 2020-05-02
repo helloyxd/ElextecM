@@ -8,7 +8,7 @@ import com.elextec.bi.entity.BiRole;
 import com.elextec.bi.entity.BiUser;
 import com.elextec.mdm.entity.DataPermissionDefined;
 import com.elextec.mdm.utils.StringUtil;
-import com.mysql.jdbc.StringUtils;
+import com.mysql.cj.util.StringUtils;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -120,7 +120,7 @@ public class BiMapperProvider {
 		sb.append(" ORDER BY u.create_time DESC)");
 		sb.append(" where RN >= ");
 		sb.append((pageQuery.getCurrentPage()-1)*pageQuery.getPageRowSize()+1);
-		if(objName != null && !StringUtils.isNullOrEmpty(objName)){
+		if(objName != null && !com.mysql.cj.util.StringUtils.isNullOrEmpty(objName)){
 			sb.append(" AND (org_name like '%");
 			sb.append(objName);
 			sb.append("%' OR region_com_name like '%");
